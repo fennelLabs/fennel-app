@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Inbox() {
+function CreateMessage() {
   return (
     <div>
       <h1>New Message</h1>
@@ -10,4 +10,4 @@ function Inbox() {
   );
 };
 
-export default Inbox;
+export default CreateMessage;
