@@ -1,0 +1,9 @@
+nav {
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+nav > * {
+  margin-right: 1rem;
+}

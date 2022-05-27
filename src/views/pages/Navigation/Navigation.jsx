@@ -1,4 +1,5 @@
 import React from 'react';
+import './Navigation.styles.css';
 import { Link } from 'react-router-dom';
 
 function Navigation() {
@@ -10,17 +11,9 @@ function Navigation() {
       }}
     >
       <a>brand</a>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <li>
-          <Link to="/inbox">Inbox</Link>
-        </li>
-      </ul>
+      <Link to="/">Home</Link>
+      <Link to="/profile">Profile</Link>
+      <Link to="/inbox">Inbox</Link>
     </nav>
   );
 }
