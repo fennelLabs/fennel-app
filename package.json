@@ -4,6 +4,7 @@
   "private": true,
   "main": "public/main.js",
   "dependencies": {
+    "@mdx-js/react": "^2.1.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
@@ -65,9 +66,9 @@
     "@storybook/react": "^6.5.5",
     "@storybook/testing-library": "^0.0.11",
     "babel-plugin-named-exports-order": "^0.0.2",
-    "prop-types": "^15.8.1",
-    "webpack": "^5.72.1",
     "concurrently": "^7.2.1",
-    "wait-on": "^6.0.1"
+    "prop-types": "^15.8.1",
+    "wait-on": "^6.0.1",
+    "webpack": "^5.72.1"
   }
 }
