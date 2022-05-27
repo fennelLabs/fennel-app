@@ -1,13 +1,11 @@
-version: '3.7'
-
 services:
-
-  sample:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  dev:
+    build: .
+    working_dir: /app/fennel-app
     volumes:
-      - '.:/app'
-      - '/app/node_modules'
+      - fennel-app:/app
     ports:
       - 3001:3000
+    entrypoint: sh docker-entry.sh
+volumes:
+  fennel-app:
