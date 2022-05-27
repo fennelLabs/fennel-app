@@ -10,12 +10,9 @@ function Inbox() {
   ]);
 
   return (
-    <div style={{ width: "90%" }}>
-      {messageList.map(({ id, name }) => (
-        <div key={id}>
-          {name}
-        </div>
-      ))}
+    <div>
+      <h1>Inbox</h1>
+      <ListView itemList={messageList} />
     </div>
   );
 };
