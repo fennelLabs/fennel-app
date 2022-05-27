@@ -1,0 +1,11 @@
+services:
+  dev:
+    build: .
+    working_dir: /app/fennel-app
+    volumes:
+      - fennel-app:/app
+    ports:
+      - 3001:3000
+    entrypoint: sh docker-entry.sh
+volumes:
+  fennel-app:
