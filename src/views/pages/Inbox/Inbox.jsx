@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ListView from '../../components/ListView/ListView';
 
 function Inbox() {
   const [messageList, setMessageList] = useState([

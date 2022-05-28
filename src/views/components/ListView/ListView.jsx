@@ -9,3 +9,5 @@ function ListView(props) {
         </div>
     );
 }
+
+export default ListView;

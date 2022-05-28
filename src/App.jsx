@@ -5,6 +5,7 @@ import {
   Outlet,
 } from 'react-router-dom';
 import './App.css';
+import Splash from './views/pages/Splash/Splash';
 import Navigation from './views/pages/Navigation/Navigation';
 import Profile from './views/pages/Profile/Profile';
 import Inbox from './views/pages/Inbox/Inbox';
@@ -24,4 +25,4 @@ function App() {
   );
 }
 
-export default App;
+export default Splash(App);
