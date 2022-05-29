@@ -16,3 +16,5 @@ function AddContact() {
         </div>
     );
 }
+
+export default AddContact;
