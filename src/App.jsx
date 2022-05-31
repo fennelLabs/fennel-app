@@ -10,6 +10,7 @@ import Navigation from './views/pages/Navigation/Navigation';
 import Profile from './views/pages/Profile/Profile';
 import Inbox from './views/pages/Inbox/Inbox';
 import Home from './views/pages/Home';
+import Diagnostics from './views/pages/Diagnostics';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/inbox" element={<Inbox />} />
+        <Route path="/diagnostics" element={<Diagnostics />} />
       </Routes>
       <Outlet />
     </Router>
