@@ -34,10 +34,8 @@ function Splash(WrappedComponent) {
     }
 
     render() {
-      // while checking user session, show "loading" message
       if (this.state.loading) return LoadingMessage();
 
-      // otherwise, show the desired route
       return <WrappedComponent {...this.props} />;
     }
   };
