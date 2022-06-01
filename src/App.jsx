@@ -11,7 +11,7 @@ import Profile from './views/pages/Profile/Profile';
 import Inbox from './views/pages/Inbox/Inbox';
 import Home from './views/pages/Home';
 import Diagnostics from './views/pages/Diagnostics/Diagnostics';
-
+  
 function App() {
   return (
     <Router>
