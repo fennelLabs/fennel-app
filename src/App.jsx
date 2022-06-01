@@ -28,7 +28,7 @@ function App() {
     setTimeout(() => {
       setLoading(false);
     }, 3000);
-  });
+  }, []);
 
   if (loading) { return LoadingMessage(); }
   else {
