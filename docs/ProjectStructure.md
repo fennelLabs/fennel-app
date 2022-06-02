@@ -2,21 +2,25 @@
 
 This outlines the concepts for how the code is to be organized in `src`
 
+- src/addons (addons are high-level react components which require some kind of registration at the root app level)
+  - /`name-of-addon`
 - src/views
   - /components: reusable react view components (button, loader, logo, etc.)
     - /`name-of-component`
-      - `index.js`
-      - `NameOfComponent.jsx`
+      - `index.js` (react component definition will reside here)
       - `NameOfComponent.test.js`
       - `NameOfComponent.styles.js`
       - `NameOfComponent.stories.js` (if we use storyboard -- it is a great tool for documentation & component exploration)
   - /pages: reflects the routing of the app (Home, Profile, etc.)
+    - /`name-of-page`
+      - `index.js` (react component definition will reside here)
+      - `NameOfPage.test.js`
+      - `NameOfPage.styles.js`
 - src/services
   - /`name-of-service`
     - description: uses stores and APIs to transform data into the required use case for various components
     - justification: services may be used across several different components
-    - `index.js`
-    - `NameOfService.service.js`
+    - `index.js` (service class will reside here)
     - `NameOfService.model.js` (these models will not be shared across services, they are tailored made for the particular service)
     - `NameOfService.test.js`
 - src/data
