@@ -6,46 +6,56 @@ import {
   Outlet,
 } from 'react-router-dom';
 import './App.css';
-import Navigation from './views/pages/Navigation/Navigation';
-import Profile from './views/pages/Profile/Profile';
-import Inbox from './views/pages/Inbox/Inbox';
-import Diagnostics from './views/pages/Diagnostics/Diagnostics';
+import Navigation from './views/pages/Navigation';
+import Profile from './views/pages/Profile';
+import Inbox from './views/pages/Inbox';
 import Home from './views/pages/Home';
+import LoadingScreen from './views/components/LoadingScreen';
+import AppContext from './contexts/AppContext';
+import RegisterModal from './addons/Modal/RegisterModal';
 
-function LoadingMessage() {
-  return (
-    <div className="splash-screen">
-      Wait a moment while we load your app.
-      <div className="loading-dot">.</div>
-    </div>
-  );
-}
-
-function App() {
-
+function AppLoader({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 3000);
-  });
+  }, []);
 
-  if (loading) { return LoadingMessage(); }
-  else {
-    return (
-      <Router>
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/inbox" element={<Inbox />} />
-          <Route path="/diagnostics" element={<Diagnostics />} />
-        </Routes>
-        <Outlet />
-      </Router>
-    );
-  }
+  if (loading) return LoadingScreen();
+  return children;
+}
+
+function AppRouter() {
+  return (
+    <Router>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/inbox" element={<Inbox />} />
+      </Routes>
+      <Outlet />
+    </Router>
+  );
+}
+
+function App() {
+  const modal = RegisterModal();
+
+  return (
+    <AppContext.Provider
+      value={{
+        ...modal.value,
+      }}
+    >
+      <AppLoader>
+        <AppRouter />
+      </AppLoader>
+      {modal.Component}
+    </AppContext.Provider>
+  );
 }
 
 export default App;
