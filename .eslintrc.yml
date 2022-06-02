@@ -1,0 +1,24 @@
+env:
+  browser: true
+  es2020: true
+extends:
+  #- 'plugin:@typescript-eslint/recommended'
+  - 'plugin:react/recommended'
+  - 'plugin:react-hooks/recommended'
+  - 'prettier'
+  #- 'prettier/@typescript-eslint'
+  #- 'prettier/babel'
+  #- 'prettier/react'
+#parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 11
+  sourceType: module
+plugins:
+  # - '@typescript-eslint'
+  - react
+  - prettier
+rules:
+  prettier/prettier: 'error'
+  prefer-const: 0
