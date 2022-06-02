@@ -1,5 +1,5 @@
 import { useState, createContext } from 'react';
-import ModalDisplay from './Common/ModalDisplay';
+import ModalDisplay from './ModalDisplay';
 
 export const ModalContext = createContext({});
 

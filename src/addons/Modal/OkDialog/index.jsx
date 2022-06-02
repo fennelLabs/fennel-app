@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ModalContext } from '../../useModalContext';
+import { ModalContext } from '../useModalContext';
 import ModalTemplate from '../Template';
 
 function OkDialog() {
