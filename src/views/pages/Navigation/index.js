@@ -1,8 +1,14 @@
 import React from 'react';
 import './Navigation.styles.css';
-import {Link} from 'react-router-dom';
+import Logo from '../../components/Logo';
+import {useMediaQuery} from '../../../utils/useMediaQuery';
+import {Desktop} from './Desktop';
+import {Mobile} from './Mobile';
+
+const mediaQuery = 'screen and (min-width: 768px)';
 
 function Navigation() {
+  const isDesktop = useMediaQuery(mediaQuery);
   return (
     <nav
       style={{
@@ -10,21 +16,8 @@ function Navigation() {
         paddingBottom: '1rem'
       }}
     >
-      <a>brand</a>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <li>
-          <Link to="/inbox">Inbox</Link>
-        </li>
-        <li>
-          <Link to="/diagnostics">Diagnostics</Link>
-        </li>
-      </ul>
+      <Logo style={{width: '4rem'}} />
+      {isDesktop ? <Desktop /> : <Mobile />}
     </nav>
   );
 }
