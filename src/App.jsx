@@ -1,27 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Outlet,
-} from 'react-router-dom';
-import './App.css';
-import Navigation from './views/pages/Navigation/Navigation';
-import Profile from './views/pages/Profile/Profile';
-import Inbox from './views/pages/Inbox/Inbox';
-import Home from './views/pages/Home';
-
-function LoadingMessage() {
-  return (
-    <div className="splash-screen">
-      Wait a moment while we load your app.
-      <div className="loading-dot">.</div>
-    </div>
-  );
-}
+} from "react-router-dom";
+import "./App.css";
+import Navigation from "./views/pages/Navigation";
+import Profile from "./views/pages/Profile";
+import Inbox from "./views/pages/Inbox";
+import Home from "./views/pages/Home";
+import LoadingScreen from "./views/components/LoadingScreen";
 
 function App() {
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,8 +21,9 @@ function App() {
     }, 3000);
   }, []);
 
-  if (loading) { return LoadingMessage(); }
-  else {
+  if (loading) {
+    return LoadingScreen();
+  } else {
     return (
       <Router>
         <Navigation />
