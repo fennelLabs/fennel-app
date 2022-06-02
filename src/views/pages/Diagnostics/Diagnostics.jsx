@@ -1,5 +1,6 @@
-import { ApiPromise, WsProvider } from '@polkadot/api';
+
 import * as React from 'react';
+import RPCService from '../../../services/RPCService/RPCService.tsx';
 
 class Diagnostics extends React.Component {
 
@@ -14,8 +15,8 @@ class Diagnostics extends React.Component {
 
   fetchData = async () => {
 
-    const wsProvider = new WsProvider('ws://127.0.0.1:9944');
-    const api = await ApiPromise.create({ provider: wsProvider });
+    const service = new RPCService();
+    const api = await service.api();//await service.getInstance();
 
     const [genesisHash, chain, nodeName, nodeVersion] = await Promise.all([
       api.genesisHash.toHex(),
