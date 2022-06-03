@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import RPCService from '../../../services/RPCService/RPCService.tsx';
+import RPCService from '../../../services/Node/index.js';
 
 function Diagnostics() {
 

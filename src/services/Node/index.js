@@ -1,23 +1,20 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import React, { useState, useEffect } from "react";
 
-const RPCService = (props) => {
+class Node {
 
-  const _api: ApiPromise = null;
+  constructor() {
+    this._api = null;
+  }
 
-  useEffect(() => {
-    api();
-  });
-
-
-  async function api(): Promise<ApiPromise> {
+  async api() {
     if (this.apiNotReady()) {
-      await connect();
+      await this.connect();
     }
     return this._api;
   }
 
-  async function connect(): Promise<void> {
+  async connect() {
     try {
       const provider = new WsProvider('ws://127.0.0.1:9944');
       this._api = await ApiPromise.create({ provider });
@@ -26,16 +23,16 @@ const RPCService = (props) => {
     }
   }
 
-  function disconnect(): void {
-    if (_api) {
-      _api.disconnect();
+  disconnect() {
+    if (this._api) {
+      this._api.disconnect();
     }
   }
 
-  function apiNotReady(): boolean {
-    return !_api;
+  apiNotReady() {
+    return !this._api;
   }
 
 }
 
-export default RPCService 
+export default Node; 
