@@ -20,8 +20,8 @@
     "build-storybook": "build-storybook -s public",
     "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && electron .",
-    "lint": "eslint src/**.{js,jsx}",
-    "format": "prettier -w src/**"
+    "lint": "eslint --ext js,jsx src",
+    "format": "prettier -w src/**/*"
   },
   "eslintConfig": {
     "extends": [
@@ -80,4 +80,3 @@
     "webpack": "^5.72.1"
   }
 }
-

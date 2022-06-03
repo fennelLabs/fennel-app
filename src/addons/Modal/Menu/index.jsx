@@ -1,3 +1,4 @@
+import React from 'react';
 import ModalTemplate from '../Template';
 
 function MenuModal() {
