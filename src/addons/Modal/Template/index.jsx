@@ -1,5 +1,4 @@
-import React from 'react';
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 import {ModalContext} from '../useModalContext';
 import './Template.style.css';
 
