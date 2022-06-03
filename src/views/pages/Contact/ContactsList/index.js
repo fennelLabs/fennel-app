@@ -6,7 +6,7 @@ function ContactsList() {
     {id: 2, name: 'contact2'},
     {id: 3, name: 'contact3'},
     {id: 4, name: 'contact4'},
-    {id: 5, name: 'contact5'},
+    {id: 5, name: 'contact5'}
   ]);
 
   return (

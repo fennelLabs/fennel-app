@@ -7,7 +7,7 @@ function Navigation() {
     <nav
       style={{
         borderBottom: 'solid 1px',
-        paddingBottom: '1rem',
+        paddingBottom: '1rem'
       }}
     >
       <a>brand</a>

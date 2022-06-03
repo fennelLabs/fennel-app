@@ -4,7 +4,7 @@ import {AddContact} from './AddContact';
 
 export default {
   title: 'AddContact',
-  component: AddContact,
+  component: AddContact
 };
 
 const Template = (args) => <AddContact {...args} />;

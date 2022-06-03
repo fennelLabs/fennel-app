@@ -4,7 +4,7 @@ import {ListView} from './ListView';
 
 export default {
   title: 'ListView',
-  component: ListView,
+  component: ListView
 };
 
 const Template = (args) => <ListView {...args} />;
@@ -16,6 +16,6 @@ Primary.args = {
     {id: 2, name: 'message2'},
     {id: 3, name: 'message3'},
     {id: 4, name: 'message4'},
-    {id: 5, name: 'message5'},
-  ],
+    {id: 5, name: 'message5'}
+  ]
 };

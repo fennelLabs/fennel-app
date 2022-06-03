@@ -42,7 +42,7 @@ function App() {
   return (
     <AppContext.Provider
       value={{
-        ...modal.value,
+        ...modal.value
       }}
     >
       <AppLoader>
@@ -54,4 +54,3 @@ function App() {
 }
 
 export default App;
-

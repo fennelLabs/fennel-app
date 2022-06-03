@@ -1,12 +1,12 @@
-import { useContext } from 'react';
-import { ModalContext } from '../useModalContext';
+import {useContext} from 'react';
+import {ModalContext} from '../useModalContext';
 import ModalTemplate from '../Template';
 
 function OkDialog() {
-  const { controls } = useContext(ModalContext);
+  const {controls} = useContext(ModalContext);
   return (
     <ModalTemplate
-      options={{ size: 'small', title: 'Ok Dialog', backgroundColor: 'grey' }}
+      options={{size: 'small', title: 'Ok Dialog', backgroundColor: 'grey'}}
     >
       Is this ok?
       <button onClick={() => controls.close()}>Yes</button>
