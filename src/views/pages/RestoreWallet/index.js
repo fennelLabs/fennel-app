@@ -1,4 +1,4 @@
-import React  from "react";
+import React from 'react';
 
 function RestoreWallet() {
   return (
@@ -8,6 +8,6 @@ function RestoreWallet() {
       <button type="submit" />
     </div>
   );
-};
+}
 
 export default RestoreWallet;
