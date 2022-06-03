@@ -1,19 +1,26 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import MessageService from '../../../services/Message.service';
 import ListView from '../../components/ListView';
 
+const message = new MessageService();
+
 function Inbox() {
-  const [messageList, setMessageList] = useState([
-    {id: 1, name: 'message1'},
-    {id: 2, name: 'message2'},
-    {id: 3, name: 'message3'},
-    {id: 4, name: 'message4'},
-    {id: 5, name: 'message5'}
-  ]);
+  const [messageList, setMessageList] = useState([]);
+
+  useEffect(() => {
+    const sub = message.messages.subscribe((d) => {
+      setMessageList(d);
+    });
+
+    return () => {
+      sub.remove();
+    };
+  }, []);
 
   return (
     <div>
       <h1>Inbox</h1>
-      <ListView itemList={messageList} />
+      <ListView itemList={messageList ?? []} />
     </div>
   );
 }
