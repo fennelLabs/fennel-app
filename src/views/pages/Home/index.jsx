@@ -1,3 +1,4 @@
+import React from 'react';
 import useModal from '../../../utils/useModal';
 
 function Home() {

@@ -1,13 +1,13 @@
 import React from 'react';
 import './Navigation.styles.css';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 function Navigation() {
   return (
     <nav
       style={{
         borderBottom: 'solid 1px',
-        paddingBottom: '1rem',
+        paddingBottom: '1rem'
       }}
     >
       <a>brand</a>

@@ -1,16 +1,17 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import useModalContext from './useModalContext';
 
 const root = document.getElementById('modal-root');
 
 function RegisterModal() {
-  const { getModalHandle, ModalContextProvider } = useModalContext();
+  const {getModalHandle, ModalContextProvider} = useModalContext();
 
   return {
     value: {
-      getModalHandle,
+      getModalHandle
     },
-    Component: ReactDOM.createPortal(<ModalContextProvider />, root),
+    Component: ReactDOM.createPortal(<ModalContextProvider />, root)
   };
 }
 
