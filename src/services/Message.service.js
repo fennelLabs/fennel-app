@@ -4,12 +4,10 @@ class MessageService {
   _messages = new BehaviorSubject([]);
   _count = 0;
 
+  messages$ = this._messages.asObservable();
+
   constructor() {
     this.queueTestMessages();
-  }
-
-  get messages() {
-    return this._messages.asObservable();
   }
 
   sendMessage() {

@@ -8,7 +8,7 @@ function Inbox() {
   const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
-    const sub = message.messages.subscribe((d) => {
+    const sub = message.messages$.subscribe((d) => {
       setMessageList(d);
     });
 
