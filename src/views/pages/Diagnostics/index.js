@@ -3,7 +3,7 @@ import Node from '../../../services/Node';
 
 function Diagnostics() {
 
-    const [data, setData] = useState({ pending: false, diagnostics: null });
+    const [data, setData] = useState({ pending: true, diagnostics: null });
 
     useEffect(() => {
         setData({ pending: true, diagnostics: {} });
