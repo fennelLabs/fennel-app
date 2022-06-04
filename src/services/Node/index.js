@@ -8,18 +8,17 @@ class Node {
   }
 
   async getDiagnosticsData() {
-    //let's not do this here
-    await this.api();
+
+    const node = await this.api();
     try {
-      let ret = await Promise.all([
-        this._api.genesisHash.toHex(),
-        this._api.rpc.system.chain(),
-        this._api.rpc.system.name(),
-        this._api.rpc.system.version(),
+      let data = await Promise.all([
+        node.genesisHash.toHex(),
+        node.rpc.system.chain(),
+        node.rpc.system.name(),
+        node.rpc.system.version(),
       ]);
-      return {
-        genesisHash: ret.genesisHash, chain: ret.chain, nodeName: ret.nodeName, nodeVersion: ret.nodeVersion
-      }
+      await this.disconnect();
+      return data;
     } catch (error) {
       console.log(error);
     }

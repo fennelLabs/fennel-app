@@ -1,22 +1,25 @@
-
 import React, { useState, useEffect } from "react";
 import Node from '../../../services/Node';
 
 function Diagnostics() {
 
-    let [genesisHash, chain, nodeName, nodeVersion, setDiagnostics] = useState(0);
+    const [data, setData] = useState({ pending: false, diagnostics: null });
 
     useEffect(() => {
-        fetchData();
-    });
+        setData({ pending: true, diagnostics: {} });
 
-    async function fetchData() {
-        //not working yet, have to figure out how to set state
-        const node = await new Node();
-        [genesisHash, chain, nodeName, nodeVersion] = node.getDiagnosticsData(); 
-        //setDiagnostics(genesisHash, chain, nodeName, nodeVersion)
-        
-    }
+        const fetchData = async () => {
+            const node = new Node();
+            const data = await node.getDiagnosticsData();
+            return data;
+        }
+        fetchData().then((fetchedData) => {
+            setData({
+                pending: false,
+                diagnostics: fetchedData
+            })
+        }).catch(console.error);
+    }, [])
 
     return (
         <div>
@@ -25,24 +28,24 @@ function Diagnostics() {
                     Genesis Hash
                 </dt>
                 <dd>
-                   {genesisHash}
+                    {data.pending == false ? data.diagnostics[0] : ''}
                 </dd>
                 <dt>
                     Chain
                 </dt>
-                <dd>{chain}
-            </dd>
+                <dd>{data.pending == false ? data.diagnostics[1] : ''}
+                </dd>
                 <dt>
                     Node Name
                 </dt>
                 <dd>
-                   {nodeName}
+                    {data.pending == false ? data.diagnostics[2] : ''}
                 </dd>
                 <dt>
                     Node Version
                 </dt>
                 <dd>
-                    {nodeVersion}
+                    {data.pending == false ? data.diagnostics[3] : ''}
                 </dd>
             </dl>
         </div>);
