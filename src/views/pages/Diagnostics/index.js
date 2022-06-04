@@ -3,7 +3,7 @@ import Node from '../../../services/Node';
 
 function Diagnostics() {
 
-    const [data, setData] = useState({ pending: true, diagnostics: null });
+    const [data, setData] = useState({ pending: undefined, diagnostics: null });
 
     useEffect(() => {
         setData({ pending: true, diagnostics: {} });
@@ -22,7 +22,7 @@ function Diagnostics() {
     }, [])
 
     return (
-        <div>
+        <div> {data &&
             <dl>
                 <dt>
                     Genesis Hash
@@ -47,7 +47,7 @@ function Diagnostics() {
                 <dd>
                     {data.pending == false ? data.diagnostics[3] : ''}
                 </dd>
-            </dl>
+            </dl>}
         </div>);
 
 }
