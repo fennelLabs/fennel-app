@@ -1,10 +1,5 @@
-import { useState, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Outlet,
-} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {BrowserRouter as Router, Route, Routes, Outlet} from 'react-router-dom';
 import './App.css';
 import Navigation from './views/pages/Navigation';
 import Profile from './views/pages/Profile';
@@ -15,7 +10,7 @@ import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
 import RegisterModal from './addons/Modal/RegisterModal';
 
-function AppLoader({ children }) {
+function AppLoader({children}) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,7 +44,7 @@ function App() {
   return (
     <AppContext.Provider
       value={{
-        ...modal.value,
+        ...modal.value
       }}
     >
       <AppLoader>

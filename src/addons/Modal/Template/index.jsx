@@ -1,16 +1,16 @@
-import { useContext } from 'react';
-import { ModalContext } from '../useModalContext';
+import React, {useContext} from 'react';
+import {ModalContext} from '../useModalContext';
 import './Template.style.css';
 
 const sizeVariants = {
   full: 'modal-full',
   medium: 'modal-medium',
-  small: 'modal-small',
+  small: 'modal-small'
 };
 
-function ModalTemplate({ options, ...props }) {
-  const { controls } = useContext(ModalContext);
-  const { size, title, backgroundColor } = options;
+function ModalTemplate({options, ...props}) {
+  const {controls} = useContext(ModalContext);
+  const {size, title, backgroundColor} = options;
 
   return (
     <div
@@ -24,29 +24,29 @@ function ModalTemplate({ options, ...props }) {
         justifyContent: 'center',
         alignItems: 'center',
         overflowY: 'auto',
-        zIndex: '10',
+        zIndex: '10'
       }}
     >
       <div
         className={`modal ${sizeVariants[size] ?? ''}`}
         style={{
-          backgroundColor,
+          backgroundColor
         }}
       >
         <div
           style={{
             textAlign: 'right',
-            width: '100%',
+            width: '100%'
           }}
           onClick={() => controls.close()}
         >
-          <span style={{ fontSize: '2rem', paddingRight: '1rem' }}>x</span>
+          <span style={{fontSize: '2rem', paddingRight: '1rem'}}>x</span>
         </div>
         <div
           style={{
             display: 'flex',
             justifyContent: 'between',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <h1>{title}</h1>

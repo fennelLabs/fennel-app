@@ -21,7 +21,7 @@ function App() {
   return (
     <AppContext.Provider
       value={{
-        ...modal.value,
+        ...modal.value
       }}
     >
       <MainContent />
@@ -34,7 +34,7 @@ function App() {
 ```js
 import useModal from './utils/useModal';
 
-const { open, close } = useModal('OkDialog');
+const {open, close} = useModal('OkDialog');
 ```
 
 The modals which can be used are listed in the `ModalOptions` constant defined in [ModalDisplay](./ModalDisplay.jsx).

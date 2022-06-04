@@ -2,25 +2,29 @@
   "name": "fennel-app",
   "version": "0.1.0",
   "private": true,
-  "main": "public/main.js",
+  "electron-main": "public\\main.js",
   "dependencies": {
     "@mdx-js/react": "^2.1.1",
     "@polkadot/api": "^8.6.2",
+    "@swc/helpers": "^0.3.17",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "rxjs": "^7.5.5",
+    "web-vitals": "^2.1.4",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "parcel public/index.html",
+    "build": "parcel build public/index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron ."
+    "electron": "wait-on tcp:3000 && electron .",
+    "lint": "eslint --ext js,jsx src",
+    "format": "prettier -w src/**/*"
   },
   "eslintConfig": {
     "extends": [
@@ -55,8 +59,6 @@
     "@storybook/addon-essentials": "^6.5.5",
     "@storybook/addon-interactions": "^6.5.5",
     "@storybook/addon-links": "^6.5.5",
-    "@storybook/builder-webpack5": "^6.5.5",
-    "@storybook/manager-webpack5": "^6.5.5",
     "@storybook/node-logger": "^6.5.5",
     "@storybook/preset-create-react-app": "^4.1.1",
     "@storybook/react": "^6.5.5",
@@ -68,8 +70,14 @@
     "concurrently": "^7.2.1",
     "electron": "^19.0.1",
     "electron-is-dev": "^2.0.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "parcel": "^2.6.0",
+    "prettier": "2.6.2",
     "prop-types": "^15.8.1",
-    "wait-on": "^6.0.1",
-    "webpack": "^5.72.1"
+    "wait-on": "^6.0.1"
   }
 }

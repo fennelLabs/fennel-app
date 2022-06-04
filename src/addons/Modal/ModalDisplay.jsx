@@ -4,10 +4,10 @@ import OkDialog from './OkDialog';
 
 const ModalOptions = {
   Menu: MenuModal,
-  OkDialog: OkDialog,
+  OkDialog: OkDialog
 };
 
-function ModalDisplay({ name }) {
+function ModalDisplay({name}) {
   const Modal = ModalOptions[name];
   return Modal && <Modal />;
 }
