@@ -1,27 +1,21 @@
 
 import React, { useState, useEffect } from "react";
-import RPCService from '../../../services/Node/index.js';
+import Node from '../../../services/Node';
 
 function Diagnostics() {
 
-    const [genesisHash, chain, nodeName, nodeVersion] = useState(0);
+    let [genesisHash, chain, nodeName, nodeVersion, setDiagnostics] = useState(0);
 
     useEffect(() => {
         fetchData();
     });
 
     async function fetchData() {
-
-        const service = new RPCService();
-        const api = await service.api();
-
-        [genesisHash, chain, nodeName, nodeVersion] = await Promise.all([
-            api.genesisHash.toHex(),
-            api.rpc.system.chain(),
-            api.rpc.system.name(),
-            api.rpc.system.version(),
-        ]);
-
+        //not working yet, have to figure out how to set state
+        const node = await new Node();
+        [genesisHash, chain, nodeName, nodeVersion] = node.getDiagnosticsData(); 
+        //setDiagnostics(genesisHash, chain, nodeName, nodeVersion)
+        
     }
 
     return (
@@ -31,19 +25,18 @@ function Diagnostics() {
                     Genesis Hash
                 </dt>
                 <dd>
-                    {genesisHash}
+                   {genesisHash}
                 </dd>
                 <dt>
                     Chain
                 </dt>
-                <dd>
-                    {chain}
-                </dd>
+                <dd>{chain}
+            </dd>
                 <dt>
                     Node Name
                 </dt>
                 <dd>
-                    {nodeName}
+                   {nodeName}
                 </dd>
                 <dt>
                     Node Version

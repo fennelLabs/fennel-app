@@ -7,6 +7,24 @@ class Node {
     this._api = null;
   }
 
+  async getDiagnosticsData() {
+    //let's not do this here
+    await this.api();
+    try {
+      let ret = await Promise.all([
+        this._api.genesisHash.toHex(),
+        this._api.rpc.system.chain(),
+        this._api.rpc.system.name(),
+        this._api.rpc.system.version(),
+      ]);
+      return {
+        genesisHash: ret.genesisHash, chain: ret.chain, nodeName: ret.nodeName, nodeVersion: ret.nodeVersion
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async api() {
     if (this.apiNotReady()) {
       await this.connect();
