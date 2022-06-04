@@ -10,11 +10,14 @@
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
     "rxjs": "^7.5.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "parcel public/index.html",
     "build": "parcel build public/index.html",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
@@ -58,6 +61,10 @@
     "@storybook/node-logger": "^6.5.5",
     "@storybook/preset-create-react-app": "^4.1.1",
     "@storybook/react": "^6.5.5",
+    "@storybook/testing-library": "^0.0.11",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.2.0",
+    "@testing-library/user-event": "^13.5.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "concurrently": "^7.2.1",
     "electron": "^19.0.1",
