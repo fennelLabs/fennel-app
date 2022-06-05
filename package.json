@@ -5,6 +5,7 @@
   "electron-main": "public\\main.js",
   "dependencies": {
     "@mdx-js/react": "^2.1.1",
+    "@polkadot/api": "^8.6.2",
     "@swc/helpers": "^0.3.17",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -78,5 +79,8 @@
     "prettier": "2.6.2",
     "prop-types": "^15.8.1",
     "wait-on": "^6.0.1"
+  },
+  "optionalDependencies": { 
+    "fsevents": "2.1.2" 
   }
 }

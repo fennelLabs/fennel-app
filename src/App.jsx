@@ -4,6 +4,7 @@ import './App.css';
 import Navigation from './views/pages/Navigation';
 import Profile from './views/pages/Profile';
 import Inbox from './views/pages/Inbox';
+import Diagnostics from './views/pages/Diagnostics';
 import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
@@ -30,6 +31,7 @@ function AppRouter() {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/inbox" element={<Inbox />} />
+        <Route path="/diagnostics" element={<Diagnostics />} />
       </Routes>
       <Outlet />
     </Router>

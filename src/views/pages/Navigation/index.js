@@ -21,6 +21,9 @@ function Navigation() {
         <li>
           <Link to="/inbox">Inbox</Link>
         </li>
+        <li>
+          <Link to="/diagnostics">Diagnostics</Link>
+        </li>
       </ul>
     </nav>
   );
