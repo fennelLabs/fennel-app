@@ -2,7 +2,11 @@
   "name": "fennel-app",
   "version": "0.1.0",
   "private": true,
-  "main": "src/main.js",
+  "main": "public/electron.js",
+  "targets": {
+    "main": false
+  },
+  "extends": null,
   "homepage": "./",
   "dependencies": {
     "@mdx-js/react": "^2.1.1",
@@ -25,19 +29,23 @@
     "dev": "concurrently \"cross-env BROWSER=none npm start\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && electron .",
     "lint": "eslint --ext js,jsx src",
-    "electron-build": "electron-builder -mwl",
+    "electron-build": "electron-builder",
     "format": "prettier -w src/**/*"
   },
   "build": {
+    "extends": null,
     "appId": "com.fennellabs",
     "files": [
-      "src/electron.js",
+      "public/electron.js",
+      "src/main.js",
       "src/assets/*",
-      "build/**/*"
+      "build/**/*",
+      "dist/**/*"
     ],
     "mac": {
       "target": "dmg",
-      "icon": "src/assets/logo.png"
+      "icon": "src/assets/logo.png",
+      "identity": null
     },
     "win": {
       "target": "nsis",
@@ -69,12 +77,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "electron >= 19.0.0"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "electron >= 19.0.0"
     ]
   },
   "devDependencies": {
