@@ -1,5 +1,10 @@
 {
   "name": "fennel-app",
+  "author": {
+    "name": "Fennel Labs",
+    "email": "info@fennellabs.com",
+    "url": "http://fennellabs.com"
+  },
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
@@ -29,8 +34,9 @@
     "dev": "concurrently \"cross-env BROWSER=none npm start\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && electron .",
     "lint": "eslint --ext js,jsx src",
-    "electron-build": "electron-builder",
-    "format": "prettier -w src/**/*"
+    "electron-build": "electron-builder -mwl",
+    "format": "prettier -w src/**/*",
+    "clean": "rm -rf ./build/ ./dist/"
   },
   "build": {
     "extends": null,
