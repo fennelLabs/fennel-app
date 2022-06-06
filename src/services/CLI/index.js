@@ -1,4 +1,5 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
+import {NODE_URI} from '../../config';
 
 class Node {
 
@@ -51,4 +52,4 @@ class Node {
 
 }
 
-export default Node; 
+export default CLI; 
