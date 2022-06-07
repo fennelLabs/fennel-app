@@ -42,15 +42,17 @@ function ModalTemplate({options, ...props}) {
         >
           <span style={{fontSize: '2rem', paddingRight: '1rem'}}>x</span>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'between',
-            alignItems: 'center'
-          }}
-        >
-          <h1>{title}</h1>
-        </div>
+        {title && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'between',
+              alignItems: 'center'
+            }}
+          >
+            <h1>{title}</h1>
+          </div>
+        )}
         {props.children}
       </div>
     </div>
