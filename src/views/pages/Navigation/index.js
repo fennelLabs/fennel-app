@@ -24,6 +24,9 @@ function Navigation() {
         <li>
           <Link to="/diagnostics">Diagnostics</Link>
         </li>
+        <li>
+          <Link to="/generate-keypair">Generate Keypair</Link>
+        </li>
       </ul>
     </nav>
   );

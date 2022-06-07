@@ -1,10 +1,23 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import {NODE_URI} from '../../config';
+import {CLI_URI} from '../../config';
+import axios from 'axios';
 
-class Node {
+class CLI {
 
   constructor() {
     this._api = null;
+  }
+
+  async generateKeyPair() {
+    const node = await this.api();
+
+    try {
+      console.log("go generate key pair");
+
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
   async getDiagnosticsData() {
