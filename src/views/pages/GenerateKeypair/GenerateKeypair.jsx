@@ -1,7 +1,6 @@
-import React from "react";
+import React from 'react';
 
 function GenerateKeypair() {
-
   toggleShow = false;
 
   return (
@@ -9,6 +8,6 @@ function GenerateKeypair() {
       <h1>Generate RSA Keypair</h1>
     </div>
   );
-};
+}
 
 export default GenerateKeypair;

@@ -34,7 +34,7 @@ function AppRouter() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/inbox" element={<Inbox />} />
         <Route path="/diagnostics" element={<Diagnostics />} />
-        <Route path="/generate-keypair" element={<GenerateKeypair /> } />
+        <Route path="/generate-keypair" element={<GenerateKeypair />} />
       </Routes>
       <Outlet />
     </Router>
