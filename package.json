@@ -1,30 +1,68 @@
 {
   "name": "fennel-app",
+  "author": {
+    "name": "Fennel Labs",
+    "email": "info@fennellabs.com",
+    "url": "http://fennellabs.com"
+  },
   "version": "0.1.0",
   "private": true,
-  "electron-main": "public\\main.js",
+  "main": "public/electron.js",
+  "targets": {
+    "main": false
+  },
+  "extends": null,
+  "homepage": "./",
   "dependencies": {
     "@mdx-js/react": "^2.1.1",
     "@polkadot/api": "^8.6.2",
     "@swc/helpers": "^0.3.17",
+    "cross-env": "^7.0.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
     "rxjs": "^7.5.5",
-    "web-vitals": "^2.1.4",
-    "react-scripts": "5.0.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "parcel public/index.html",
-    "build": "parcel build public/index.html",
+    "start": "parcel -p 3000 index.html --dist-dir build",
+    "build": "parcel build index.html --dist-dir build --public-url ./",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
+    "dev": "concurrently \"cross-env BROWSER=none npm start\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && electron .",
     "lint": "eslint --ext js,jsx src",
-    "format": "prettier -w src/**/*"
+    "electron-build": "electron-builder -mwl",
+    "format": "prettier -w src/**/*",
+    "clean": "rm -rf ./build/ ./dist/"
+  },
+  "build": {
+    "extends": null,
+    "appId": "com.fennellabs",
+    "files": [
+      "public/electron.js",
+      "src/main.js",
+      "src/assets/*",
+      "build/**/*",
+      "dist/**/*"
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "src/assets/logo.png",
+      "identity": null
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/logo.png"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "src/assets/logo.png",
+      "category": "Development"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -46,12 +84,14 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "electron >= 19.0.0"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "electron >= 19.0.0"
     ]
   },
   "devDependencies": {
@@ -69,6 +109,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "concurrently": "^7.2.1",
     "electron": "^19.0.1",
+    "electron-builder": "^23.0.3",
     "electron-is-dev": "^2.0.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
