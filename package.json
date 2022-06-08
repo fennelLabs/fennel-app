@@ -7,12 +7,20 @@
   },
   "version": "0.1.0",
   "private": true,
-  "main": "public/electron.js",
+  "electron": "build/electron.js",
+  "web-app": "build/index.html",
   "targets": {
-    "main": false
+    "electron": {
+      "context": "electron-main",
+      "source": "public/electron.js",
+      "distDir": "build"
+    },
+    "web-app": {
+      "context": "browser",
+      "source": "index.html",
+      "distDir": "build"
+    }
   },
-  "extends": null,
-  "homepage": "./",
   "dependencies": {
     "@mdx-js/react": "^2.1.1",
     "@polkadot/api": "^8.6.2",
@@ -26,25 +34,25 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "parcel -p 3000 index.html --dist-dir build",
-    "build": "parcel build index.html --dist-dir build --public-url ./",
+    "start": "parcel -p 3000 --target web-app --dist-dir build .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "dev": "concurrently \"cross-env BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron .",
+    "dev": "concurrently \"npm start\" \"npm:electron:start\"",
+    "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
+    "electron:build": "parcel build --target electron .",
+    "electron:dist": "electron-builder -mwl",
     "lint": "eslint --ext js,jsx src",
-    "electron-build": "electron-builder -mwl",
     "format": "prettier -w src/**/*",
-    "clean": "rm -rf ./build/ ./dist/"
+    "clean": "rm -rf ./build/ ./dist/",
+    "prod:build": "parcel build --public-url ./ ."
   },
   "build": {
     "extends": null,
     "appId": "com.fennellabs",
     "files": [
-      "public/electron.js",
-      "src/main.js",
+      "build/electron.js",
       "src/assets/*",
       "build/**/*",
       "dist/**/*"
@@ -121,7 +129,7 @@
     "prop-types": "^15.8.1",
     "wait-on": "^6.0.1"
   },
-  "optionalDependencies": { 
-    "fsevents": "2.1.2" 
+  "optionalDependencies": {
+    "fsevents": "2.1.2"
   }
 }
