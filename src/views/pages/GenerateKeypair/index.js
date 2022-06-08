@@ -13,12 +13,6 @@ function GenerateKeypair() {
 
     ws.on('open', async () => {
       try {
-        //this fails:
-        //await ws.call('help', []);
-        //this fails:
-        //await ws.call('fennel-cli.exe help', []);
-        //Error generated:
-        //{code: -32601, message: 'Method not found'}
         await ws.call('get_or_generate_keypair', []);
       } catch (err) {
         console.log(err);
