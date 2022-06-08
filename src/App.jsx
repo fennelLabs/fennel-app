@@ -10,7 +10,6 @@ import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
 import RegisterModal from './addons/Modal/RegisterModal';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function AppLoader({children}) {
   const [loading, setLoading] = useState(true);

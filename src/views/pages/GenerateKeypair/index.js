@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import CLI from '../../../services/CLI';
 import {CLI_URI} from '../../../config';
 import {Client as WsClient} from 'rpc-websockets';
