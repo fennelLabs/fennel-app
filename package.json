@@ -7,12 +7,12 @@
   },
   "version": "0.1.0",
   "private": true,
-  "electron": "build\\electron.js",
-  "web-app": "build\\index.html",
+  "electron": "build/electron.js",
+  "web-app": "build/index.html",
   "targets": {
     "electron": {
       "context": "electron-main",
-      "source": "public\\electron.js",
+      "source": "public/electron.js",
       "distDir": "build"
     },
     "web-app": {
