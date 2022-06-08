@@ -35,12 +35,11 @@
   },
   "scripts": {
     "start": "parcel -p 3000 --target web-app --dist-dir build .",
-    "dev:build": "parcel build --public-url ./ .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "dev": "npm run dev:build && concurrently \"npm start\" \"npm:electron:start\"",
+    "dev": "concurrently \"npm start\" \"npm:electron:start\"",
     "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
     "electron:build": "parcel build --target electron .",
     "electron:dist": "electron-builder -mwl",
