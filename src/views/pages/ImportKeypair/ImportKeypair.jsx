@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function ImportKeypair() {
   return (
@@ -6,6 +6,6 @@ function ImportKeypair() {
       <h1>Import RSA Keypair</h1>
     </div>
   );
-};
+}
 
 export default ImportKeypair;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 
 function CreateMessage() {
   return (
@@ -8,6 +8,6 @@ function CreateMessage() {
       <button type="submit" />
     </div>
   );
-};
+}
 
 export default CreateMessage;
