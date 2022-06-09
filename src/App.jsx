@@ -26,7 +26,7 @@ function AppLoader({children}) {
 
 function AppRouter() {
   return (
-    <Router>
+    <>
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -36,7 +36,7 @@ function AppRouter() {
         <Route path="/generate-keypair" element={<GenerateKeypair />} />
       </Routes>
       <Outlet />
-    </Router>
+    </>
   );
 }
 
@@ -44,16 +44,18 @@ function App() {
   const modal = RegisterModal();
 
   return (
-    <AppContext.Provider
-      value={{
-        ...modal.value
-      }}
-    >
-      <AppLoader>
-        <AppRouter />
-      </AppLoader>
-      {modal.Component}
-    </AppContext.Provider>
+    <Router>
+      <AppContext.Provider
+        value={{
+          ...modal.value
+        }}
+      >
+        <AppLoader>
+          <AppRouter />
+        </AppLoader>
+        {modal.Component}
+      </AppContext.Provider>
+    </Router>
   );
 }
 

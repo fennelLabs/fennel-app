@@ -1,15 +1,33 @@
 {
   "name": "fennel-app",
+  "author": {
+    "name": "Fennel Labs",
+    "email": "info@fennellabs.com",
+    "url": "http://fennellabs.com"
+  },
   "version": "0.1.0",
   "private": true,
-  "electron-main": "public\\main.js",
+  "electron": "build/electron.js",
+  "web-app": "build/index.html",
+  "targets": {
+    "electron": {
+      "context": "electron-main",
+      "source": "public/electron.js",
+      "distDir": "build"
+    },
+    "web-app": {
+      "context": "browser",
+      "source": "index.html",
+      "distDir": "build"
+    }
+  },
   "dependencies": {
-    "@mdx-js/react": "^2.1.1",
     "@polkadot/api": "^8.6.2",
     "@popperjs/core": "2.9.1",
     "@swc/helpers": "^0.3.17",
     "axios": "^0.27.2",
     "daisyui": "^2.15.2",
+    "cross-env": "^7.0.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -19,16 +37,41 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "parcel public/index.html",
-    "build": "parcel build public/index.html",
+    "start": "parcel -p 3000 --target web-app --dist-dir build .",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public",
-    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron .",
+    "dev": "concurrently \"npm start\" \"npm:electron:start\"",
+    "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
+    "electron:build": "parcel build --target electron .",
+    "electron:dist": "electron-builder -mwl",
     "lint": "eslint --ext js,jsx src",
-    "format": "prettier -w src/**/*"
+    "format": "prettier -w src/**/*",
+    "clean": "rm -rf ./build/ ./dist/",
+    "prod:build": "parcel build --public-url ./ ."
+  },
+  "build": {
+    "extends": null,
+    "appId": "com.fennellabs",
+    "files": [
+      "build/electron.js",
+      "src/assets/*",
+      "build/**/*",
+      "dist/**/*"
+    ],
+    "mac": {
+      "target": "dmg",
+      "icon": "src/assets/logo.png",
+      "identity": null
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/logo.png"
+    },
+    "linux": {
+      "target": "deb",
+      "icon": "src/assets/logo.png",
+      "category": "Development"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -50,23 +93,17 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "electron >= 19.0.0"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "electron >= 19.0.0"
     ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.5.5",
-    "@storybook/addon-essentials": "^6.5.5",
-    "@storybook/addon-interactions": "^6.5.5",
-    "@storybook/addon-links": "^6.5.5",
-    "@storybook/node-logger": "^6.5.5",
-    "@storybook/preset-create-react-app": "^4.1.1",
-    "@storybook/react": "^6.5.5",
-    "@storybook/testing-library": "^0.0.11",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
@@ -74,6 +111,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "concurrently": "^7.2.1",
     "electron": "^19.0.1",
+    "electron-builder": "^23.0.3",
     "electron-is-dev": "^2.0.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
