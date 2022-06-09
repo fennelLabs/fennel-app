@@ -1,6 +1,5 @@
 import React from 'react';
-
-import {AddContact} from './AddContact';
+import AddContact from '.';
 
 export default {
   title: 'AddContact',
