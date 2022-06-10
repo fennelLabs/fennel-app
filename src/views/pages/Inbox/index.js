@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import MessageService from '../../../services/Message.service';
+import MessageAPIService from '../../../services/MessageAPI';
 import ListView from '../../components/ListView';
 
-const message = new MessageService();
+const message = new MessageAPIService();
 
 function Inbox() {
   const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
-    const sub = message.messages$.subscribe((d) => {
+    const sub = message.received_messages$.subscribe((d) => {
       setMessageList(d);
     });
 

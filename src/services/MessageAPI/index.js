@@ -7,7 +7,7 @@ class MessageAPIService {
     _count = 0;
 
     sent_messages$ = this._sent_messages.asObservable();
-    received_message$ = this._received_messages.asObservable();
+    received_messages$ = this._received_messages.asObservable();
 
     sendMessage(message, fingerprint, signature, publicKey, sender_id, recipient_id, message_encryption_indicator_id) {
         const query = `
