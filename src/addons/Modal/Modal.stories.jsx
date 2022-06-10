@@ -1,5 +1,5 @@
 import React from 'react';
-import useModal from '../../../utils/useModal';
+import useModal from '../../utils/useModal';
 
 function Demo() {
   const controls = useModal('Menu');

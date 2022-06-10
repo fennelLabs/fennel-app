@@ -1,13 +1,12 @@
 import React from 'react';
-
-import {AddContact} from './AddContact';
+import EditContact from '.';
 
 export default {
-  title: 'AddContact',
-  component: AddContact
+  title: 'EditContact',
+  component: EditContact
 };
 
-const Template = (args) => <AddContact {...args} />;
+const Template = (args) => <EditContact {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {};
