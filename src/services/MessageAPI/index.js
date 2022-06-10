@@ -120,6 +120,8 @@ class MessageAPIService {
             url: 'http://localhost:1234/graphql',
             headers: {
                 'content-type': 'application/json',
+                "X-Requested-With": "XMLHttpRequest",
+                "Access-Control-Allow-Origin": "*"
             },
             data: {
                 "query": query,
