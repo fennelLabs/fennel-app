@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 class MessageAPIService {
     _sent_messages = new BehaviorSubject([]);
     _received_messages = new BehaviorSubject([]);
-    _count = 0;
 
     sent_messages$ = this._sent_messages.asObservable();
     received_messages$ = this._received_messages.asObservable();
@@ -108,7 +107,6 @@ class MessageAPIService {
     }
 
     __addSentMessage(data) {
-        ++this._count;
         this._sent_messages.next([
             ...this._sent_messages.value,
             ...data['data']['messages']
