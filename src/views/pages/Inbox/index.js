@@ -12,6 +12,8 @@ function Inbox() {
       setMessageList(d);
     });
 
+    message.checkMessages();
+
     return () => {
       sub.remove();
     };

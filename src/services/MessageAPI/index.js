@@ -63,7 +63,7 @@ class MessageAPIService {
         const variables = {
             "recipientID": recipientID,
         };
-        response = this.__queryHandler(query, variables);
+        let response = this.__queryHandler(query, variables);
         this.__populateReceivedMessages(response);
     }
 
@@ -88,7 +88,7 @@ class MessageAPIService {
         const variables = {
             "senderID": senderID
         };
-        response = this.__queryHandler(query, variables);
+        let response = this.__queryHandler(query, variables);
         this.__populateSentMessages(response);
     }
 
@@ -114,17 +114,28 @@ class MessageAPIService {
     }
 
     async __queryHandler(query, variables) {
-        try {
-            const response = await axios.post('http://localhost:1234', {
-                query,
-                variables
+        let retval = undefined;
+        const options = {
+            method: 'POST',
+            url: 'http://localhost:1234/graphql',
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: {
+                "query": query,
+                "variables": variables
+            }
+        };
+        await axios
+            .request(options)
+            .then(function (response) {
+                console.log(response);
+                retval = response.data;
+            })
+            .catch(function (error) {
+                console.error(error);
+                retval = [];
             });
-            console.log(response);
-            retval = response.data;
-        } catch (error) {
-            console.log(error);
-            retval = {};
-        }
         return JSON.parse(retval);
     }
 }
