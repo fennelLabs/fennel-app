@@ -94,12 +94,10 @@ class MessageAPIService {
     }
 
     __populateReceivedMessages(data) {
-        data['data']['messages'].forEach(item => {
-            this._received_messages.next([
+          this._received_messages.next([
                 ...this._received_messages.value,
-                item
+                ...data['data']['messages']
             ]);
-        });
     }
 
     __populateSentMessages(data) {
