@@ -121,11 +121,12 @@ class MessageAPIService {
             headers: {
                 'content-type': 'application/json',
                 "X-Requested-With": "XMLHttpRequest",
-                "Access-Control-Allow-Origin": "*"
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Max-Age": 600
             },
             data: {
-                "query": query,
-                "variables": variables
+                query: query,
+                variables: variables
             }
         };
         await axios
