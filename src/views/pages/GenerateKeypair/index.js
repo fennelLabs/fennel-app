@@ -5,7 +5,8 @@ import {Client as WsClient} from 'rpc-websockets';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
-import Button from '../../components/Button';
+import Button from '../../components/Button'; 
+import IdentitySubNav from '../../components/IdentitySubNav';
 
 function GenerateKeypair() {
   async function generateKeypair() {
@@ -29,23 +30,7 @@ function GenerateKeypair() {
     <PageContainer>
       <div className="flex flex-row">
         <div className="basis-1/4">
-          <ul className="menu bg-base-300 w-56 p-2 rounded-box">
-            <li>
-              <a>Import / Generate Key</a>
-            </li>
-            <li>
-              <a>Publish My Key</a>
-            </li>
-            <li>
-              <a>Edit My Profile</a>
-            </li>
-            <li>
-              <a>Backup Key</a>
-            </li>
-            <li>
-              <a>Revoke Key</a>
-            </li>
-          </ul>
+          <IdentitySubNav />
         </div>
         <div className="basis-3/4 px-8">
           <PageTitle>Generate Key Pair</PageTitle>

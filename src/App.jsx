@@ -6,6 +6,10 @@ import Profile from './views/pages/Profile';
 import Inbox from './views/pages/Inbox';
 import Diagnostics from './views/pages/Diagnostics';
 import GenerateKeypair from './views/pages/GenerateKeypair';
+import PublishKey from './views/pages/PublishKey';
+import RevokeKey from './views/pages/RevokeKey';
+import Identity from './views/pages/Identity';
+import BackupKey from './views/pages/BackupKey';
 import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
@@ -33,7 +37,12 @@ function AppRouter() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/inbox" element={<Inbox />} />
         <Route path="/diagnostics" element={<Diagnostics />} />
-        <Route path="/generate-keypair" element={<GenerateKeypair />} />
+        <Route path="/identity/import-generate-keypair" element={<GenerateKeypair />} />
+        <Route path="/identity/profile" element={<Profile />} />
+        <Route path="/identity/publish-key" element={<PublishKey />} />
+        <Route path="/identity/backup-key" element={<BackupKey />} />
+        <Route path="/identity/revoke-key" element={<RevokeKey />} />
+        <Route path="/identity" element={<Identity />} />
       </Routes>
       <Outlet />
     </>

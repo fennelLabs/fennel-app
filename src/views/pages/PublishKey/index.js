@@ -5,7 +5,7 @@ import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 
-function Profile() {
+function PublishKey() {
   return (
     <PageContainer>
       <div className="flex flex-row">
@@ -13,15 +13,15 @@ function Profile() {
           <IdentitySubNav />
         </div>
         <div className="basis-3/4 px-8">
-          <PageTitle>Profile</PageTitle>
+          <PageTitle>Publish Key</PageTitle>
           <Text>
             Some text explaining what this is all about and what to expect.
           </Text>
-          <Button>Edit</Button>
+          <Button>Publish Key</Button>
         </div>
       </div>
     </PageContainer>
   );
 }
 
-export default Profile;
+export default PublishKey;
