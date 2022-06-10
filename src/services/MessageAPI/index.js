@@ -103,19 +103,17 @@ class MessageAPIService {
     }
 
     __populateSentMessages(data) {
-        data['data']['messages'].forEach(item => {
-            this._sent_messages.next([
-                ...this._sent_messages.value,
-                item
-            ]);
-        });
+        this._sent_messages.next([
+            ...this._sent_messages.value,
+            ...data['data']['messages']
+        ]);
     }
 
     __addSentMessage(data) {
         ++this._count;
         this._sent_messages.next([
             ...this._sent_messages.value,
-            data
+            ...data['data']['messages']
         ]);
     }
 
