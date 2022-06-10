@@ -115,22 +115,22 @@ class MessageAPIService {
 
     async __queryHandler(query, variables) {
         let retval = undefined;
-        const options = {
-            method: 'POST',
-            url: 'http://localhost:1234/graphql',
-            headers: {
-                'content-type': 'application/json',
-                "X-Requested-With": "XMLHttpRequest",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Max-Age": 600
-            },
-            data: {
-                query: query,
-                variables: variables
-            }
-        };
         await axios
-            .request(options)
+            .post(
+                'http://localhost:1234/graphql',
+                {
+                    headers: {
+                    'content-type': 'application/json',
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Max-Age": 600
+                    }
+                },
+                {
+                    query,
+                    variables: variables
+                }
+            )
             .then(function (response) {
                 console.log(response);
                 retval = response.data;
