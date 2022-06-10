@@ -2,10 +2,12 @@ import axios from 'axios';
 import { BehaviorSubject } from 'rxjs';
 
 class MessageAPIService {
-    _messages = new BehaviorSubject([]);
+    _sent_messages = new BehaviorSubject([]);
+    _received_messages = new BehaviorSubject([]);
     _count = 0;
 
-    messages$ = this._messages.asObservable();
+    sent_messages$ = this._sent_messages.asObservable();
+    received_message$ = this._received_messages.asObservable();
 
     sendMessage(message, fingerprint, signature, publicKey, sender_id, recipient_id, message_encryption_indicator_id) {
         const query = `
@@ -37,7 +39,8 @@ class MessageAPIService {
                 "messageEncryptionIndicatorId": message_encryption_indicator_id
             }
         };
-        this.__queryHandler(query, variables);
+        response = this.__queryHandler(query, variables);
+        this.__addSentMessage(response);
     }
 
     checkMessages(recipientID) {
@@ -61,7 +64,8 @@ class MessageAPIService {
         const variables = {
             "recipientID": recipientID,
         };
-        this.__queryHandler(query, variables);
+        response = this.__queryHandler(query, variables);
+        this.__populateReceivedMessagess(response);
     }
 
     getSentMessages(senderID) {
@@ -85,7 +89,33 @@ class MessageAPIService {
         const variables = {
             "senderID": senderID
         };
-        this.__queryHandler(query, variables);
+        response = this.__queryHandler(query, variables);
+        this.__populateSentMessages(response);
+    }
+
+    __populateReceivedMessagess(data) {
+        data['data']['messages'].forEach(item => {
+            this._received_messages.next([
+                ...this._received_messages.value,
+                item
+            ]);
+        });
+    }
+
+    __populateSentMessages(data) {
+        data['data']['messages'].forEach(item => {
+            this._sent_messages.next([
+
+            ]);
+        });
+    }
+
+    __addSentMessage(data) {
+        ++this._count;
+        this._sent_messages.next([
+            ...this._sent_messages.value,
+            data
+        ]);
     }
 
     async __queryHandler(query, variables) {
@@ -95,9 +125,12 @@ class MessageAPIService {
                 variables
             });
             console.log(response);
+            retval = response.data;
         } catch (error) {
             console.log(error);
+            retval = {};
         }
+        return JSON.parse(retval);
     }
 }
 
