@@ -10,6 +10,8 @@ import PublishKey from './views/pages/PublishKey';
 import RevokeKey from './views/pages/RevokeKey';
 import Identity from './views/pages/Identity';
 import BackupKey from './views/pages/BackupKey';
+import Contacts from './views/pages/Contacts';
+import AddContact from './views/pages/AddContact';
 import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
@@ -43,6 +45,8 @@ function AppRouter() {
         <Route path="/identity/backup-key" element={<BackupKey />} />
         <Route path="/identity/revoke-key" element={<RevokeKey />} />
         <Route path="/identity" element={<Identity />} />
+        <Route path="/contacts" element={<Contacts />} />
+        <Route path="/contacts/add" element={<AddContact />} />
       </Routes>
       <Outlet />
     </>
