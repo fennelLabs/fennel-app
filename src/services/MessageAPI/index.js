@@ -65,7 +65,7 @@ class MessageAPIService {
             "recipientID": recipientID,
         };
         response = this.__queryHandler(query, variables);
-        this.__populateReceivedMessagess(response);
+        this.__populateReceivedMessages(response);
     }
 
     getSentMessages(senderID) {
@@ -93,7 +93,7 @@ class MessageAPIService {
         this.__populateSentMessages(response);
     }
 
-    __populateReceivedMessagess(data) {
+    __populateReceivedMessages(data) {
         data['data']['messages'].forEach(item => {
             this._received_messages.next([
                 ...this._received_messages.value,
