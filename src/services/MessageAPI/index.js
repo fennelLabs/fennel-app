@@ -105,7 +105,8 @@ class MessageAPIService {
     __populateSentMessages(data) {
         data['data']['messages'].forEach(item => {
             this._sent_messages.next([
-
+                ...this._sent_messages.value,
+                item
             ]);
         });
     }
