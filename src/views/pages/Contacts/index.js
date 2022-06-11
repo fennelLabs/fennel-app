@@ -20,7 +20,6 @@ function Contacts() {
           </Text>
           <ContactsList />
           <Button>Add</Button>
-
         </div>
       </div>
     </PageContainer>
