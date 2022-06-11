@@ -12,7 +12,7 @@ function Inbox() {
       setMessageList(d);
     });
 
-    message.checkMessages();
+    message.checkMessages(1);
 
     return () => {
       sub.remove();

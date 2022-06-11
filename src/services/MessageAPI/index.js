@@ -1,146 +1,110 @@
 import axios from 'axios';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 
 class MessageAPIService {
-    _sent_messages = new BehaviorSubject([]);
-    _received_messages = new BehaviorSubject([]);
+  _sent_messages = new BehaviorSubject([]);
+  _received_messages = new BehaviorSubject([]);
 
-    sent_messages$ = this._sent_messages.asObservable();
-    received_messages$ = this._received_messages.asObservable();
+  sent_messages$ = this._sent_messages.asObservable();
+  received_messages$ = this._received_messages.asObservable();
 
-    sendMessage(message, fingerprint, signature, publicKey, sender_id, recipient_id, message_encryption_indicator_id) {
-        const query = `
-        mutation createMessageEncryptionIndicator($indicatorInput:CreateMessageEncryptionIndicatorInput!) {
-            createMessageEncryptionIndicator(input:$indicatorInput){
-                id
-                message
-                signature
-                fingerprint
-                publicKey
-                sender {
-                    id
-                }
-                recipient {
-                    id
-                }
-            }
+  async sendMessage(
+    message,
+    fingerprint,
+    signature,
+    publicKey,
+    sender_id,
+    recipient_id,
+    message_encryption_indicator_id
+  ) {
+    let retval = undefined;
+    await axios
+      .post(
+        `http://localhost:1234/api/messages/`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
           }
-        `;
-        const variables = {
-            "messageInput": {
-                "message": message,
-                "clientMutationId": "1",
-                "fingerprint": fingerprint,
-                "signature": signature,
-                "publicKey": publicKey,
-                "senderId": sender_id,
-                "recipientId": recipient_id,
-                "messageEncryptionIndicatorId": message_encryption_indicator_id
-            }
-        };
-        response = this.__queryHandler(query, variables);
-        this.__addSentMessage(response);
-    }
-
-    checkMessages(recipientID) {
-        const query = `
-        query {
-            messages(recipient_id: $recipientID) {
-                id
-                message
-                signature
-                fingerprint
-                publicKey
-                sender {
-                    id
-                }
-                recipient {
-                    id
-                }
-            }
+        },
+        {
+          message: message,
+          public_key: publicKey,
+          signature: signature,
+          fingerprint: fingerprint,
+          sender: `http://localhost:1234/api/identities/${sender_id}/`,
+          recipient: `http://localhost:1234/api/identities/${recipient_id}/`,
+          message_encryption_indicator: `http://localhost:1234/api/message_encryption_indicators/${message_encryption_indicator_id}/`
         }
-        `;
-        const variables = {
-            "recipientID": recipientID,
-        };
-        let response = this.__queryHandler(query, variables);
-        this.__populateReceivedMessages(response);
-    }
+      )
+      .then(function (response) {
+        console.log(response.data.results);
+        retval = response.data.results;
+      })
+      .catch(function (error) {
+        console.error(error);
+        retval = [];
+      });
+    this.__addSentMessage(retval);
+  }
 
-    getSentMessages(senderID) {
-        const query = `
-        query {
-            messages(sender_id: $senderID) {
-                id
-                message
-                signature
-                fingerprint
-                publicKey
-                sender {
-                    id
-                }
-                recipient {
-                    id
-                }
-            }
+  async checkMessages(recipientID) {
+    let retval = undefined;
+    await axios
+      .get(`http://localhost:1234/api/messages/?recipient=${recipientID}/`, {
+        headers: {
+          'Content-Type': 'application/json',
         }
-        `;
-        const variables = {
-            "senderID": senderID
-        };
-        let response = this.__queryHandler(query, variables);
-        this.__populateSentMessages(response);
-    }
+      })
+      .then(function (response) {
+        console.log(response.data.results);
+        retval = response.data.results;
+      })
+      .catch(function (error) {
+        console.error(error);
+        retval = [];
+      });
+    this.__populateReceivedMessages(retval);
+  }
 
-    __populateReceivedMessages(data) {
-          this._received_messages.next([
-                ...this._received_messages.value,
-                ...data['data']['messages']
-            ]);
-    }
+  async getSentMessages(senderID) {
+    let retval = undefined;
+    await axios
+      .get(`http://localhost:1234/api/messages/?sender=${senderID}/`, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(function (response) {
+        console.log(response.data.results);
+        retval = response.data.results;
+      })
+      .catch(function (error) {
+        console.error(error);
+        retval = [];
+      });
+    this.__populateSentMessages(retval);
+  }
 
-    __populateSentMessages(data) {
-        this._sent_messages.next([
-            ...this._sent_messages.value,
-            ...data['data']['messages']
-        ]);
-    }
+  __populateReceivedMessages(data) {
+    this._received_messages.next([
+      ...this._received_messages.value,
+      ...data
+    ]);
+  }
 
-    __addSentMessage(data) {
-        this._sent_messages.next([
-            ...this._sent_messages.value,
-            ...data['data']['messages']
-        ]);
-    }
+  __populateSentMessages(data) {
+    this._sent_messages.next([
+      ...this._sent_messages.value,
+      ...data
+    ]);
+  }
 
-    async __queryHandler(query, variables) {
-        let retval = undefined;
-        await axios
-            .post(
-                'http://localhost:1234/graphql',
-                {
-                    headers: {
-                    'content-type': 'application/json',
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Max-Age": 600
-                    }
-                },
-                {
-                    query,
-                    variables: variables
-                }
-            )
-            .then(function (response) {
-                console.log(response);
-                retval = response.data;
-            })
-            .catch(function (error) {
-                console.error(error);
-                retval = [];
-            });
-        return JSON.parse(retval);
-    }
+  __addSentMessage(data) {
+    this._sent_messages.next([
+      ...this._sent_messages.value,
+      ...data
+    ]);
+  }
 }
 
 export default MessageAPIService;
