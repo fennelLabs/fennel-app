@@ -12,10 +12,13 @@ function Inbox() {
       setMessageList(d);
     });
 
-    message.checkMessages(1);
+    // TODO checkMessages needs to pull its argument from our current identity.
+    // TODO Why is it pulling messages twice?
+    let id = setInterval(message.checkMessages(1), 5000);
 
     return () => {
       sub.remove();
+      clearInterval(id);
     };
   }, []);
 
