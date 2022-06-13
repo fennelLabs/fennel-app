@@ -1,8 +1,26 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
+import axios from 'axios';
+import { NODE_URI_HTTP } from '../../config';
 
 class Node {
   constructor() {
     this._api = null;
+  }
+
+  /*async*/ createIdentity() {
+    console.log('Execute substrate node extrinsic: create_identity');
+    /*let headers = {
+      "Content-Type": "application/json",
+      "Accept": "text/plain"
+    }
+    let bodyContent = JSON.stringify({
+        "id":1,
+        "jsonrpc":"2.0",
+        "method": "runtime_getState",
+        "params":["System", "Events",[]]
+    });
+    let tx_res = await axios.post(NODE_URI_HTTP,bodyContent,{headers:headers})
+    console.log(tx_res);*/
   }
 
   async getDiagnosticsData() {
@@ -19,6 +37,34 @@ class Node {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async getMetaData() {
+    const node = await this.api();
+    try {
+      let data = await Promise.all([
+        node.rpc.rpc.methods()
+      ]);
+      await this.disconnect();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  get_metadata_request() {
+    let request = new Request(NODE_URI_WS, {
+      method: 'POST',
+      body: JSON.stringify({
+        id: 1,
+        jsonrpc: '2.0',
+        method: 'state_getMetadata',
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    return request;
   }
 
   async api() {

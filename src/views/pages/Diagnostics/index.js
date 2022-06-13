@@ -2,12 +2,13 @@ import React, {useState, useEffect} from 'react';
 import Node from '../../../services/Node';
 
 function Diagnostics() {
-  const [data, setData] = useState({pending: undefined, diagnostics: null});
+  const [data, setData] = useState(undefined);
 
   useEffect(() => {
     setData({pending: true, diagnostics: {}});
-
-    const fetchData = async () => {
+    //const node = new Node();
+    //const data = node.createIdentity();
+  const fetchData = async () => {
       const node = new Node();
       const data = await node.getDiagnosticsData();
       return data;
@@ -20,11 +21,27 @@ function Diagnostics() {
         });
       })
       .catch(console.error);
-  }, []);
 
+      const fetchMoreData = async () => {
+        const node = new Node();
+        const data = await node.createIdentity();
+        return data;
+      };
+      fetchMoreData()
+        .then((fetchedMoreData) => {
+          console.log(fetchedMoreData);
+          //setData({
+          //  pending: false,
+          //  diagnostics: fetchedData
+          //});
+        })
+        .catch(console.error);
+
+
+  }, []);
+ 
   return (
     <div>
-      {' '}
       {data && (
         <dl>
           <dt>Genesis Hash</dt>

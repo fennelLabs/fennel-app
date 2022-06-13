@@ -2,7 +2,7 @@ import React from 'react';
 
 function Button({children, ...attributes}) {
   return (
-    <button className="btn" type="button" {...attributes}>
+    <button className="btn" {...attributes}>
       {children}
     </button>
   );
