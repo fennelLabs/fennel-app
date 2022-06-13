@@ -48,8 +48,7 @@ class MessageAPIService {
   }
 
   async checkMessages(recipientID) {
-    let retval = undefined;
-    await axios
+    let results = await axios
       .get(`http://localhost:1234/api/messages/?recipient=${recipientID}/`, {
         headers: {
           'Content-Type': 'application/json',
@@ -57,13 +56,13 @@ class MessageAPIService {
       })
       .then(function (response) {
         console.log(response.data.results);
-        retval = response.data.results;
+        return response.data.results;
       })
       .catch(function (error) {
         console.error(error);
-        retval = [];
+        return [];
       });
-    this.__populateReceivedMessages(retval);
+      this.__populateReceivedMessages(results);
   }
 
   async getSentMessages(senderID) {
