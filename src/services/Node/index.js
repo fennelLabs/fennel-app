@@ -6,7 +6,7 @@ import {NODE_URI_HTTP} from '../../config';
 class Node {
   _signals = new BehaviorSubject([]);
 
-  $signals$ = this._signals.asObservable();
+  signals$ = this._signals.asObservable();
 
   constructor() {
     this._api = null;
