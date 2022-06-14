@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function BackupWallet() {
   return (
@@ -6,6 +6,6 @@ function BackupWallet() {
       <h1>Backup Wallet</h1>
     </div>
   );
-};
+}
 
 export default BackupWallet;
