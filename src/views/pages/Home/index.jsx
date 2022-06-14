@@ -1,18 +1,24 @@
 import React from 'react';
 import useModal from '../../../utils/useModal';
+import PageContainer from '../../components/PageContainer';
+import PageTitle from '../../components/PageTitle';
+import Button from '../../components/Button';
+import useModal from '../../../utils/useModal';
 
 function Home() {
   const controls = useModal('Menu');
   const okdialog = useModal('OkDialog');
 
   return (
-    <div>
-      <h1>Home</h1>
-      <div>
-        <button onClick={() => controls.open()}>Open Menu</button>
-        <button onClick={() => okdialog.open()}>Ok Dialog</button>
+    <PageContainer>
+      <div className="flex flex-row">
+        <div className="basis-4/4 px-8">
+          <PageTitle>Home</PageTitle>
+          <Button onClick={() => controls.open()}>Open Menu</Button>
+          <Button onClick={() => okdialog.open()}>Ok Dialog</Button>
+        </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import MessageService from '../../../services/Message.service';
 import ListView from '../../components/ListView';
+import PageContainer from '../../components/PageContainer';
+import PageTitle from '../../components/PageTitle';
+import InboxSubNav from '../../components/InboxSubNav';
 
 const message = new MessageService();
 
@@ -18,10 +21,17 @@ function Inbox() {
   }, []);
 
   return (
-    <div>
-      <h1>Inbox</h1>
-      <ListView itemList={messageList ?? []} />
-    </div>
+    <PageContainer>
+      <div className="flex flex-row">
+        <div className="basis-1/4">
+          <InboxSubNav />
+        </div>
+        <div className="basis-3/4 px-8">
+        <PageTitle>Inbox</PageTitle>
+          <ListView itemList={messageList ?? []} />
+        </div>
+      </div>
+    </PageContainer>
   );
 }
 

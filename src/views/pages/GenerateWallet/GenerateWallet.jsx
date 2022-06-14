@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function GenerateWallet() {
   return (
@@ -6,6 +6,6 @@ function GenerateWallet() {
       <h1>Generate Wallet</h1>
     </div>
   );
-};
+}
 
 export default GenerateWallet;
