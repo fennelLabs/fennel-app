@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
 
+const node = new Node();
+
 function Feed() {
+  useEffect(() => {
+    node.listenForSignals();
+  });
+
   return (
     <PageContainer>
       <div className="flex flex-row">

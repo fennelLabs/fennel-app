@@ -33,6 +33,8 @@ class Node {
     const apiAt = await this.api.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
+    console.log(signedBlock.block.extrinsics);
+
     signedBlock.block.extrinsics.forEach(
       ({method: {method, section}}, index) => {
         const events = allRecords
