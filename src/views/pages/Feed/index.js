@@ -10,7 +10,7 @@ const node = new Node();
 function Feed() {
   useEffect(() => {
     node.listenForSignals();
-  });
+  }, []);
 
   return (
     <PageContainer>
