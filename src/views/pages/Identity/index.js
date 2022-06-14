@@ -32,16 +32,16 @@ function Identity() {
           <PageTitle>Identity</PageTitle>
           <Text>You may use the links in the menu to manage your identity.</Text>
           <form onSubmit={handleSubmit}>
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text"><strong>Create New Identity</strong></span>
-                <input value="create" type="radio" name="radio" class="radio checked:bg-blue-500" onChange={() => setCreateIdentity(true)} onClick={() => toggleChoice()} />
+            <div className="form-control">
+              <label className="label cursor-pointer">
+                <span className="label-text"><strong>Create New Identity</strong></span>
+                <input value="create" type="radio" name="radio" className="radio checked:bg-blue-500" onChange={() => setCreateIdentity(true)} onClick={() => toggleChoice()} />
               </label>
             </div>
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text"><strong>Import Identity</strong></span>
-                <input value="import" type="radio" name="radio" class="radio checked:bg-blue-500" onChange={() => setCreateIdentity(false)} onClick={() => toggleChoice()} />
+            <div className="form-control">
+              <label className="label cursor-pointer">
+                <span className="label-text"><strong>Import Identity</strong></span>
+                <input value="import" type="radio" name="radio" className="radio checked:bg-blue-500" onChange={() => setCreateIdentity(false)} onClick={() => toggleChoice()} />
               </label>
             </div>
             <div className="mt-2">
