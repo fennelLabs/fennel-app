@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import MessageAPIService from '../../../services/MessageAPI';
 import ListView from '../../components/ListView';
+import PropTypes from 'prop-types';
 
 const message = new MessageAPIService();
 
-function Inbox() {
+function Inbox(props) {
   const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
@@ -12,10 +13,8 @@ function Inbox() {
       setMessageList(d);
     });
 
-    // TODO checkMessages needs to pull its argument from our current identity.
-    // TODO Why is it pulling messages twice?
     let id = setInterval(() => {
-       message.checkMessages(1);
+      message.checkMessages(props.user_identity);
     }, 5000);
 
     return () => {
@@ -31,5 +30,9 @@ function Inbox() {
     </div>
   );
 }
+
+Inbox.propTypes = {
+  user_identity: PropTypes.number
+};
 
 export default Inbox;
