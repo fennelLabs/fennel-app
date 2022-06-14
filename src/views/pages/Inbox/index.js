@@ -35,7 +35,7 @@ function Inbox(props) {
           <InboxSubNav />
         </div>
         <div className="basis-3/4 px-8">
-        <PageTitle>Inbox</PageTitle>
+          <PageTitle>Inbox</PageTitle>
           <ListView itemList={messageList ?? []} />
         </div>
       </div>

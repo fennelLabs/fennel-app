@@ -17,13 +17,12 @@ class MessageAPIService {
     recipient_id,
     message_encryption_indicator_id
   ) {
-    let retval = undefined;
-    await axios
+    let retval = await axios
       .post(
         `http://localhost:1234/api/messages/`,
         {
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           }
         },
         {
@@ -38,11 +37,11 @@ class MessageAPIService {
       )
       .then(function (response) {
         console.log(response.data.results);
-        retval = response.data.results;
+        return response.data.results;
       })
       .catch(function (error) {
         console.error(error);
-        retval = [];
+        return [];
       });
     this.__addSentMessage(retval);
   }
@@ -51,7 +50,7 @@ class MessageAPIService {
     let results = await axios
       .get(`http://localhost:1234/api/messages/?recipient=${recipientID}/`, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       })
       .then(function (response) {
@@ -62,44 +61,37 @@ class MessageAPIService {
         console.error(error);
         return [];
       });
-      this.__populateReceivedMessages(results);
+    this.__populateReceivedMessages(results);
   }
 
   async getSentMessages(senderID) {
-    let retval = undefined;
-    await axios
+    let retval = await axios
       .get(`http://localhost:1234/api/messages/?sender=${senderID}/`, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         }
       })
       .then(function (response) {
         console.log(response.data.results);
-        retval = response.data.results;
+        return response.data.results;
       })
       .catch(function (error) {
         console.error(error);
-        retval = [];
+        return [];
       });
     this.__populateSentMessages(retval);
   }
 
   __populateReceivedMessages(data) {
-    this._received_messages.next([
-      ...data
-    ]);
+    this._received_messages.next([...data]);
   }
 
   __populateSentMessages(data) {
-    this._sent_messages.next([
-      ...data
-    ]);
+    this._sent_messages.next([...data]);
   }
 
   __addSentMessage(data) {
-    this._sent_messages.next([
-      ...data
-    ]);
+    this._sent_messages.next([...data]);
   }
 }
 
