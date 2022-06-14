@@ -13,6 +13,8 @@ function Inbox(props) {
       setMessageList(d);
     });
 
+    message.checkMessages(props.user_identity);
+
     let id = setInterval(() => {
       message.checkMessages(props.user_identity);
     }, 5000);
@@ -21,7 +23,7 @@ function Inbox(props) {
       sub.remove();
       clearInterval(id);
     };
-  }, []);
+  }, [props.user_identity]);
 
   return (
     <div>

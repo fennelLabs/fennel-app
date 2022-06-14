@@ -86,21 +86,18 @@ class MessageAPIService {
 
   __populateReceivedMessages(data) {
     this._received_messages.next([
-      ...this._received_messages.value,
       ...data
     ]);
   }
 
   __populateSentMessages(data) {
     this._sent_messages.next([
-      ...this._sent_messages.value,
       ...data
     ]);
   }
 
   __addSentMessage(data) {
     this._sent_messages.next([
-      ...this._sent_messages.value,
       ...data
     ]);
   }
