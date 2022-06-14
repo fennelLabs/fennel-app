@@ -1,7 +1,7 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import { ApiPromise, WsProvider } from '@polkadot/api';
 import axios from 'axios';
-import {BehaviorSubject} from 'rxjs';
-import {NODE_URI_HTTP} from '../../config';
+import { BehaviorSubject } from 'rxjs';
+import { NODE_URI_HTTP } from '../../config';
 
 class Node {
   _signals = new BehaviorSubject([]);
@@ -29,20 +29,22 @@ class Node {
   }
 
   async listenForSignals() {
-    const signedBlock = await this.api.rpc.chain.getBlock();
-    const apiAt = await this.api.at(signedBlock.block.header.hash);
+    const node = await this.api();
+    console.log(this._api);
+    const signedBlock = await node.rpc.chain.getBlock();
+    const apiAt = await node.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
     console.log(signedBlock.block.extrinsics);
 
     signedBlock.block.extrinsics.forEach(
-      ({method: {method, section}}, index) => {
+      ({ method: { method, section } }, index) => {
         const events = allRecords
           .filter(
-            ({phase}) =>
+            ({ phase }) =>
               phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
           )
-          .map(({event}) => `${event.section}.${event.method}`);
+          .map(({ event }) => `${event.section}.${event.method}`);
 
         console.log(
           `${section}.${method}:: ${events.join(', ') || 'no events'}`
@@ -86,7 +88,7 @@ class Node {
         jsonrpc: '2.0',
         method: 'state_getMetadata'
       }),
-      headers: {'Content-Type': 'application/json'}
+      headers: { 'Content-Type': 'application/json' }
     });
     return request;
   }
@@ -101,7 +103,7 @@ class Node {
   async connect() {
     try {
       const provider = new WsProvider('ws://127.0.0.1:9944');
-      this._api = await ApiPromise.create({provider});
+      this._api = await ApiPromise.create({ provider });
     } catch (error) {
       console.error(error);
     }

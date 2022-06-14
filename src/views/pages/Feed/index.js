@@ -10,8 +10,14 @@ const node = new Node();
 
 function Feed() {
   useEffect(() => {
-    node.listenForSignals();
-  }, []);
+    let id = setInterval(() => {
+      node.listenForSignals();
+    }, 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  });
 
   return (
     <PageContainer>
