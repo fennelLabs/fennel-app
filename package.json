@@ -26,8 +26,8 @@
     "@popperjs/core": "2.9.1",
     "@swc/helpers": "^0.3.17",
     "axios": "^0.27.2",
-    "daisyui": "^2.15.2",
     "cross-env": "^7.0.3",
+    "daisyui": "^2.15.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -121,6 +121,7 @@
     "parcel": "^2.6.0",
     "postcss": "^8.4.14",
     "prettier": "2.6.2",
+    "process": "^0.11.10",
     "prop-types": "^15.8.1",
     "tailwindcss": "^3.0.24",
     "wait-on": "^6.0.1"
