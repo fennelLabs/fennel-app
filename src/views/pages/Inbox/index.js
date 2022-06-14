@@ -1,24 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import MessageService from '../../../services/Message.service';
+import MessageAPIService from '../../../services/MessageAPI';
 import ListView from '../../components/ListView';
+import PropTypes from 'prop-types';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import InboxSubNav from '../../components/InboxSubNav';
 
-const message = new MessageService();
+const message = new MessageAPIService();
 
-function Inbox() {
+function Inbox(props) {
   const [messageList, setMessageList] = useState([]);
 
   useEffect(() => {
-    const sub = message.messages$.subscribe((d) => {
+    const sub = message.received_messages$.subscribe((d) => {
       setMessageList(d);
     });
 
+    message.checkMessages(props.user_identity);
+
+    let id = setInterval(() => {
+      message.checkMessages(props.user_identity);
+    }, 5000);
+
     return () => {
       sub.remove();
+      clearInterval(id);
     };
-  }, []);
+  }, [props.user_identity]);
 
   return (
     <PageContainer>
@@ -27,12 +35,16 @@ function Inbox() {
           <InboxSubNav />
         </div>
         <div className="basis-3/4 px-8">
-        <PageTitle>Inbox</PageTitle>
+          <PageTitle>Inbox</PageTitle>
           <ListView itemList={messageList ?? []} />
         </div>
       </div>
     </PageContainer>
   );
 }
+
+Inbox.propTypes = {
+  user_identity: PropTypes.number
+};
 
 export default Inbox;
