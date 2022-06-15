@@ -7,7 +7,7 @@ import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function NewFeedMessage() {
-  const {_, keymanager} = useServiceContext();
+  const {keymanager} = useServiceContext();
   const node = new Node();
 
   const [value, setValue] = useState('');
