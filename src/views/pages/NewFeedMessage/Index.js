@@ -1,11 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
-import Text from '../../components/Text';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
+import Node from '../../../services/Node';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function NewFeedMessage() {
+  const {keymanager} = useServiceContext();
+  const node = new Node();
+
+  const [value, setValue] = useState('');
+
   return (
     <PageContainer>
       <div className="flex flex-row">
@@ -14,9 +20,23 @@ function NewFeedMessage() {
         </div>
         <div className="basis-3/4 px-8">
           <PageTitle>New Feed Message</PageTitle>
-          <Text>
-            Some text explaining what this is all about and what to expect.
-          </Text>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              node.sendNewSignal(keymanager, value);
+            }}
+          >
+            <textarea
+              name="new_message"
+              rows={5}
+              cols={5}
+              value={value}
+              onChange={(event) => {
+                setValue(event.target.value);
+              }}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
         </div>
       </div>
     </PageContainer>

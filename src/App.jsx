@@ -19,6 +19,8 @@ import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
 import RegisterModal from './addons/Modal/RegisterModal';
+import GenerateWallet from './views/pages/GenerateWallet';
+import RestoreWallet from './views/pages/RestoreWallet';
 import {ServiceContextProvider} from './contexts/ServiceContext';
 
 function AppLoader({children}) {
@@ -57,6 +59,8 @@ function AppRouter() {
         <Route path="/feed" element={<Feed />} />
         <Route path="/feed/message" element={<NewFeedMessage />} />
         <Route path="/inbox/new" element={<NewMessage />} />
+        <Route path="/wallet/generate" element={<GenerateWallet />} />
+        <Route path="/wallet/restore" element={<RestoreWallet />} />
       </Routes>
       <Outlet />
     </>

@@ -3,7 +3,6 @@ import useModal from '../../../utils/useModal';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
-import useModal from '../../../utils/useModal';
 
 function Home() {
   const controls = useModal('Menu');

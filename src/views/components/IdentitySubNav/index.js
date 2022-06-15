@@ -1,22 +1,25 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 function IdentitySubNav({children, ...attributes}) {
   return (
     <ul className="menu bg-base-300 w-56 p-2 rounded-box">
       <li>
-        <a href="/identity/import-generate-keypair">Import / Generate Key</a>
+        <Link to="/identity/import-generate-keypair">
+          Import / Generate Key
+        </Link>
       </li>
       <li>
-        <a href="/identity/publish-key">Publish My Key</a>
+        <Link to="/identity/publish-key">Publish My Key</Link>
       </li>
       <li>
-        <a href="/identity/profile">Edit My Profile</a>
+        <Link to="/identity/profile">Edit My Profile</Link>
       </li>
       <li>
-        <a href="/identity/backup-key">Backup Key</a>
+        <Link to="/identity/backup-key">Backup Key</Link>
       </li>
       <li>
-        <a href="/identity/revoke-key">Revoke Key</a>
+        <Link to="/identity/revoke-key">Revoke Key</Link>
       </li>
     </ul>
   );

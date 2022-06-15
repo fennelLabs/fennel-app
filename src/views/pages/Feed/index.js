@@ -1,23 +1,29 @@
 import React, {useEffect, useState} from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
-import Text from '../../components/Text';
 import FeedSubNav from '../../components/FeedSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import Node from '../../../services/Node';
+import FeedListView from '../../components/FeedListView';
+
+const node = new Node();
 
 function Feed() {
-  const {messageService} = useServiceContext();
-  const [messages, setMessages] = useState([]);
+  const [signalList, setSignalList] = useState([]);
 
   useEffect(() => {
-    const sub = messageService.messages$.subscribe((message) => {
-      setMessages(message.map((m) => JSON.stringify(m)) ?? []);
+    const sub = node.signals$.subscribe((d) => {
+      setSignalList(d);
     });
 
+    let id = setInterval(() => {
+      node.listenForSignals();
+    }, 1000);
+
     return () => {
-      sub.unsubscribe();
+      sub.remove();
+      clearInterval(id);
     };
-  }, []);
+  });
 
   return (
     <PageContainer>
@@ -27,12 +33,7 @@ function Feed() {
         </div>
         <div className="basis-3/4 px-8">
           <PageTitle>Feed</PageTitle>
-          <Text>
-            Some text explaining what this is all about and what to expect.
-          </Text>
-          <div>
-            {React.Children.toArray(messages.map((m) => <div>{m}</div>))}
-          </div>
+          <FeedListView itemList={signalList ?? []} />
         </div>
       </div>
     </PageContainer>

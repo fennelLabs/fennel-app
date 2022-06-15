@@ -1,26 +1,116 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
-import axios from 'axios';
-import { NODE_URI_HTTP } from '../../config';
+import {BehaviorSubject} from 'rxjs';
+import {TextDecoder} from 'text-encoding';
 
 class Node {
+  _signals = new BehaviorSubject([]);
+  _balance = new BehaviorSubject(0);
+
+  signals$ = this._signals.asObservable();
+  balance$ = this._balance.asObservable();
+
   constructor() {
     this._api = null;
   }
 
-  /*async*/ createIdentity() {
-    console.log('Execute substrate node extrinsic: create_identity');
-    /*let headers = {
-      "Content-Type": "application/json",
-      "Accept": "text/plain"
+  async getBalance(keymanager) {
+    console.log(`Getting balance for signer ${keymanager.name()}`);
+    const node = await this.api();
+    if (!keymanager.signer()) {
+      this._balance.next(0);
+    } else {
+      const { _, data: balance } = await node.query.system.account(keymanager.signer().address);
+      console.log(`${balance.free}`);
+      this._balance.next(`${balance.free}`);
     }
-    let bodyContent = JSON.stringify({
-        "id":1,
-        "jsonrpc":"2.0",
-        "method": "runtime_getState",
-        "params":["System", "Events",[]]
+  }
+
+  async createIdentity(keymanager) {
+    const node = await this.api();
+    let identity_number = await node.tx.identityModule
+      .createIdentity()
+      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+        console.log(`Current status is ${status.type}`);
+
+        if (status.isFinalized) {
+          console.log(
+            `Transaction included at blockHash ${status.asFinalized}`
+          );
+          console.log(`Transaction hash ${txHash.toHex()}`);
+
+          events.forEach(({phase, event: {data, method, section}}) => {
+            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          });
+
+          unsub();
+          return 0;
+        }
+      });
+    return identity_number;
+  }
+
+  async sendNewSignal(keymanager, content) {
+    const node = await this.api();
+    await node.tx.signalModule
+      .sendSignal(content)
+      .signAndSend(keymanager.signer(), (result) => {
+        console.log(`Current status is ${result.status}`);
+
+        if (result.status.isInBlock) {
+          console.log(
+            `Transaction included at blockHash ${result.status.asInBlock}`
+          );
+        } else if (result.status.isFinalized) {
+          console.log(
+            `Transaction finalized at blockHash ${result.status.asFinalized}`
+          );
+          unsub();
+        }
+      });
+  }
+
+  async listenForSignals() {
+    var events_list = [];
+
+    const decoder = new TextDecoder('utf-8');
+    const node = await this.api();
+    const signedBlock = await node.rpc.chain.getBlock();
+    const apiAt = await node.at(signedBlock.block.header.hash);
+    const allRecords = await apiAt.query.system.events();
+
+    signedBlock.block.extrinsics.forEach(
+      ({method: {method, section}}, index) => {
+        if (method == 'sendSignal' && section == 'signalModule') {
+          const events = allRecords
+            .filter(
+              ({phase}) =>
+                phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
+            )
+            .map(({event}) => {
+              return {
+                id: event.index,
+                section: event.section,
+                method: event.method,
+                message: decoder.decode(event.data[0])
+              };
+            });
+
+          events_list.push(...events);
+        }
+      }
+    );
+
+    let new_events_list = events_list.filter((element) => {
+      return (
+        element.section == 'signalModule' && element.method == 'SignalSent'
+      );
     });
-    let tx_res = await axios.post(NODE_URI_HTTP,bodyContent,{headers:headers})
-    console.log(tx_res);*/
+
+    let final_events = Array.from(
+      new Set([...this._signals.value, ...new_events_list].map(JSON.stringify))
+    ).map(JSON.parse);
+
+    this._signals.next(final_events);
   }
 
   async getDiagnosticsData() {
@@ -42,9 +132,7 @@ class Node {
   async getMetaData() {
     const node = await this.api();
     try {
-      let data = await Promise.all([
-        node.rpc.rpc.methods()
-      ]);
+      let data = await Promise.all([node.rpc.rpc.methods()]);
       await this.disconnect();
       return data;
     } catch (error) {
@@ -52,18 +140,16 @@ class Node {
     }
   }
 
-
-
   get_metadata_request() {
     let request = new Request(NODE_URI_WS, {
       method: 'POST',
       body: JSON.stringify({
         id: 1,
         jsonrpc: '2.0',
-        method: 'state_getMetadata',
+        method: 'state_getMetadata'
       }),
-      headers: { 'Content-Type': 'application/json' },
-    })
+      headers: {'Content-Type': 'application/json'}
+    });
     return request;
   }
 
