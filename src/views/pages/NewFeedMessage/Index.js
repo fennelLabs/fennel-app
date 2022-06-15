@@ -6,7 +6,7 @@ import FeedSubNav from '../../components/FeedSubNav';
 import Node from '../../../services/Node';
 
 function NewFeedMessage() {
-  const keymanager = useContext(KeyManagerContext);
+  const {_, keymanager} = useServiceContext();
   const node = new Node();
 
   const [value, setValue] = useState('');

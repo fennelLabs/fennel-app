@@ -1,10 +1,10 @@
 import React, {useState, useContext} from 'react';
 import Button from '../../components/Button';
-import KeyManagerContext from '../../../contexts/KeyManagerContext';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function RestoreWallet(props) {
   const [value, setValue] = useState('');
-  const keymanager = useContext(KeyManagerContext);
+  const {_, keymanager} = useServiceContext();
 
   return (
     <div>

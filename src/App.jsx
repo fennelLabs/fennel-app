@@ -23,7 +23,6 @@ import RegisterModal from './addons/Modal/RegisterModal';
 import GenerateWallet from './views/pages/GenerateWallet';
 import RestoreWallet from './views/pages/RestoreWallet';
 import {ServiceContextProvider} from './contexts/ServiceContext';
-import KeyManagerContext from './contexts/KeyManagerContext';
 
 function AppLoader({children}) {
   const [loading, setLoading] = useState(true);
@@ -71,24 +70,21 @@ function AppRouter() {
 
 function App() {
   const modal = RegisterModal();
-  const [keyManager, _] = useState(new KeyManager('Tester'));
 
   return (
     <Router>
-      <KeyManagerContext.Provider value={keyManager}>
-        <ServiceContextProvider>
-          <AppContext.Provider
-            value={{
-              ...modal.value
-            }}
-          >
-            <AppLoader>
-              <AppRouter />
-            </AppLoader>
-            {modal.Component}
-          </AppContext.Provider>
-        </ServiceContextProvider>
-      </KeyManagerContext.Provider>
+      <ServiceContextProvider>
+        <AppContext.Provider
+          value={{
+            ...modal.value
+          }}
+        >
+          <AppLoader>
+            <AppRouter />
+          </AppLoader>
+          {modal.Component}
+        </AppContext.Provider>
+      </ServiceContextProvider>
     </Router>
   );
 }

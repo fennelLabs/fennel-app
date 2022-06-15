@@ -1,11 +1,11 @@
 import React, {useState, useContext} from 'react';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 import Button from '../../components/Button';
 import Text from '../../components/Text';
-import KeyManagerContext from '../../../contexts/KeyManagerContext';
 
 function GenerateWallet() {
   const [mnemonic, setMnemonic] = useState('');
-  const keymanager = useContext(KeyManagerContext);
+  const {_, keymanager} = useServiceContext();
 
   return (
     <div>

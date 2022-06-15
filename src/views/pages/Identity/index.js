@@ -5,13 +5,12 @@ import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import Node from '../../../services/Node';
-import PropTypes from 'prop-types';
-import KeyManagerContext from '../../../contexts/KeyManagerContext';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
-  const keymanager = useContext(KeyManagerContext);
+  const {_, keymanager} = useServiceContext();
 
   function toggleChoice() {
     setBtnEnabled(true);
