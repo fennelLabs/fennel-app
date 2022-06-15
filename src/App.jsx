@@ -19,6 +19,7 @@ import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
 import RegisterModal from './addons/Modal/RegisterModal';
+import {ServiceContextProvider} from './contexts/ServiceContext';
 
 function AppLoader({children}) {
   const [loading, setLoading] = useState(true);
@@ -56,7 +57,6 @@ function AppRouter() {
         <Route path="/feed" element={<Feed />} />
         <Route path="/feed/message" element={<NewFeedMessage />} />
         <Route path="/inbox/new" element={<NewMessage />} />
-        
       </Routes>
       <Outlet />
     </>
@@ -68,16 +68,18 @@ function App() {
 
   return (
     <Router>
-      <AppContext.Provider
-        value={{
-          ...modal.value
-        }}
-      >
-        <AppLoader>
-          <AppRouter />
-        </AppLoader>
-        {modal.Component}
-      </AppContext.Provider>
+      <ServiceContextProvider>
+        <AppContext.Provider
+          value={{
+            ...modal.value
+          }}
+        >
+          <AppLoader>
+            <AppRouter />
+          </AppLoader>
+          {modal.Component}
+        </AppContext.Provider>
+      </ServiceContextProvider>
     </Router>
   );
 }
