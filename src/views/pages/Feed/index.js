@@ -1,20 +1,28 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
 import Node from '../../../services/Node';
+import FeedListView from '../../components/FeedListView';
 
 const node = new Node();
 
 function Feed() {
+  const [signalList, setSignalList] = useState([]);
+
   useEffect(() => {
+    const sub = node.signals$.subscribe((d) => {
+      setSignalList(d);
+    });
+
     let id = setInterval(() => {
       node.listenForSignals();
     }, 1000);
 
     return () => {
+      sub.remove();
       clearInterval(id);
     };
   });
@@ -27,9 +35,7 @@ function Feed() {
         </div>
         <div className="basis-3/4 px-8">
           <PageTitle>Feed</PageTitle>
-          <Text>
-            Some text explaining what this is all about and what to expect.
-          </Text>
+          <FeedListView itemList={signalList ?? []} />
         </div>
       </div>
     </PageContainer>

@@ -12,6 +12,10 @@ class KeyManager {
     this._pair = null;
   }
 
+  signer() {
+    return this._pair;
+  }
+
   generateAccount(name) {
     const mnemonic = mnemonicGenerate();
 

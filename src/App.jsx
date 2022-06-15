@@ -56,7 +56,6 @@ function AppRouter() {
         <Route path="/feed" element={<Feed />} />
         <Route path="/feed/message" element={<NewFeedMessage />} />
         <Route path="/inbox/new" element={<NewMessage />} />
-        
       </Routes>
       <Outlet />
     </>

@@ -1,7 +1,8 @@
-import { ApiPromise, WsProvider } from '@polkadot/api';
+import {ApiPromise, WsProvider} from '@polkadot/api';
 import axios from 'axios';
-import { BehaviorSubject } from 'rxjs';
-import { NODE_URI_HTTP } from '../../config';
+import {BehaviorSubject, count} from 'rxjs';
+import {TextDecoder} from 'text-encoding';
+import {NODE_URI_HTTP} from '../../config';
 
 class Node {
   _signals = new BehaviorSubject([]);
@@ -28,29 +29,68 @@ class Node {
     console.log(tx_res);*/
   }
 
-  async listenForSignals() {
+  async sendNewSignal(keymanager, content) {
     const node = await this.api();
-    console.log(this._api);
+    await node.tx.signalModule
+      .sendSignal(content)
+      .signAndSend(keymanager.signer(), (result) => {
+        console.log(`Current status is ${result.status}`);
+
+        if (result.status.isInBlock) {
+          console.log(
+            `Transaction included at blockHash ${result.status.asInBlock}`
+          );
+        } else if (result.status.isFinalized) {
+          console.log(
+            `Transaction finalized at blockHash ${result.status.asFinalized}`
+          );
+          unsub();
+        }
+      });
+  }
+
+  async listenForSignals() {
+    var events_list = [];
+
+    const decoder = new TextDecoder('utf-8');
+    const node = await this.api();
     const signedBlock = await node.rpc.chain.getBlock();
     const apiAt = await node.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
-    console.log(signedBlock.block.extrinsics);
-
     signedBlock.block.extrinsics.forEach(
-      ({ method: { method, section } }, index) => {
-        const events = allRecords
-          .filter(
-            ({ phase }) =>
-              phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
-          )
-          .map(({ event }) => `${event.section}.${event.method}`);
+      ({method: {method, section}}, index) => {
+        if (method == 'sendSignal' && section == 'signalModule') {
+          const events = allRecords
+            .filter(
+              ({phase}) =>
+                phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
+            )
+            .map(({event}) => {
+              return {
+                id: event.index,
+                section: event.section,
+                method: event.method,
+                message: decoder.decode(event.data[0])
+              };
+            });
 
-        console.log(
-          `${section}.${method}:: ${events.join(', ') || 'no events'}`
-        );
+          events_list.push(...events);
+        }
       }
     );
+
+    let new_events_list = events_list.filter((element) => {
+      return (
+        element.section == 'signalModule' && element.method == 'SignalSent'
+      );
+    });
+
+    let final_events = Array.from(
+      new Set([...this._signals.value, ...new_events_list].map(JSON.stringify))
+    ).map(JSON.parse);
+
+    this._signals.next(final_events);
   }
 
   async getDiagnosticsData() {
@@ -88,7 +128,7 @@ class Node {
         jsonrpc: '2.0',
         method: 'state_getMetadata'
       }),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {'Content-Type': 'application/json'}
     });
     return request;
   }
@@ -103,7 +143,7 @@ class Node {
   async connect() {
     try {
       const provider = new WsProvider('ws://127.0.0.1:9944');
-      this._api = await ApiPromise.create({ provider });
+      this._api = await ApiPromise.create({provider});
     } catch (error) {
       console.error(error);
     }
