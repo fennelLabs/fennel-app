@@ -18,7 +18,6 @@ import NewMessage from './views/pages/NewMessage';
 import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
-import KeyManager from './utils/KeyManager';
 import RegisterModal from './addons/Modal/RegisterModal';
 import GenerateWallet from './views/pages/GenerateWallet';
 import RestoreWallet from './views/pages/RestoreWallet';

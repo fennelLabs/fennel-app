@@ -1,7 +1,7 @@
 import React from 'react';
 import {createContext, useContext} from 'react';
 import {MessageService} from '../services';
-import KeyManager from '../utils/KeyManager';
+import KeyManager from '../services/KeyManager';
 
 const ServiceContext = createContext({});
 
