@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import MessageAPIService from '../../../services/MessageAPI';
 import ListView from '../../components/ListView';
 import PropTypes from 'prop-types';
-import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import InboxSubNav from '../../components/InboxSubNav';
 
@@ -29,17 +28,15 @@ function Inbox(props) {
   }, [props.user_identity]);
 
   return (
-    <PageContainer>
-      <div className="flex flex-row">
-        <div className="basis-1/4">
-          <InboxSubNav />
-        </div>
-        <div className="basis-3/4 px-8">
-          <PageTitle>Inbox</PageTitle>
-          <ListView itemList={messageList ?? []} />
-        </div>
+    <div className="flex flex-row">
+      <div className="basis-1/4">
+        <InboxSubNav />
       </div>
-    </PageContainer>
+      <div className="basis-3/4 px-8">
+        <PageTitle>Inbox</PageTitle>
+        <ListView itemList={messageList ?? []} />
+      </div>
+    </div>
   );
 }
 
