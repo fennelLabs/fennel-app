@@ -21,8 +21,11 @@ function TailwindyNav() {
             <span className="block relative w-6 h-px rounded-sm bg-white mt-1"></span>
           </button>
         </div>
-        <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
-          <ul class="flex flex-col lg:flex-row list-none ml-auto">
+        <div
+          className="lg:flex flex-grow items-center"
+          id="example-navbar-warning"
+        >
+          <ul className="flex flex-col lg:flex-row list-none ml-auto">
             {React.Children.toArray(
               [
                 <Link to="/identity" className="link">
