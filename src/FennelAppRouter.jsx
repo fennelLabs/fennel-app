@@ -13,7 +13,6 @@ import Identity from './views/pages/Identity';
 import BackupKey from './views/pages/BackupKey';
 import NewFeedMessage from './views/pages/NewFeedMessage';
 import Contacts from './views/pages/Contacts';
-import AddContact from './views/pages/AddContact';
 import NewMessage from './views/pages/NewMessage';
 import Home from './views/pages/Home';
 import PageContainer from './views/components/PageContainer';
