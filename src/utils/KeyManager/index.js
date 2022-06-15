@@ -17,9 +17,11 @@ class KeyManager {
   }
 
   generateAccount(name) {
-    const mnemonic = mnemonicGenerate();
+    const mnemonic = mnemonicGenerate(24);
 
     this._pair = this._keyring.addFromUri(mnemonic, {name: name}, 'ed25519');
+
+    return mnemonic;
   }
 
   importAccount(name, mnemonic) {
