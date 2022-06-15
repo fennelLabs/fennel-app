@@ -1,8 +1,6 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
-import axios from 'axios';
-import {BehaviorSubject, count} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
-import {NODE_URI_HTTP} from '../../config';
 
 class Node {
   _signals = new BehaviorSubject([]);
@@ -18,9 +16,13 @@ class Node {
   async getBalance(keymanager) {
     console.log(`Getting balance for signer ${keymanager.name()}`);
     const node = await this.api();
-    if (!keymanager.signer()) return 0;
-    const {_, data: balance} = await node.query.system.account(keymanager.signer().address)
-    _balance.next(balance.free);
+    if (!keymanager.signer()) {
+      this._balance.next(0);
+    } else {
+      const { _, data: balance } = await node.query.system.account(keymanager.signer().address);
+      console.log(`${balance.free}`);
+      this._balance.next(`${balance.free}`);
+    }
   }
 
   async createIdentity(keymanager) {

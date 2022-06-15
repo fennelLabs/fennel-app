@@ -21,6 +21,8 @@ class KeyManager {
     console.log(`Signer handler: ${this._name}`);
     if (this._pair) {
       console.log(`Signer address: ${this._pair.address}`);
+    } else {
+      console.log('Signer has been set to null.');
     }
     return this._pair;
   }
