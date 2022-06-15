@@ -4,6 +4,7 @@ import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
 import Node from '../../../services/Node';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function NewFeedMessage() {
   const {_, keymanager} = useServiceContext();
