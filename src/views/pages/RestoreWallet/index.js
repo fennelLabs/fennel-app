@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import Button from '../../components/Button';
+import PropTypes from 'prop-types';
 
 function RestoreWallet(props) {
   const [value, setValue] = useState('');

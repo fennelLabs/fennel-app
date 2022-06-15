@@ -13,20 +13,28 @@ class Node {
     this._api = null;
   }
 
-  /*async*/ createIdentity() {
-    console.log('Execute substrate node extrinsic: create_identity');
-    /*let headers = {
-      "Content-Type": "application/json",
-      "Accept": "text/plain"
-    }
-    let bodyContent = JSON.stringify({
-        "id":1,
-        "jsonrpc":"2.0",
-        "method": "runtime_getState",
-        "params":["System", "Events",[]]
-    });
-    let tx_res = await axios.post(NODE_URI_HTTP,bodyContent,{headers:headers})
-    console.log(tx_res);*/
+  async createIdentity(keymanager) {
+    const node = await this.api();
+    let identity_number = await node.tx.identityModule
+      .createIdentity()
+      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+        console.log(`Current status is ${status.type}`);
+
+        if (status.isFinalized) {
+          console.log(
+            `Transaction included at blockHash ${status.asFinalized}`
+          );
+          console.log(`Transaction hash ${txHash.toHex()}`);
+
+          events.forEach(({phase, event: {data, method, section}}) => {
+            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          });
+
+          unsub();
+          return 0;
+        }
+      });
+    return identity_number;
   }
 
   async sendNewSignal(keymanager, content) {
