@@ -36,8 +36,7 @@ function FennelAppRouter() {
         <Route path="/identity/backup-key" element={<BackupKey />} />
         <Route path="/identity/revoke-key" element={<RevokeKey />} />
         <Route path="/identity" element={<Identity />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/contacts/add" element={<AddContact />} />
+        <Route path="/contacts/*" element={<Contacts />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/feed/message" element={<NewFeedMessage />} />
         <Route path="/inbox/new" element={<NewMessage />} />

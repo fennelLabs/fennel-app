@@ -1,9 +1,10 @@
 import React from 'react';
+import {Routes, Route} from 'react-router-dom';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
-import Button from '../../components/Button';
 import ContactsSubNav from '../../components/ContactsSubNav';
 import ContactsList from '../../components/Contact/ContactsList';
+import AddContact from '../AddContact';
 
 function Contacts() {
   return (
@@ -16,8 +17,10 @@ function Contacts() {
         <Text>
           Some text explaining what this is all about and what to expect.
         </Text>
-        <ContactsList />
-        <Button>Add</Button>
+        <Routes>
+          <Route path="" element={<ContactsList />} />
+          <Route path="add" element={<AddContact />} />
+        </Routes>
       </div>
     </div>
   );
