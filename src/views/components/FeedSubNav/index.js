@@ -1,13 +1,14 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 function FeedSubNav({children, ...attributes}) {
   return (
     <ul className="menu bg-base-300 w-56 p-2 rounded-box">
       <li>
-        <a href="/feed">Feed</a>
+        <Link to="/feed">Feed</Link>
       </li>
       <li>
-        <a href="/feed/message">New Feed Message</a>
+        <Link to="/feed/message">New Feed Message</Link>
       </li>
     </ul>
   );
