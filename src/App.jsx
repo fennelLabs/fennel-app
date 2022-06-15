@@ -18,11 +18,12 @@ import NewMessage from './views/pages/NewMessage';
 import Home from './views/pages/Home';
 import LoadingScreen from './views/components/LoadingScreen';
 import AppContext from './contexts/AppContext';
-import KeyManagerContext from './contexts/KeyManagerContext';
 import KeyManager from './utils/KeyManager';
 import RegisterModal from './addons/Modal/RegisterModal';
 import GenerateWallet from './views/pages/GenerateWallet';
 import RestoreWallet from './views/pages/RestoreWallet';
+import {ServiceContextProvider} from './contexts/ServiceContext';
+import KeyManagerContext from './contexts/KeyManagerContext';
 
 function AppLoader({children}) {
   const [loading, setLoading] = useState(true);
@@ -74,18 +75,20 @@ function App() {
 
   return (
     <Router>
-      <AppContext.Provider
-        value={{
-          ...modal.value
-        }}
-      >
-        <KeyManagerContext.Provider value={keyManager}>
-          <AppLoader>
-            <AppRouter />
-          </AppLoader>
-        </KeyManagerContext.Provider>
-        {modal.Component}
-      </AppContext.Provider>
+      <KeyManagerContext.Provider value={keyManager}>
+        <ServiceContextProvider>
+          <AppContext.Provider
+            value={{
+              ...modal.value
+            }}
+          >
+            <AppLoader>
+              <AppRouter />
+            </AppLoader>
+            {modal.Component}
+          </AppContext.Provider>
+        </ServiceContextProvider>
+      </KeyManagerContext.Provider>
     </Router>
   );
 }

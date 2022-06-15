@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs';
 
-class MessageService {
+export class MessageService {
   _messages = new BehaviorSubject([]);
   _count = 0;
 
@@ -28,5 +28,3 @@ class MessageService {
     }, 3_000);
   }
 }
-
-export default MessageService;

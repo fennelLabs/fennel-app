@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
-import Text from '../../components/Text';
-import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
 import Node from '../../../services/Node';
 import FeedListView from '../../components/FeedListView';
