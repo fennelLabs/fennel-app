@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Button from '../../components/Button';
 import Text from '../../components/Text';
+import KeyManagerContext from '../../../contexts/KeyManagerContext';
 
-function GenerateWallet(props) {
+function GenerateWallet() {
   const [mnemonic, setMnemonic] = useState('');
+  const keymanager = useContext(KeyManagerContext);
 
   return (
     <div>
@@ -11,7 +13,7 @@ function GenerateWallet(props) {
       <Text>{mnemonic}</Text>
       <Button
         onClick={() => {
-          setMnemonic(props.keymanager.generateAccount('Main'));
+          setMnemonic(keymanager.generateAccount('Main'));
         }}
       >
         Generate
@@ -19,9 +21,5 @@ function GenerateWallet(props) {
     </div>
   );
 }
-
-GenerateWallet.propTypes = {
-  keymanager: PropTypes.function
-};
 
 export default GenerateWallet;

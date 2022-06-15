@@ -1,7 +1,29 @@
-import React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import KeyManagerContext from '../../../contexts/KeyManagerContext';
+import Node from '../../../services/Node';
+
+const node = new Node();
 
 function TailwindyNav() {
+  const keymanager = useContext(KeyManagerContext);
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    const sub = node.balance$.subscribe((d) => {
+      setBalance(d);
+    });
+
+    let id = setInterval(() => {
+      node.getBalance(keymanager);
+    }, 1000);
+
+    return () => {
+      sub.remove();
+      clearInterval(id);
+    };
+  });
+
   return (
     <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-amber-500 mb-3">
       <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
@@ -12,6 +34,9 @@ function TailwindyNav() {
           >
             Our Unnamed App
           </a>
+          <div className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white">
+            Balance: {balance}
+          </div>
           <button
             className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
             type="button"
@@ -21,12 +46,18 @@ function TailwindyNav() {
             <span className="block relative w-6 h-px rounded-sm bg-white mt-1"></span>
           </button>
         </div>
-        <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
-          <ul class="flex flex-col lg:flex-row list-none ml-auto">
+        <div
+          className="lg:flex flex-grow items-center"
+          id="example-navbar-warning"
+        >
+          <ul className="flex flex-col lg:flex-row list-none ml-auto">
             {React.Children.toArray(
               [
-                <Link to="/identity" className="link">
-                  Manage Identity
+                <Link to="/wallet/generate" className="link">
+                  Generate Wallet
+                </Link>,
+                <Link to="/wallet/restore" className="link">
+                  Restore Wallet
                 </Link>,
                 <Link to="/contacts" className="link">
                   Manage Contacts

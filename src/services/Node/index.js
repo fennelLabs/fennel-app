@@ -6,11 +6,21 @@ import {NODE_URI_HTTP} from '../../config';
 
 class Node {
   _signals = new BehaviorSubject([]);
+  _balance = new BehaviorSubject(0);
 
   signals$ = this._signals.asObservable();
+  balance$ = this._balance.asObservable();
 
   constructor() {
     this._api = null;
+  }
+
+  async getBalance(keymanager) {
+    console.log(`Getting balance for signer ${keymanager.name()}`);
+    const node = await this.api();
+    if (!keymanager.signer()) return 0;
+    const {_, data: balance} = await node.query.system.account(keymanager.signer().address)
+    _balance.next(balance.free);
   }
 
   async createIdentity(keymanager) {

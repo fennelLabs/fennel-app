@@ -7,25 +7,38 @@ import {
 import {stringToU8a, u8aToHex} from '@polkadot/util';
 
 class KeyManager {
-  constructor() {
-    this._keyring = new Keyring({type: 'sr25519', ss58Format: 2});
+  constructor(name) {
+    this._name = name; // For debugging.
+    this._keyring = new Keyring();
     this._pair = null;
   }
 
+  name() {
+    return this._name;
+  }
+
   signer() {
+    console.log(`Signer handler: ${this._name}`);
+    if (this._pair) {
+      console.log(`Signer address: ${this._pair.address}`);
+    }
     return this._pair;
   }
 
   generateAccount(name) {
+    console.log(`Generating a wallet with ${this._name}`);
     const mnemonic = mnemonicGenerate(24);
 
-    this._pair = this._keyring.addFromUri(mnemonic, {name: name}, 'ed25519');
+    this._pair = this._keyring.addFromUri(mnemonic, {name: name}, 'sr25519');
+    console.log(`Address: ${this._pair.address}`);
 
     return mnemonic;
   }
 
   importAccount(name, mnemonic) {
-    this._pair = this._keyring.addFromUri(mnemonic, {name: name}, 'ed25519');
+    console.log(`Restoring a wallet with ${this._name}`);
+    this._pair = this._keyring.addFromUri(mnemonic, {name: name}, 'sr25519');
+    console.log(`Address: ${this._pair.address}`);
   }
 
   sign(message) {

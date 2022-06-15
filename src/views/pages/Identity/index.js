@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
@@ -6,10 +6,12 @@ import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import Node from '../../../services/Node';
 import PropTypes from 'prop-types';
+import KeyManagerContext from '../../../contexts/KeyManagerContext';
 
-function Identity(props) {
+function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
+  const keymanager = useContext(KeyManagerContext);
 
   function toggleChoice() {
     setBtnEnabled(true);
@@ -18,8 +20,8 @@ function Identity(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     const node = new Node();
-    let identity_number = await node.createIdentity(props.keymanager);
-    // TODO display identity number
+    let identity_number = await node.createIdentity(keymanager);
+    alert(`New identity number is ${identity_number}`);
   }
 
   return (
@@ -79,9 +81,5 @@ function Identity(props) {
     </PageContainer>
   );
 }
-
-Identity.propTypes = {
-  keymanager: PropTypes.function
-};
 
 export default Identity;

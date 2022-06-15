@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import Button from '../../components/Button';
-import PropTypes from 'prop-types';
+import KeyManagerContext from '../../../contexts/KeyManagerContext';
 
 function RestoreWallet(props) {
   const [value, setValue] = useState('');
+  const keymanager = useContext(KeyManagerContext);
 
   return (
     <div>
@@ -11,7 +12,7 @@ function RestoreWallet(props) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          props.keymanager.importAccount('Main', value);
+          keymanager.importAccount('Main', value);
         }}
       >
         <textarea
@@ -28,9 +29,5 @@ function RestoreWallet(props) {
     </div>
   );
 }
-
-RestoreWallet.propTypes = {
-  keymanager: PropTypes.function
-};
 
 export default RestoreWallet;
