@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Routes, Outlet} from 'react-router-dom';
+import {Route, Routes, Outlet} from 'react-router-dom';
 import './App.css';
 import Navigation from './views/pages/Navigation';
 import Profile from './views/pages/Profile';
@@ -16,8 +16,7 @@ import Contacts from './views/pages/Contacts';
 import AddContact from './views/pages/AddContact';
 import NewMessage from './views/pages/NewMessage';
 import Home from './views/pages/Home';
-import GenerateWallet from './views/pages/GenerateWallet';
-import RestoreWallet from './views/pages/RestoreWallet';
+import PageContainer from './views/components/PageContainer';
 
 function FennelAppRouter() {
   return (
@@ -45,7 +44,9 @@ function FennelAppRouter() {
         <Route path="/wallet/generate" element={<GenerateWallet />} />
         <Route path="/wallet/restore" element={<RestoreWallet />} />
       </Routes>
-      <Outlet />
+      <PageContainer>
+        <Outlet />
+      </PageContainer>
     </>
   );
 }

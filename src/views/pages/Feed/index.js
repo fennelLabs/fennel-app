@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import FeedSubNav from '../../components/FeedSubNav';
 import Node from '../../../services/Node';
@@ -26,17 +25,15 @@ function Feed() {
   });
 
   return (
-    <PageContainer>
-      <div className="flex flex-row">
-        <div className="basis-1/4">
-          <FeedSubNav />
-        </div>
-        <div className="basis-3/4 px-8">
-          <PageTitle>Feed</PageTitle>
-          <FeedListView itemList={signalList ?? []} />
-        </div>
+    <div className="flex flex-row">
+      <div className="basis-1/4">
+        <FeedSubNav />
       </div>
-    </PageContainer>
+      <div className="basis-3/4 px-8">
+        <PageTitle>Feed</PageTitle>
+        <FeedListView itemList={signalList ?? []} />
+      </div>
+    </div>
   );
 }
 
