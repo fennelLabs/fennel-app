@@ -1,5 +1,5 @@
 import {createContext, useContext} from 'react';
-import {MessageService} from '../services/Message.service';
+import {MessageService} from '../services';
 
 const ServiceContext = createContext({});
 
