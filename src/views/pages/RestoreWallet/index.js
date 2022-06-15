@@ -1,13 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Button from '../../components/Button';
 
-function RestoreWallet() {
+function RestoreWallet(props) {
+  const [value, setValue] = useState('');
+
   return (
     <div>
-      <h1>Restore Wallet</h1>
-      <textarea name="new_message" rows={5} cols={5} />
-      <button type="submit" />
+      <h1>Import Fennel Wallet</h1>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          props.keymanager.importAccount('Main', value);
+        }}
+      >
+        <textarea
+          name="new_message"
+          rows={5}
+          cols={5}
+          value={value}
+          onChange={(event) => {
+            setValue(event.target.value);
+          }}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
     </div>
   );
 }
+
+RestoreWallet.propTypes = {
+  keymanager: PropTypes.function
+};
 
 export default RestoreWallet;
