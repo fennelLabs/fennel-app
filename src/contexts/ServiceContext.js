@@ -6,7 +6,7 @@ import KeyManager from '../services/KeyManager';
 const ServiceContext = createContext({});
 
 /**
- * @returns {{messageService: MessageService}}
+ * @returns {{messageService: MessageService, rpc: FennelRPC, keymanager: KeyManager}}
  */
 export const useServiceContext = () => useContext(ServiceContext);
 
@@ -16,10 +16,10 @@ export const ServiceContextProvider = ({children}) => {
   useEffect(() => {
     // all services get instantiated once and registered into the context provider
     const messageService = new MessageService();
-    const fennelRPC = new FennelRPC();
+    const rpc = new FennelRPC();
     const keymanager = new KeyManager('Main');
 
-    setServices({messageService, fennelRPC, keymanager});
+    setServices({messageService, rpc, keymanager});
 
     return () => {
       setServices(undefined);
