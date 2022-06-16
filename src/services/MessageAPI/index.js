@@ -82,7 +82,6 @@ class MessageAPIService {
   }
 
   __decryptMessageList(data) {
-    let decrypted = [];
     data.forEach((message) => {
       decrypt(message, (r) => {
         this._receive_messages.next([
@@ -91,7 +90,6 @@ class MessageAPIService {
         ]);
       });
     });
-    return decrypted;
   }
 
   __populateReceivedMessages(data) {
