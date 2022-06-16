@@ -5,6 +5,7 @@ import InboxSubNav from '../../components/InboxSubNav';
 
 function NewMessage() {
 
+  //Insert values from the data store
   const [message, setMessage] = useState({
     message: '',
     public_key: '',
