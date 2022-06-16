@@ -14,12 +14,12 @@ function Contacts() {
           <li>
             <Link to="/contacts">List Contacts</Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="add">Add Contact</Link>
           </li>
           <li>
             <Link to="edit">Edit Contact</Link>
-          </li>
+          </li> */}
         </ul>
       </div>
       <div className="basis-3/4 px-8">
@@ -29,8 +29,8 @@ function Contacts() {
         </Text>
         <Routes>
           <Route path="" element={<ContactsList />} />
-          <Route path="add" element={<AddContact />} />
-          <Route path="edit" element={<EditContact />} />
+          {/* <Route path="add" element={<AddContact />} />
+          <Route path="edit" element={<EditContact />} /> */}
         </Routes>
       </div>
     </div>
