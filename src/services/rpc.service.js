@@ -124,4 +124,38 @@ export class FennelRPC {
       )
       .subscribe(callback);
   }
+
+  generateKeyPair(callback) {
+    return this.send(
+      {
+        method: 'get_or_generate_keypair'
+      },
+      callback
+    );
+  }
+
+  encrypt(public_key_bytes, plaintext, callback) {
+    return this.send(
+      {
+        method: 'encrypt',
+        params: JSON.stringify({
+          public_key_bytes: public_key_bytes,
+          plaintext: plaintext
+        })
+      },
+      callback
+    );
+  }
+
+  decrypt(ciphertext, callback) {
+    return this.send(
+      {
+        method: 'decrypt',
+        params: JSON.stringify({
+          ciphertext: ciphertext
+        })
+      },
+      callback
+    );
+  }
 }
