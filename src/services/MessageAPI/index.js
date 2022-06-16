@@ -16,6 +16,10 @@ class MessageAPIService {
     recipient_id,
     message_encryption_indicator_id
   ) {
+    let ciphertext = null;
+    encrypt(message, (r) => {
+      ciphertext = r;
+    });
     let retval = await axios
       .post(
         `http://localhost:1234/api/messages/`,
@@ -25,7 +29,7 @@ class MessageAPIService {
           }
         },
         {
-          message: message,
+          message: ciphertext,
           public_key: publicKey,
           signature: signature,
           fingerprint: fingerprint,
