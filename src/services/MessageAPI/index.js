@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
   _received_messages = new BehaviorSubject([]);
@@ -84,8 +84,12 @@ class MessageAPIService {
   __decryptMessageList(data) {
     let decrypted = [];
     data.forEach((message) => {
-      // TODO This needs to call the FennelRPC decrypt function.
-      decrypted.push(message);
+      decrypt(message, (r) => {
+        this._receive_messages.next([
+          ...this._receive_messages.value,
+          r
+        ]);
+      });
     });
     return decrypted;
   }
