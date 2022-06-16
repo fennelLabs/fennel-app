@@ -1,11 +1,29 @@
 import React, {useEffect, useState} from 'react';
+import {isHexadecimalString} from '../../../utils/isHexadecimalString';
 import useFennelRPC from '../../../utils/useFennelRPC';
 import {TextArea} from './TextArea';
+
+const example_wf_auth_message = JSON.stringify(
+  {
+    prefix: 'WF',
+    version: '1',
+    encryptionIndicator: '0',
+    duressIndicator: '0',
+    messageCode: 'A',
+    referenceIndicator: '0',
+    referencedMessage:
+      '0000000000000000000000000000000000000000000000000000000000000000',
+    verificationMethod: '1',
+    verificationData: 'https://organisation.int/whiteflag'
+  },
+  undefined,
+  2
+);
 
 export function WhiteflagEncode() {
   const rpc = useFennelRPC();
   const [output, setOutput] = useState(undefined);
-  const [input, setInput] = useState(undefined);
+  const [input, setInput] = useState(example_wf_auth_message);
 
   useEffect(() => {
     const sub = send_wf_encode();
@@ -15,9 +33,9 @@ export function WhiteflagEncode() {
   }, []);
 
   return (
-    <div>
-      <h1>Encoding Demo</h1>
-      <div className="grid gap-4 grid-cols-2">
+    <div className="h-full">
+      <div>Is Hex? {isHexadecimalString(output) ? 'yes' : 'no'}</div>
+      <div className="grid h-full w-full">
         <TextArea
           id={1}
           title="input"
@@ -27,7 +45,8 @@ export function WhiteflagEncode() {
             setInput(v);
           }}
         />
-        <TextArea id={2} title="output" placeholder={''} value={output} />
+        {/* <TextArea id={2} title="output" placeholder={''} value={output} /> */}
+        <p className="break-all">{output}</p>
       </div>
 
       <div style={{display: 'flex'}}>

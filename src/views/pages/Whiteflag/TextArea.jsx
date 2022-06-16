@@ -6,17 +6,17 @@ export function TextArea({
   onChange = (v) => {}
 }) {
   return (
-    <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
-        <label
-          htmlFor={id}
-          className="form-label inline-block mb-2 text-gray-700"
-        >
-          {title}
-        </label>
-        <textarea
-          value={value}
-          className="
+    <div className="my-3">
+      <label
+        htmlFor={id}
+        className="form-label inline-block mb-2 text-gray-700"
+      >
+        {title}
+      </label>
+      <textarea
+        value={value}
+        rows={7}
+        className="
           form-control
           block
           w-full
@@ -33,14 +33,12 @@ export function TextArea({
           m-0
           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
         "
-          id={id}
-          rows="3"
-          placeholder={placeholder}
-          onChange={(v) => {
-            onChange(v.target.value);
-          }}
-        ></textarea>
-      </div>
+        id={id}
+        placeholder={placeholder}
+        onChange={(v) => {
+          onChange(v.target.value);
+        }}
+      ></textarea>
     </div>
   );
 }
