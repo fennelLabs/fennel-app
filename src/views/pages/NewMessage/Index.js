@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
 
 function NewMessage() {
-
   //Insert values from the data store
-  const [message, setMessage] = useState({
+  const [state, setState] = useState({
     message: '',
     public_key: '',
     signature: '',
@@ -15,6 +14,14 @@ function NewMessage() {
     recipient: null,
     message_encryption_indicator: null
   });
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
 
   return (
     <div className="flex flex-row">
@@ -32,6 +39,9 @@ function NewMessage() {
               <span className="label-text">Your Message</span>
             </label>
             <textarea
+              value={this.state.message}
+              name="message"
+              onChange={handleChange}
               className="textarea textarea-bordered h-24"
               placeholder="..."
             ></textarea>
