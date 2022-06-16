@@ -22,11 +22,11 @@ function Whiteflag() {
         <div className="basis-3/4 px-8">
           <PageTitle>Whiteflag</PageTitle>
           <Text>Play around with the whiteflag protocol</Text>
+          <Routes>
+            <Route path="encode" element={<WhiteflagEncode />} />
+            <Route path="decode" element={'Decode'} />
+          </Routes>
         </div>
-        <Routes>
-          <Route path="encode" element={<WhiteflagEncode />} />
-          <Route path="decode" element={'Decode'} />
-        </Routes>
       </div>
     </PageContainer>
   );

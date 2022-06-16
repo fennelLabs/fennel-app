@@ -16,22 +16,18 @@ export function WhiteflagEncode() {
 
   return (
     <div>
-      <h1>Whiteflag Demo</h1>
-      <div>
-        <div>
-          <TextArea
-            id={1}
-            title="input"
-            placeholder={''}
-            value={input}
-            onChange={(v) => {
-              setInput(v);
-            }}
-          />
-        </div>
-        <div>
-          <TextArea id={2} title="output" placeholder={''} value={output} />
-        </div>
+      <h1>Encoding Demo</h1>
+      <div className="grid gap-4 grid-cols-2">
+        <TextArea
+          id={1}
+          title="input"
+          placeholder={''}
+          value={input}
+          onChange={(v) => {
+            setInput(v);
+          }}
+        />
+        <TextArea id={2} title="output" placeholder={''} value={output} />
       </div>
 
       <div style={{display: 'flex'}}>
