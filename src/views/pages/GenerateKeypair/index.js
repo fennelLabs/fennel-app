@@ -1,5 +1,4 @@
 import React from 'react';
-import CLI from '../../../services/CLI';
 import {CLI_URI} from '../../../config';
 import {Client as WsClient} from 'rpc-websockets';
 import PageTitle from '../../components/PageTitle';

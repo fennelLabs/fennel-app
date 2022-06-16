@@ -1,11 +1,17 @@
 import axios from 'axios';
 import { BehaviorSubject } from 'rxjs';
+import useFennelRPC from '../rpc.service';
+
 class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
   _received_messages = new BehaviorSubject([]);
 
   sent_messages$ = this._sent_messages.asObservable();
   received_messages$ = this._received_messages.asObservable();
+
+  constructor() {
+    this._rpc = useFennelRPC();
+  }
 
   async sendMessage(
     message,
@@ -17,7 +23,7 @@ class MessageAPIService {
     message_encryption_indicator_id
   ) {
     let ciphertext = null;
-    encrypt(message, (r) => {
+    this._rpc.encrypt(message, (r) => {
       ciphertext = r;
     });
     let retval = await axios
@@ -87,7 +93,7 @@ class MessageAPIService {
 
   __decryptMessageList(data) {
     data.forEach((message) => {
-      decrypt(message, (r) => {
+      this._rpc.decrypt(message, (r) => {
         this._receive_messages.next([
           ...this._receive_messages.value,
           r

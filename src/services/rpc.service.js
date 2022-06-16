@@ -158,4 +158,30 @@ export class FennelRPC {
       callback
     );
   }
+
+  sign(message, callback) {
+    return this.send(
+      {
+        method: 'sign',
+        params: JSON.stringify({
+          message: message
+        })
+      },
+      callback
+    );
+  }
+
+  verify(public_key_bytes, message, signature, callback) {
+    return this.send(
+      {
+        method: 'verify',
+        params: JSON.stringify({
+          public_key_bytes: public_key_bytes,
+          message: message,
+          signature: signature
+        })
+      },
+      callback
+    );
+  }
 }
