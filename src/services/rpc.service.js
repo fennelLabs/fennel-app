@@ -1,5 +1,5 @@
 import {filter, map, ReplaySubject, Subject} from 'rxjs';
-import rpc_endpoint from '../config/rpc_endpoint';
+//This no longer exists: import rpc_endpoint from '../config/rpc_endpoint';
 
 export class FennelRPC {
   /**
