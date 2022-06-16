@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { BehaviorSubject } from 'rxjs';
+import axios from 'axios';
 
 class ContactsManager {
   _identities = new BehaviorSubject([]);
@@ -8,7 +9,7 @@ class ContactsManager {
 
   async populateContacts() {
     let results = await axios
-      .get(`http://http://localhost:1234/api/identities/`, {
+      .get(`http://localhost:1234/api/identities/`, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -25,7 +26,7 @@ class ContactsManager {
   }
 }
 
-const contactService = ContactsManager();
+const contactService = new ContactsManager();
 
 function ContactsList() {
   const [contactList, setContactList] = useState([]);
