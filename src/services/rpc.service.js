@@ -194,10 +194,13 @@ export class FennelRPC {
     );
   }
 
-  whiteflag_decode() {
+  whiteflag_decode(message, callback) {
     this.send(
-      'whiteflag_decode',
-      '5746313020800000000000000000000000000000000000000000000000000000000000000000b43a3a38399d1797b7b933b0b734b9b0ba34b7b71734b73a17bbb434ba32b33630b380'
+      {
+        method: 'whiteflag_decode',
+        params: message
+      },
+      callback
     );
   }
 }
