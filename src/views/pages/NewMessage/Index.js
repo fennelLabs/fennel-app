@@ -55,7 +55,7 @@ function NewMessage() {
               placeholder="..."
             ></textarea>
           </div>
-          <Button type="submit" mt="2">
+          <Button type="submit" class="mt-2">
             Send Message
           </Button>
         </form>
