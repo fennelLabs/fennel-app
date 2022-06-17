@@ -1,7 +1,8 @@
 import React from 'react';
 import {Route, Routes, Outlet} from 'react-router-dom';
-import './App.css';
+import PageContainer from './views/components/PageContainer';
 import Navigation from './views/pages/Navigation';
+import Home from './views/pages/Home';
 import Profile from './views/pages/Profile';
 import Inbox from './views/pages/Inbox';
 import Diagnostics from './views/pages/Diagnostics';
@@ -16,10 +17,9 @@ import GenerateWallet from './views/pages/GenerateWallet';
 import RestoreWallet from './views/pages/RestoreWallet';
 import Contacts from './views/pages/Contacts';
 import NewMessage from './views/pages/NewMessage';
-import Home from './views/pages/Home';
-import PageContainer from './views/components/PageContainer';
 import GenerateWallet from './views/pages/GenerateWallet';
 import RestoreWallet from './views/pages/RestoreWallet';
+import Whiteflag from './views/pages/Whiteflag';
 
 function FennelAppRouter() {
   return (
@@ -40,6 +40,7 @@ function FennelAppRouter() {
         <Route path="/identity/revoke-key" element={<RevokeKey />} />
         <Route path="/identity" element={<Identity />} />
         <Route path="/contacts/*" element={<Contacts />} />
+        <Route path="/whiteflag/*" element={<Whiteflag />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/feed/message" element={<NewFeedMessage />} />
         <Route path="/inbox/new" element={<NewMessage />} />

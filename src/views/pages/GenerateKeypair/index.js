@@ -5,11 +5,11 @@ import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import useFennelRPC from '../../../utils/useFennelRPC';
+import useFennelRPC from '../../hooks/useFennelRPC';
 
 function GenerateKeypair() {
   const [publicKey, setPublicKey] = useState('');
-  const rpc = useFennelRPC();
+  const {rpc} = useFennelRPC();
 
   async function generateKeypair() {
     console.log('generate key pair');
