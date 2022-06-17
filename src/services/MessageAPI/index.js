@@ -27,9 +27,13 @@ class MessageAPIService {
     message_encryption_indicator
   ) {
     let ciphertext = null;
-    this._rpc.encrypt(message, (r) => {
-      ciphertext = r;
-    });
+    if (message_encryption_indicator != 1) {
+      this._rpc.encrypt(message, (r) => {
+        ciphertext = r;
+      });
+    } else {
+      ciphertext = message;
+    }
     let retval = await axios
       .post(
         `${API_MESSAGES}/`,
@@ -97,9 +101,13 @@ class MessageAPIService {
 
   __decryptMessageList(data) {
     data.forEach((message) => {
-      this._rpc.decrypt(message, (r) => {
-        this._receive_messages.next([...this._receive_messages.value, r]);
-      });
+      // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext. 
+      if (message.message_encryption_indicator != `${API_MESSAGE_ENCRYPTION_INDICATORS}/1`) {
+        this._rpc.decrypt(message.message, (r) => {
+          message.message = r;
+        });
+      }
+      this._receive_messages.next([...this._receive_messages.value, message]);
     });
   }
 
