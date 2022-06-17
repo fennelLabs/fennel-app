@@ -1,4 +1,4 @@
-import {filter, map, ReplaySubject, Subject} from 'rxjs';
+import {BehaviorSubject, filter, map, ReplaySubject} from 'rxjs';
 import {CLI_URI} from '../config';
 
 export class FennelRPC {
@@ -25,10 +25,11 @@ export class FennelRPC {
   /**
    * when web socket connection opens, this will be true
    * when web socket is closed, this will be false
-   * @type {Subject<boolean>}
+   * @type {BehaviorSubject<boolean>}
    * @private
    */
-  _isReady = new Subject();
+  _isWebSocketOpen = new BehaviorSubject(false);
+  isWebSocketOpen$ = this._isWebSocketOpen.asObservable();
 
   /**
    * captures outgoing messages when ws is offline
@@ -39,11 +40,12 @@ export class FennelRPC {
   _offlineOutgoingMessageQueue = [];
 
   constructor() {
-    this._isReady.subscribe((isReady) => console.log('isReady? ', isReady));
+    this._isWebSocketOpen
+      .pipe(filter((isOpen) => isOpen))
+      .subscribe((_) => console.log('websocket opened'));
   }
 
   /**
-   * @private
    * @returns {boolean}
    */
   isOpen() {
@@ -52,7 +54,6 @@ export class FennelRPC {
   }
 
   /**
-   * @private
    * @returns {boolean}
    */
   isOpenOrConnecting() {
@@ -85,13 +86,13 @@ export class FennelRPC {
       // reset for next time
       this._offlineOutgoingMessageQueue = [];
 
-      this._isReady.next(true);
+      this._isWebSocketOpen.next(true);
     };
 
     this._ws.onclose = () => {
       console.log('web socket closed!');
 
-      this._isReady.next(false);
+      this._isWebSocketOpen.next(false);
     };
   }
 

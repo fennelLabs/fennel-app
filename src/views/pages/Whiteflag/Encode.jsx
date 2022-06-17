@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import useFennelRPC from '../../../utils/useFennelRPC';
+import useFennelRPC from '../../hooks/useFennelRPC';
 import {Error} from './Error';
 import {TextArea} from './TextArea';
 
-const example_wf_auth_message = {
+const example_wf_auth_message = formatJSON({
   prefix: 'WF',
   version: '1',
   encryptionIndicator: '0',
@@ -14,12 +14,12 @@ const example_wf_auth_message = {
     '0000000000000000000000000000000000000000000000000000000000000000',
   verificationMethod: '1',
   verificationData: 'https://organisation.int/whiteflag'
-};
+});
 
 export function WhiteflagEncode() {
-  const rpc = useFennelRPC();
+  const {open, rpc} = useFennelRPC();
   const [output, setOutput] = useState(undefined);
-  const [input, setInput] = useState(formatJSON(example_wf_auth_message));
+  const [input, setInput] = useState(example_wf_auth_message);
   const [error, setError] = useState(undefined);
 
   useEffect(() => {
@@ -30,25 +30,27 @@ export function WhiteflagEncode() {
   }, [input]);
 
   return (
-    <div>
+    <div className="max-w-[60rem]">
       <div className="grid grid-flow-row">
         <Error>{error}</Error>
-        <button
-          className="btn"
-          onClick={() => {
-            const {error, message} = validate();
-            if (error) {
-              setError(error);
-              return;
-            }
+        {open && (
+          <button
+            className="btn"
+            onClick={() => {
+              const {error, message} = validate();
+              if (error) {
+                setError(error);
+                return;
+              }
 
-            rpc.whiteflag_encode(message, (hexadecimal) =>
-              setOutput(hexadecimal)
-            );
-          }}
-        >
-          Encode
-        </button>
+              rpc.whiteflag_encode(message, (hexadecimal) =>
+                setOutput(hexadecimal)
+              );
+            }}
+          >
+            Encode
+          </button>
+        )}
       </div>
       <div className="my-3 grid gap-4 md:grid-flow-col">
         <TextArea
@@ -84,7 +86,7 @@ export function WhiteflagEncode() {
       return input;
     }
 
-    return JSON.stringify(input, undefined, 2);
+    return formatJSON(input);
   }
 }
 

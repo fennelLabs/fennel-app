@@ -1,13 +1,11 @@
 import React from 'react';
-import {Link, Routes, Route} from 'react-router-dom';
-import useFennelRPC from '../../../utils/useFennelRPC';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
-import Text from '../../components/Text';
+import useFennelRPC from '../../hooks/useFennelRPC';
 import {WhiteflagEncode} from './Encode';
 
 function Whiteflag() {
-  const rpc = useFennelRPC();
+  const {rpc} = useFennelRPC();
   return (
     <PageContainer>
       <div className="grid w-full h-full">
