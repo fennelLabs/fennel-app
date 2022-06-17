@@ -1,5 +1,5 @@
 import {filter, map, ReplaySubject, Subject} from 'rxjs';
-//This no longer exists: import rpc_endpoint from '../config/rpc_endpoint';
+import {CLI_URI} from '../config';
 
 export class FennelRPC {
   /**
@@ -72,7 +72,7 @@ export class FennelRPC {
       return;
     }
 
-    this._ws = new WebSocket(rpc_endpoint);
+    this._ws = new WebSocket(CLI_URI);
     this._ws.onmessage = (m) => {
       this._incomingMessages.next(JSON.parse(m.data));
     };
