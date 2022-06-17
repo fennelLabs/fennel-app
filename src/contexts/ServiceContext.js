@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {createContext, useContext} from 'react';
-import {MessageService, FennelRPC} from '../services';
+import {FennelRPC} from '../services';
+import MessageAPIService from '../services/MessageAPI';
 import KeyManager from '../services/KeyManager';
 
 const ServiceContext = createContext({});
 
 /**
- * @returns {{messageService: MessageService, rpc: FennelRPC, keymanager: KeyManager}}
+ * @returns {{messageService: MessageAPIService, rpc: FennelRPC, keymanager: KeyManager}}
  */
 export const useServiceContext = () => useContext(ServiceContext);
 
@@ -15,8 +16,8 @@ export const ServiceContextProvider = ({children}) => {
 
   useEffect(() => {
     // all services get instantiated once and registered into the context provider
-    const messageService = new MessageService();
     const rpc = new FennelRPC();
+    const messageService = new MessageAPIService(rpc);
     const keymanager = new KeyManager('Main');
 
     setServices({messageService, rpc, keymanager});

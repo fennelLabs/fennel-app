@@ -51,6 +51,50 @@ class Node {
     return identity_number;
   }
 
+  async announceKey(fingerprint, location) {
+    const node = await this.api();
+    await node.tx.keystoreModule
+      .announceKey(fingerprint, location)
+      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+        console.log(`Current status is ${status.type}`);
+
+        if (status.isFinalized) {
+          console.log(
+            `Transaction included at blockHash ${status.asFinalized}`
+          );
+          console.log(`Transaction hash ${txHash.toHex()}`);
+
+          events.forEach(({phase, event: {data, method, section}}) => {
+            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          });
+
+          unsub();
+        }
+      });
+  }
+
+  async revokeKey(fingerprint) {
+    const node = await this.api();
+    await node.tx.keystoreModule
+      .revokeKey(fingerprint)
+      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+        console.log(`Current status is ${status.type}`);
+
+        if (status.isFinalized) {
+          console.log(
+            `Transaction included at blockHash ${status.asFinalized}`
+          );
+          console.log(`Transaction hash ${txHash.toHex()}`);
+
+          events.forEach(({phase, event: {data, method, section}}) => {
+            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          });
+
+          unsub();
+        }
+      });
+  }
+
   async sendNewSignal(keymanager, content) {
     const node = await this.api();
     await node.tx.signalModule
