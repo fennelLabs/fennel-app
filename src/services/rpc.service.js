@@ -40,6 +40,8 @@ export class FennelRPC {
   _offlineOutgoingMessageQueue = [];
 
   constructor() {
+    this.open();
+
     this._isWebSocketOpen
       .pipe(filter((isOpen) => isOpen))
       .subscribe((_) => console.log('websocket opened'));
@@ -79,19 +81,15 @@ export class FennelRPC {
     };
 
     this._ws.onopen = () => {
-      console.log('web socket opened!');
-
       // sends all messages captured while the websocket was offline
       this._offlineOutgoingMessageQueue.forEach((m) => this._ws.send(m));
       // reset for next time
       this._offlineOutgoingMessageQueue = [];
-
       this._isWebSocketOpen.next(true);
     };
 
     this._ws.onclose = () => {
       console.log('web socket closed!');
-
       this._isWebSocketOpen.next(false);
     };
   }
