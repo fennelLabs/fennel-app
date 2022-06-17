@@ -9,8 +9,8 @@ class MessageAPIService {
   sent_messages$ = this._sent_messages.asObservable();
   received_messages$ = this._received_messages.asObservable();
 
-  constructor() {
-    this._rpc = useFennelRPC();
+  constructor(rpc) {
+    this._rpc = rpc;
   }
 
   async sendMessage(
