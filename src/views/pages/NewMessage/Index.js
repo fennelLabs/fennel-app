@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
+import Button from '../../components/Button';
+import MessageAPIService from '../../../services/MessageAPI';
 
 function NewMessage() {
   //Insert values from the data store
@@ -15,12 +17,19 @@ function NewMessage() {
     message_encryption_indicator: null
   });
 
+  const service = new MessageAPIService();
+
   const handleChange = (e) => {
     const {name, value} = e.target;
     setState((prevState) => ({
       ...prevState,
       [name]: value
     }));
+  };
+
+  const submitMessage = (e) => {
+    e.preventDefault();
+    service.sendMessage(state);
   };
 
   return (
@@ -33,19 +42,22 @@ function NewMessage() {
         <Text>
           Some text explaining what this is all about and what to expect.
         </Text>
-        <form>
+        <form onSubmit={submitMessage}>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Your Message</span>
             </label>
             <textarea
-              value={this.state.message}
+              value={state.message}
               name="message"
               onChange={handleChange}
               className="textarea textarea-bordered h-24"
               placeholder="..."
             ></textarea>
           </div>
+          <Button type="submit">
+            Send
+          </Button>
         </form>
       </div>
     </div>
