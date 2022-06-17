@@ -6,7 +6,7 @@ export function TextArea({
   onChange = (v) => {}
 }) {
   return (
-    <div className="my-3">
+    <div>
       <label
         htmlFor={id}
         className="form-label inline-block mb-2 text-gray-700"

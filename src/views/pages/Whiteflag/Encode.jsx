@@ -50,7 +50,7 @@ export function WhiteflagEncode() {
           Encode
         </button>
       </div>
-      <div className="grid">
+      <div className="my-3 grid gap-4 md:grid-flow-col">
         <TextArea
           id={1}
           title="Authentication Whiteflag Message"
@@ -60,7 +60,12 @@ export function WhiteflagEncode() {
             setInput(v);
           }}
         />
-        <p className="break-all">{output}</p>
+        <div className="flex flex-col">
+          <label>Hexadecimal Encoded Message</label>
+          <div className="h-full flex self-center items-center py-3 md:py-0">
+            <div className="break-all w-[15rem]">{output}</div>
+          </div>
+        </div>
       </div>
     </div>
   );
