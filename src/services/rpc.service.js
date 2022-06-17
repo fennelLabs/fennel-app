@@ -92,8 +92,7 @@ export class FennelRPC {
       console.error(e);
     };
 
-    this._ws.onclose = (e) => {
-      e && console.error('error occurred: ', e);
+    this._ws.onclose = () => {
       console.log('web socket closed!');
       this._isWebSocketOpen.next(false);
     };
