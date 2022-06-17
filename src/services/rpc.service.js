@@ -63,7 +63,7 @@ export class FennelRPC {
   }
 
   close() {
-    this._ws.close();
+    this._ws?.close();
   }
 
   open() {
