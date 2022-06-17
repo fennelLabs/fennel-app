@@ -1,93 +1,86 @@
 import React, {useEffect, useState} from 'react';
-import {isHexadecimalString} from '../../../utils/isHexadecimalString';
 import useFennelRPC from '../../../utils/useFennelRPC';
 import {TextArea} from './TextArea';
 
-const example_wf_auth_message = JSON.stringify(
-  {
-    prefix: 'WF',
-    version: '1',
-    encryptionIndicator: '0',
-    duressIndicator: '0',
-    messageCode: 'A',
-    referenceIndicator: '0',
-    referencedMessage:
-      '0000000000000000000000000000000000000000000000000000000000000000',
-    verificationMethod: '1',
-    verificationData: 'https://organisation.int/whiteflag'
-  },
-  undefined,
-  2
-);
+const example_wf_auth_message = {
+  prefix: 'WF',
+  version: '1',
+  encryptionIndicator: '0',
+  duressIndicator: '0',
+  messageCode: 'A',
+  referenceIndicator: '0',
+  referencedMessage:
+    '0000000000000000000000000000000000000000000000000000000000000000',
+  verificationMethod: '1',
+  verificationData: 'https://organisation.int/whiteflag'
+};
 
 export function WhiteflagEncode() {
   const rpc = useFennelRPC();
   const [output, setOutput] = useState(undefined);
-  const [input, setInput] = useState(example_wf_auth_message);
+  const [input, setInput] = useState(formatJSON(example_wf_auth_message));
+  const [error, setError] = useState(undefined);
 
   useEffect(() => {
-    const sub = send_wf_encode();
-    return () => {
-      sub.unsubscribe();
-    };
-  }, []);
+    if (error) {
+      setError(validate());
+    }
+  }, [input]);
 
   return (
-    <div className="h-full">
-      <div>Is Hex? {isHexadecimalString(output) ? 'yes' : 'no'}</div>
-      <div className="grid h-full w-full">
+    <div>
+      <div className="grid grid-flow-col">
+        {error && <div>error: {error}</div>}
+        <button
+          className="btn"
+          onClick={() => {
+            const {error, message} = validate();
+            if (error) {
+              setError(error);
+              return;
+            }
+
+            rpc.whiteflag_encode(message, (hexadecimal) =>
+              setOutput(hexadecimal)
+            );
+          }}
+        >
+          Encode
+        </button>
+      </div>
+      <div className="grid">
         <TextArea
           id={1}
-          title="input"
+          title="Authentication Whiteflag Message"
           placeholder={''}
-          value={input}
+          value={ensureInputIsString()}
           onChange={(v) => {
             setInput(v);
           }}
         />
-        {/* <TextArea id={2} title="output" placeholder={''} value={output} /> */}
         <p className="break-all">{output}</p>
-      </div>
-
-      <div style={{display: 'flex'}}>
-        <div>
-          <button
-            className="btn"
-            onClick={() => {
-              send_wf_encode();
-            }}
-          >
-            Send Auth Message
-          </button>
-        </div>
-        <div>
-          <button
-            className="btn"
-            onClick={() => {
-              rpc.close();
-            }}
-          >
-            Close RPC
-          </button>
-        </div>
-        <div>
-          <button
-            className="btn"
-            onClick={() => {
-              rpc.open();
-            }}
-          >
-            Open RPC
-          </button>
-        </div>
       </div>
     </div>
   );
 
-  function send_wf_encode() {
-    return rpc.whiteflag_encode((m) => {
-      console.log('received!');
-      setOutput(m);
-    });
+  function validate() {
+    try {
+      const message = JSON.parse(input);
+      return {error: undefined, message};
+    } catch (e) {
+      return {error: 'invalid json', message: undefined};
+    }
   }
+
+  function ensureInputIsString() {
+    if (typeof input === typeof 'string') {
+      return input;
+    }
+
+    return JSON.stringify(input, undefined, 2);
+  }
+}
+
+function formatJSON(json) {
+  return JSON.stringify(json, undefined, 2);
 }

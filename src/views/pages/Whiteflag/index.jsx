@@ -1,22 +1,24 @@
 import React from 'react';
 import {Link, Routes, Route} from 'react-router-dom';
+import useFennelRPC from '../../../utils/useFennelRPC';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import {WhiteflagEncode} from './Encode';
 
 function Whiteflag() {
+  const rpc = useFennelRPC();
   return (
     <PageContainer>
       <div className="grid w-full h-full">
         <PageTitle>The Whiteflag Protocol</PageTitle>
-        <Text>
+        <p className="text">
           The whiteflag protocol is a messaging system for the blockchain and it
           defines various kinds of messages that can be sent. When a whiteflag
           message is created, it is encoded into a hexadecimal string and
           recorded onto the blockchain.
-        </Text>
-        <Text>
+        </p>
+        <div className="text">
           Experiment with the following example:{' '}
           <ul className="list-disc">
             <li>
@@ -28,8 +30,30 @@ function Whiteflag() {
               whiteflag message
             </li>
           </ul>
-        </Text>
+        </div>
         <WhiteflagEncode />
+        <div className="grid">
+          <div>
+            <button
+              className="btn"
+              onClick={() => {
+                rpc.close();
+              }}
+            >
+              Close RPC
+            </button>
+          </div>
+          <div>
+            <button
+              className="btn"
+              onClick={() => {
+                rpc.open();
+              }}
+            >
+              Open RPC
+            </button>
+          </div>
+        </div>
       </div>
     </PageContainer>
   );

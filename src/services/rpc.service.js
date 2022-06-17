@@ -185,22 +185,11 @@ export class FennelRPC {
     );
   }
 
-  whiteflag_encode(callback) {
+  whiteflag_encode(message, callback) {
     return this.send(
       {
         method: 'whiteflag_encode',
-        params: JSON.stringify({
-          prefix: 'WF',
-          version: '1',
-          encryptionIndicator: '0',
-          duressIndicator: '0',
-          messageCode: 'A',
-          referenceIndicator: '0',
-          referencedMessage:
-            '0000000000000000000000000000000000000000000000000000000000000000',
-          verificationMethod: '1',
-          verificationData: 'https://organisation.int/whiteflag'
-        })
+        params: JSON.stringify(message)
       },
       callback
     );
