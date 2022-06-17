@@ -12,6 +12,8 @@ import Feed from './views/pages/Feed';
 import Identity from './views/pages/Identity';
 import BackupKey from './views/pages/BackupKey';
 import NewFeedMessage from './views/pages/NewFeedMessage';
+import GenerateWallet from './views/pages/GenerateWallet';
+import RestoreWallet from './views/pages/RestoreWallet';
 import Contacts from './views/pages/Contacts';
 import NewMessage from './views/pages/NewMessage';
 import Home from './views/pages/Home';

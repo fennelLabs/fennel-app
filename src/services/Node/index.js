@@ -19,7 +19,9 @@ class Node {
     if (!keymanager.signer()) {
       this._balance.next(0);
     } else {
-      const { _, data: balance } = await node.query.system.account(keymanager.signer().address);
+      const {_, data: balance} = await node.query.system.account(
+        keymanager.signer().address
+      );
       console.log(`${balance.free}`);
       this._balance.next(`${balance.free}`);
     }
