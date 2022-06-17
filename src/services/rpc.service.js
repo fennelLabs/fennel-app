@@ -88,7 +88,12 @@ export class FennelRPC {
       this._isWebSocketOpen.next(true);
     };
 
-    this._ws.onclose = () => {
+    this._ws.onerror = (e) => {
+      console.error(e);
+    };
+
+    this._ws.onclose = (e) => {
+      e && console.error('error occurred: ', e);
       console.log('web socket closed!');
       this._isWebSocketOpen.next(false);
     };
