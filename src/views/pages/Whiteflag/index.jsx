@@ -19,12 +19,9 @@ function Whiteflag() {
           recorded onto the blockchain.
         </p>
         <div className="text">
-          Experiment with the following example:{' '}
+          Experiment with the following example:&nbsp;
           <ul className="list-disc">
-            <li>
-              Encode an authentication whiteflag message (in JSON formatting) to
-              hexadecimal
-            </li>
+            <li>Encode an authentication whiteflag message to hexadecimal</li>
             <li>
               Decode the hexadecimal string back into the JSON authentication
               whiteflag message
