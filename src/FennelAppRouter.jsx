@@ -16,6 +16,8 @@ import Contacts from './views/pages/Contacts';
 import NewMessage from './views/pages/NewMessage';
 import Home from './views/pages/Home';
 import PageContainer from './views/components/PageContainer';
+import GenerateWallet from './views/pages/GenerateWallet';
+import RestoreWallet from './views/pages/RestoreWallet';
 
 function FennelAppRouter() {
   return (
