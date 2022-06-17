@@ -25,30 +25,29 @@ function FennelAppRouter() {
   return (
     <>
       <Navigation />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/inbox" element={<Inbox />} />
-        <Route path="/diagnostics" element={<Diagnostics />} />
-        <Route
-          path="/identity/import-generate-keypair"
-          element={<GenerateKeypair />}
-        />
-        <Route path="/identity/profile" element={<Profile />} />
-        <Route path="/identity/publish-key" element={<PublishKey />} />
-        <Route path="/identity/backup-key" element={<BackupKey />} />
-        <Route path="/identity/revoke-key" element={<RevokeKey />} />
-        <Route path="/identity" element={<Identity />} />
-        <Route path="/contacts/*" element={<Contacts />} />
-        <Route path="/whiteflag/*" element={<Whiteflag />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/feed/message" element={<NewFeedMessage />} />
-        <Route path="/inbox/new" element={<NewMessage />} />
-        <Route path="/wallet/generate" element={<GenerateWallet />} />
-        <Route path="/wallet/restore" element={<RestoreWallet />} />
-      </Routes>
       <PageContainer>
-        <Outlet />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/diagnostics" element={<Diagnostics />} />
+          <Route
+            path="/identity/import-generate-keypair"
+            element={<GenerateKeypair />}
+          />
+          <Route path="/identity/profile" element={<Profile />} />
+          <Route path="/identity/publish-key" element={<PublishKey />} />
+          <Route path="/identity/backup-key" element={<BackupKey />} />
+          <Route path="/identity/revoke-key" element={<RevokeKey />} />
+          <Route path="/identity" element={<Identity />} />
+          <Route path="/contacts/*" element={<Contacts />} />
+          <Route path="/whiteflag/*" element={<Whiteflag />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/feed/message" element={<NewFeedMessage />} />
+          <Route path="/inbox/new" element={<NewMessage />} />
+          <Route path="/wallet/generate" element={<GenerateWallet />} />
+          <Route path="/wallet/restore" element={<RestoreWallet />} />
+        </Routes>
       </PageContainer>
     </>
   );
