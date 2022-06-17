@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import useFennelRPC from '../../../utils/useFennelRPC';
+import {Error} from './Error';
 import {TextArea} from './TextArea';
 
 const example_wf_auth_message = {
@@ -23,14 +24,15 @@ export function WhiteflagEncode() {
 
   useEffect(() => {
     if (error) {
-      setError(validate());
+      const validation = validate();
+      setError(validation.error);
     }
   }, [input]);
 
   return (
     <div>
-      <div className="grid grid-flow-col">
-        {error && <div>error: {error}</div>}
+      <div className="grid grid-flow-row">
+        <Error>{error}</Error>
         <button
           className="btn"
           onClick={() => {
