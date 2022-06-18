@@ -27,7 +27,7 @@ class MessageAPIService {
     message_encryption_indicator
   ) {
     let ciphertext = null;
-    if (message_encryption_indicator != 1) {
+    if (message_encryption_indicator == 2) {
       this._rpc.encrypt(message, (r) => {
         ciphertext = r;
       });
@@ -101,8 +101,9 @@ class MessageAPIService {
 
   __decryptMessageList(data) {
     data.forEach((message) => {
-      // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext. 
-      if (message.message_encryption_indicator != `${API_MESSAGE_ENCRYPTION_INDICATORS}/1`) {
+      // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
+      // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
+      if (message.message_encryption_indicator == `${API_MESSAGE_ENCRYPTION_INDICATORS}/2`) {
         this._rpc.decrypt(message.message, (r) => {
           message.message = r;
         });
