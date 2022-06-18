@@ -24,4 +24,8 @@ code {
   .link {
     @apply px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75 no-underline;
   }
+
+  .text {
+    @apply text-base leading-relaxed mt-0 mb-4 text-slate-800;
+  }
 }

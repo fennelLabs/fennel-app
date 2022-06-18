@@ -1,25 +1,21 @@
-import React from 'react';
-import CLI from '../../../services/CLI';
+import React, {useState} from 'react';
 import {CLI_URI} from '../../../config';
 import {Client as WsClient} from 'rpc-websockets';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
+import useFennelRPC from '../../hooks/useFennelRPC';
 
 function GenerateKeypair() {
+  const [publicKey, setPublicKey] = useState('');
+  const {rpc} = useFennelRPC();
+
   async function generateKeypair() {
-    ///this will move to '../../../services/CLI'
     console.log('generate key pair');
 
-    let ws = new WsClient(CLI_URI);
-
-    ws.on('open', async () => {
-      try {
-        await ws.call('get_or_generate_keypair', []);
-      } catch (err) {
-        console.log(err);
-      }
+    rpc.generateKeypair((r) => {
+      setPublicKey(r);
     });
 
     console.log('done');
@@ -32,9 +28,7 @@ function GenerateKeypair() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Generate Key Pair</PageTitle>
-        <Text>
-          Some text explaining what this is all about and what to expect.
-        </Text>
+        <Text>{publicKey}</Text>
         <Button onClick={generateKeypair}>Generate</Button>
       </div>
     </div>

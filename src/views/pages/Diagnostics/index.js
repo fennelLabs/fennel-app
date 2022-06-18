@@ -8,7 +8,7 @@ function Diagnostics() {
     setData({pending: true, diagnostics: {}});
     //const node = new Node();
     //const data = node.createIdentity();
-  const fetchData = async () => {
+    const fetchData = async () => {
       const node = new Node();
       const data = await node.getDiagnosticsData();
       return data;
@@ -22,24 +22,22 @@ function Diagnostics() {
       })
       .catch(console.error);
 
-      const fetchMoreData = async () => {
-        const node = new Node();
-        const data = await node.createIdentity();
-        return data;
-      };
-      fetchMoreData()
-        .then((fetchedMoreData) => {
-          console.log(fetchedMoreData);
-          //setData({
-          //  pending: false,
-          //  diagnostics: fetchedData
-          //});
-        })
-        .catch(console.error);
-
-
+    const fetchMoreData = async () => {
+      const node = new Node();
+      const data = await node.createIdentity();
+      return data;
+    };
+    fetchMoreData()
+      .then((fetchedMoreData) => {
+        console.log(fetchedMoreData);
+        //setData({
+        //  pending: false,
+        //  diagnostics: fetchedData
+        //});
+      })
+      .catch(console.error);
   }, []);
- 
+
   return (
     <div>
       {data && (

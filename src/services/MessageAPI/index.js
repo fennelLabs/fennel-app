@@ -1,5 +1,10 @@
 import axios from 'axios';
 import {BehaviorSubject} from 'rxjs';
+import {
+  API_MESSAGES,
+  API_IDENTITIES,
+  API_MESSAGE_ENCRYPTION_INDICATORS
+} from '../../config';
 
 class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
@@ -8,31 +13,43 @@ class MessageAPIService {
   sent_messages$ = this._sent_messages.asObservable();
   received_messages$ = this._received_messages.asObservable();
 
+  constructor(rpc) {
+    this._rpc = rpc;
+  }
+
   async sendMessage(
     message,
     fingerprint,
     signature,
     publicKey,
-    sender_id,
-    recipient_id,
-    message_encryption_indicator_id
+    sender,
+    recipient,
+    message_encryption_indicator
   ) {
+    let ciphertext = null;
+    if (message_encryption_indicator != 1) {
+      this._rpc.encrypt(message, (r) => {
+        ciphertext = r;
+      });
+    } else {
+      ciphertext = message;
+    }
     let retval = await axios
       .post(
-        `http://localhost:1234/api/messages/`,
+        `${API_MESSAGES}/`,
         {
           headers: {
             'Content-Type': 'application/json'
           }
         },
         {
-          message: message,
+          message: ciphertext,
           public_key: publicKey,
           signature: signature,
           fingerprint: fingerprint,
-          sender: `http://localhost:1234/api/identities/${sender_id}/`,
-          recipient: `http://localhost:1234/api/identities/${recipient_id}/`,
-          message_encryption_indicator: `http://localhost:1234/api/message_encryption_indicators/${message_encryption_indicator_id}/`
+          sender: `${API_IDENTITIES}/${sender}/`,
+          recipient: `${API_IDENTITIES}/${recipient}/`,
+          message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${message_encryption_indicator}/`
         }
       )
       .then(function (response) {
@@ -80,6 +97,18 @@ class MessageAPIService {
         return [];
       });
     this.__populateSentMessages(retval);
+  }
+
+  __decryptMessageList(data) {
+    data.forEach((message) => {
+      // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext. 
+      if (message.message_encryption_indicator != `${API_MESSAGE_ENCRYPTION_INDICATORS}/1`) {
+        this._rpc.decrypt(message.message, (r) => {
+          message.message = r;
+        });
+      }
+      this._receive_messages.next([...this._receive_messages.value, message]);
+    });
   }
 
   __populateReceivedMessages(data) {

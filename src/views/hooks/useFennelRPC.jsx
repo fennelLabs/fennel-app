@@ -1,0 +1,23 @@
+import React, {useEffect, useState} from 'react';
+import {useServiceContext} from '../../contexts/ServiceContext';
+import {FennelRPC} from '../../services';
+
+/**
+ * returns the rpc instance and a boolean indicating the state of the web socket connection
+ * @returns {{open: boolean, rpc: FennelRPC}}
+ */
+function useFennelRPC() {
+  const {rpc} = useServiceContext();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const sub = rpc.isWebSocketOpen$.subscribe((isOpen) => setOpen(isOpen));
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
+
+  return {open, rpc};
+}
+
+export default useFennelRPC;

@@ -70,6 +70,9 @@ function TailwindyNav() {
                 </Link>,
                 <Link to="/feed" className="link">
                   Feed
+                </Link>,
+                <Link to="/whiteflag" className="link">
+                  Whiteflag
                 </Link>
               ].map((e) => <li>{e}</li>)
             )}
