@@ -19,11 +19,23 @@ function Home() {
 
   return !state.hasFennelAccount ? (
     <>
+      <p>This page checks to see if there iss evidence of an account.</p>
       <p>
-        A bunch of introductory text explaining that acts as a sort of splash
-        followed by the option to getting started with creating an account.
+        If no account then a bunch of introductory text explaining that acts as
+        a sort of splash followed by the option to getting started with creating
+        an account.
       </p>
-      <Link to="/account">Get Started</Link>
+      <p>
+        If there is an account, then we need to redirect to whatever page we
+        determine is approrpriate. It might be something like a dashboard of
+        some sort or maybe we just push to identities page and see if they have
+        an identity
+      </p>
+      <Link to="/account">
+        <Button type="button" className="mt-2">
+          Get Started
+        </Button>
+      </Link>
     </>
   ) : (
     <Redirect

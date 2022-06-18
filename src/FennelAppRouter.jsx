@@ -18,6 +18,7 @@ import RestoreWallet from './views/pages/RestoreWallet';
 import Contacts from './views/pages/Contacts';
 import NewMessage from './views/pages/NewMessage';
 import Whiteflag from './views/pages/Whiteflag';
+import Account from './views/pages/Account';
 
 function FennelAppRouter() {
   return (
@@ -45,6 +46,7 @@ function FennelAppRouter() {
           <Route path="/inbox/new" element={<NewMessage />} />
           <Route path="/wallet/generate" element={<GenerateWallet />} />
           <Route path="/wallet/restore" element={<RestoreWallet />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </PageContainer>
     </>
