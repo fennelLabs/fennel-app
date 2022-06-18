@@ -1,9 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
 import Button from '../../components/Button';
 import MessageAPIService from '../../../services/MessageAPI';
+import ContactsManager from '../../../services/ContactsManager.service';
+import MessageEncryptionIndicatorsManager from '../../../services/MessageEncryptionIndicatorsManager.service';
+
+const service = new MessageAPIService();
+const contactsManager = new ContactsManager();
+const indicatorsManager = new MessageEncryptionIndicatorsManager();
 
 function NewMessage() {
   //Insert values from the data store
@@ -20,7 +26,22 @@ function NewMessage() {
   const [recipientsList, setRecipientsList] = useState([]);
   const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
 
-  const service = new MessageAPIService();
+  useEffect(() => {
+    const sub = contactsManager.identities$.subscribe((d) => {
+      setRecipientsList(d);
+    });
+    const indicatorsSub =
+      indicatorsManager.message_encryption_indicators$.subscribe((d) => {
+        setEncryptionsIndicatorsList(d);
+      });
+
+    contactsManager.populateContacts();
+
+    return () => {
+      sub.remove();
+      indicatorsSub.remove();
+    };
+  }, []);
 
   const handleTextChange = (e) => {
     const {name, value} = e.target;
