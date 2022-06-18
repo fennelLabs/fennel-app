@@ -17,8 +17,6 @@ import GenerateWallet from './views/pages/GenerateWallet';
 import RestoreWallet from './views/pages/RestoreWallet';
 import Contacts from './views/pages/Contacts';
 import NewMessage from './views/pages/NewMessage';
-import GenerateWallet from './views/pages/GenerateWallet';
-import RestoreWallet from './views/pages/RestoreWallet';
 import Whiteflag from './views/pages/Whiteflag';
 
 function FennelAppRouter() {

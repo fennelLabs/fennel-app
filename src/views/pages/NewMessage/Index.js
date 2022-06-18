@@ -1,9 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
 import Button from '../../components/Button';
 import MessageAPIService from '../../../services/MessageAPI';
+import ContactsManager from '../../../services/ContactsManager.service';
+import MessageEncryptionIndicatorsManager from '../../../services/MessageEncryptionIndicatorsManager.service';
+
+const service = new MessageAPIService();
+const contactsManager = new ContactsManager();
+const indicatorsManager = new MessageEncryptionIndicatorsManager();
 
 function NewMessage() {
   //Insert values from the data store
@@ -17,9 +23,43 @@ function NewMessage() {
     message_encryption_indicator: null
   });
 
-  const service = new MessageAPIService();
+  const [recipientsList, setRecipientsList] = useState([]);
+  const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    const sub = contactsManager.identities$.subscribe((d) => {
+      setRecipientsList(d);
+    });
+    const indicatorsSub =
+      indicatorsManager.message_encryption_indicators$.subscribe((d) => {
+        setEncryptionsIndicatorsList(d);
+      });
+
+    contactsManager.populateContacts();
+
+    return () => {
+      sub.remove();
+      indicatorsSub.remove();
+    };
+  }, []);
+
+  const handleTextChange = (e) => {
+    const {name, value} = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleRecipientChange = (e) => {
+    const {name, value} = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleIndicatorChange = (e) => {
     const {name, value} = e.target;
     setState((prevState) => ({
       ...prevState,
@@ -31,6 +71,18 @@ function NewMessage() {
     e.preventDefault();
     service.sendMessage(state);
   };
+
+  const recipients = recipientsList.map((item) => (
+    <option key={item.id} value={item.fingerprint}>
+      {item.fingerprint}
+    </option>
+  ));
+
+  const indicators = encryptionIndicatorsList.map((item) => (
+    <option key={item.id} value={item.name}>
+      {item.name}
+    </option>
+  ));
 
   return (
     <div className="flex flex-row">
@@ -50,10 +102,22 @@ function NewMessage() {
             <textarea
               value={state.message}
               name="message"
-              onChange={handleChange}
+              onChange={handleTextChange}
               className="textarea textarea-bordered h-24"
               placeholder="..."
             ></textarea>
+            <label className="label">
+              <span className="label-text">Recipient</span>
+            </label>
+            <select name="recipient" onChange={handleRecipientChange}>
+              {recipients}
+            </select>
+            <label className="label">
+              <span className="label-text">Encryption Mode</span>
+            </label>
+            <select name="indicator" onChange={handleIndicatorChange}>
+              {indicators}
+            </select>
           </div>
           <Button type="submit" class="mt-2">
             Send Message
