@@ -27,8 +27,12 @@ function GenerateKeypair() {
         <IdentitySubNav />
       </div>
       <div className="basis-3/4 px-8">
-        <PageTitle>Generate Key Pair</PageTitle>
+        <PageTitle>Generate Identity</PageTitle>
         <Text>{publicKey}</Text>
+        <p>
+          You will now create a keypair representing an identity associated with
+          your Fennel account.
+        </p>
         <Button onClick={generateKeypair}>Generate</Button>
       </div>
     </div>

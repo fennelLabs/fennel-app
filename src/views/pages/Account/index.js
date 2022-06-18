@@ -5,10 +5,19 @@ import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import {useNavigate} from 'react-router-dom';
 
 function Account() {
-  const [createAccount, setCreateAccount] = useState(true);
+  const [state, setState] = useState({createAccount: true});
   const [btnEnabled, setBtnEnabled] = useState(false);
+  const navigate = useNavigate();
+
+  function handleStateChange(o) {
+    setState((prevState) => ({
+      ...prevState,
+      o
+    }));
+  }
 
   function toggleChoice() {
     setBtnEnabled(true);
@@ -16,7 +25,12 @@ function Account() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log('Create the account');
+    if (state.createAccount) {
+      console.log('Create the account here, then redirect');
+      navigate('/identity/generate-keypair'); //redirect to maybe inbox or something else if they have account?
+    } else {
+      navigate('/');
+    }
   }
 
   return (
@@ -26,23 +40,19 @@ function Account() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Account</PageTitle>
-        <p>
-          Things to consider: people think they are creating an fennel account
-          then suddenly they are creating a wallet and wallet usually means
-          money when an account does not. Something to consider.
-        </p>
+        <p>We need to say something about what they are doing.</p>
         <form onSubmit={handleSubmit}>
           <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">
-                <strong>Create New Wallet (or account?)</strong>
+                <strong>Create New Account</strong>
               </span>
               <input
                 value="create"
                 type="radio"
                 name="radio"
                 className="radio checked:bg-blue-500"
-                onChange={() => setCreateAccount(true)}
+                onChange={() => handleStateChange({createAccount: true})}
                 onClick={() => toggleChoice()}
               />
             </label>
@@ -50,25 +60,25 @@ function Account() {
           <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">
-                <strong>Import Wallet (or account?)</strong>
+                <strong>Import Account</strong>
               </span>
               <input
                 value="import"
                 type="radio"
                 name="radio"
                 className="radio checked:bg-blue-500"
-                onChange={() => setCreateAccount(false)}
+                onChange={() => handleStateChange({createAccount: false})}
                 onClick={() => toggleChoice()}
               />
             </label>
           </div>
           <div className="mt-2">
-            {createAccount && btnEnabled && (
-              <Button type="submit">Create Wallet</Button>
+            {state.createAccount && btnEnabled && (
+              <Button type="submit">Create Account</Button>
             )}
 
-            {!createAccount && btnEnabled && (
-              <Button type="submit">Import Wallet</Button>
+            {!state.createAccount && btnEnabled && (
+              <Button type="submit">Import Account</Button>
             )}
           </div>
         </form>

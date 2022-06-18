@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import useModal from '../../../utils/useModal';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
-import Redirect from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 
 function Home() {

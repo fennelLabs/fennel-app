@@ -31,7 +31,7 @@ function FennelAppRouter() {
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/diagnostics" element={<Diagnostics />} />
           <Route
-            path="/identity/import-generate-keypair"
+            path="/identity/generate-keypair"
             element={<GenerateKeypair />}
           />
           <Route path="/identity/profile" element={<Profile />} />

@@ -1,6 +1,7 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {BehaviorSubject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
+import NODE_URI_WS from '../../config';
 
 class Node {
   _signals = new BehaviorSubject([]);
@@ -208,7 +209,7 @@ class Node {
 
   async connect() {
     try {
-      const provider = new WsProvider('ws://127.0.0.1:9944');
+      const provider = new WsProvider(NODE_URI_WS);
       this._api = await ApiPromise.create({provider});
     } catch (error) {
       console.error(error);
