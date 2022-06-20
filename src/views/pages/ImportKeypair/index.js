@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
+import {useNavigate} from 'react-router-dom';
 
 function ImportKeypair() {
-
   const [state, setState] = useState({useJson: true});
+  const [btnEnabled, setBtnEnabled] = useState(false);
+  const navigate = useNavigate();
 
   function handleStateChange(o) {
     setState((prevState) => ({
@@ -22,7 +24,7 @@ function ImportKeypair() {
     e.preventDefault();
     if (state.useJson) {
       console.log('import json');
-      navigate('/'); 
+      navigate('/');
     } else {
       console.log('import phrase');
       navigate('/');
