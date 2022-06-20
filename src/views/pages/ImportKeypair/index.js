@@ -76,7 +76,7 @@ function ImportKeypair() {
             </label>
           </div>
           <div className="mt-2">
-            <Button type="submit">Import</Button>
+            {btnEnabled && <Button type="submit">Import</Button>}
           </div>
         </form>
       </div>
