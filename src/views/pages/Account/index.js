@@ -15,7 +15,7 @@ function Account() {
   function handleStateChange(o) {
     setState((prevState) => ({
       ...prevState,
-      o
+      ...o
     }));
   }
 
@@ -27,9 +27,9 @@ function Account() {
     e.preventDefault();
     if (state.createAccount) {
       console.log('Create the account here, then redirect');
-      navigate('/identity/generate-keypair'); //redirect to maybe inbox or something else if they have account?
+      navigate('/identity/generate-keypair'); 
     } else {
-      navigate('/');
+      navigate('/identity/import-keypair');
     }
   }
 
