@@ -72,15 +72,16 @@ function Account() {
               />
             </label>
           </div>
-          <div className="mt-2">
-            {state.createAccount && btnEnabled && (
+     {btnEnabled && (         
+        <div className="mt-2">
+            {state.createAccount &&  (
               <Button type="submit">Create Account</Button>
             )}
 
-            {!state.createAccount && btnEnabled && (
+            {!state.createAccount && (
               <Button type="submit">Import Account</Button>
             )}
-          </div>
+          </div>)}
         </form>
       </div>
     </div>
