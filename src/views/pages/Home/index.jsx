@@ -19,7 +19,7 @@ function Home() {
 
   return !state.hasFennelAccount ? (
     <>
-      <p>This page checks to see if there iss evidence of an account.</p>
+      <p>This page checks to see if there is evidence of an account.</p>
       <p>
         If no account then a bunch of introductory text explaining that acts as
         a sort of splash followed by the option to getting started with creating
@@ -31,11 +31,11 @@ function Home() {
         some sort or maybe we just push to identities page and see if they have
         an identity
       </p>
-      <Link to="/account">
-        <Button type="button" className="mt-2">
-          Get Started
-        </Button>
-      </Link>
+      <div className="mt-2">
+        <Link to="/account">
+          <Button type="button">Get Started</Button>
+        </Link>
+      </div>
     </>
   ) : (
     <Redirect

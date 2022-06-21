@@ -22,6 +22,7 @@ function GenerateKeypair() {
   async function generateKeypair(e) {
     e.preventDefault();
     console.log('generate key pair');
+    handleStateChange({publicKey: 'asdf'});
 
     //rpc.generateKeypair((r) => {
     //  handleStateChange({publicKey: r});
@@ -43,7 +44,9 @@ function GenerateKeypair() {
               with your Fennel account.
             </p>
             <form onSubmit={generateKeypair}>
-              <Button class="mt-2">Generate</Button>
+              <div className="mt-2">
+                <Button type="submit">Generate</Button>
+              </div>
             </form>
           </div>
         ) : (

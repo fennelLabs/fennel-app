@@ -20,7 +20,7 @@ function ImportKeypair() {
     setBtnEnabled(true);
   }
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
     e.preventDefault();
     handleStateChange({isComplete: true});
     if (state.useJson) {
