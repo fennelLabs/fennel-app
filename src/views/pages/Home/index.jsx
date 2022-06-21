@@ -1,18 +1,20 @@
 import React from 'react';
-import useModal from '../../../utils/useModal';
 import PageTitle from '../../components/PageTitle';
-import Button from '../../components/Button';
 
 function Home() {
-  const controls = useModal('Menu');
-  const okdialog = useModal('OkDialog');
-
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row max-w-[50rem]">
       <div className="basis-4/4 px-8">
         <PageTitle>Home</PageTitle>
-        <Button onClick={() => controls.open()}>Open Menu</Button>
-        <Button onClick={() => okdialog.open()}>Ok Dialog</Button>
+        <div className="text">
+          The Fennel Protocol is a decentralized software distribution that
+          includes or will include decentralized messaging servers, access to
+          decentralized storage features, and a blockchain network used as a
+          repository for inter-organizational messaging. A number of the
+          features listed in this section are on-chain/off-chain hybrid features
+          and will as a result incur fees on the Fennel network at certain
+          critical points.
+        </div>
       </div>
     </div>
   );
