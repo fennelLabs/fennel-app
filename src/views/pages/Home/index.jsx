@@ -13,7 +13,7 @@ function Home() {
           repository for inter-organizational messaging. A number of the
           features listed in this section are on-chain/off-chain hybrid features
           and will as a result incur fees on the Fennel network at certain
-          critical points
+          critical points.
         </div>
       </div>
     </div>
