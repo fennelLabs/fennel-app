@@ -22,11 +22,10 @@ function GenerateKeypair() {
   async function generateKeypair(e) {
     e.preventDefault();
     console.log('generate key pair');
-    handleStateChange({publicKey: 'asdf'});
 
-    //rpc.generateKeypair((r) => {
-    //  handleStateChange({publicKey: r});
-    //});
+    rpc.generateKeypair((r) => {
+      handleStateChange({publicKey: r});
+    });
   }
 
   return (
