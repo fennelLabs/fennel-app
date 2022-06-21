@@ -8,16 +8,9 @@ import {useServiceContext} from '../../../contexts/ServiceContext';
 import {useNavigate} from 'react-router-dom';
 
 function Account() {
-  const [state, setState] = useState({createAccount: true});
+  const [createAccount, setCreateAccount] = useState({createAccount: true});
   const [btnEnabled, setBtnEnabled] = useState(false);
   const navigate = useNavigate();
-
-  function handleStateChange(o) {
-    setState((prevState) => ({
-      ...prevState,
-      ...o
-    }));
-  }
 
   function toggleChoice() {
     setBtnEnabled(true);
@@ -25,9 +18,9 @@ function Account() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (state.createAccount) {
+    if (createAccount) {
       console.log('Create the account here, then redirect');
-      navigate('/identity/generate-keypair'); 
+      navigate('/identity/generate-keypair');
     } else {
       navigate('/identity/import-keypair');
     }
@@ -52,7 +45,7 @@ function Account() {
                 type="radio"
                 name="radio"
                 className="radio checked:bg-blue-500"
-                onChange={() => handleStateChange({createAccount: true})}
+                onChange={() => setCreateAccount(true)}
                 onClick={() => toggleChoice()}
               />
             </label>
@@ -67,21 +60,18 @@ function Account() {
                 type="radio"
                 name="radio"
                 className="radio checked:bg-blue-500"
-                onChange={() => handleStateChange({createAccount: false})}
+                onChange={() => setCreateAccount(false)}
                 onClick={() => toggleChoice()}
               />
             </label>
           </div>
-     {btnEnabled && (         
-        <div className="mt-2">
-            {state.createAccount &&  (
-              <Button type="submit">Create Account</Button>
-            )}
+          {btnEnabled && (
+            <div className="mt-2">
+              {createAccount && <Button type="submit">Create Account</Button>}
 
-            {!state.createAccount && (
-              <Button type="submit">Import Account</Button>
-            )}
-          </div>)}
+              {!createAccount && <Button type="submit">Import Account</Button>}
+            </div>
+          )}
         </form>
       </div>
     </div>
