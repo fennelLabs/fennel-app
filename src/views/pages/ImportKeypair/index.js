@@ -22,12 +22,13 @@ function ImportKeypair() {
 
   handleSubmit = () => {
     e.preventDefault();
+    handleStateChange({isComplete: true});
     if (state.useJson) {
       console.log('import json');
-      navigate('/');
+      //navigate('/');
     } else {
       console.log('import phrase');
-      navigate('/');
+      //navigate('/');
     }
   };
 
@@ -37,8 +38,8 @@ function ImportKeypair() {
         <IdentitySubNav />
       </div>
       <div className="basis-3/4 px-8">
-        <PageTitle>Import Keypair</PageTitle>
-        {state.isComplete && (
+        <PageTitle>Import Account</PageTitle>
+        {!state.isComplete ? (
           <form onSubmit={handleSubmit}>
             <textarea
               cols="50"
@@ -80,9 +81,9 @@ function ImportKeypair() {
               {btnEnabled && <Button type="submit">Import</Button>}
             </div>
           </form>
-        ) ? (
-          <>Complete</>
-        ) : null}
+        ) : (
+          <span>Complete</span>
+        )}
       </div>
     </div>
   );

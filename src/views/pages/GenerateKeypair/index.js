@@ -8,17 +8,24 @@ import IdentitySubNav from '../../components/IdentitySubNav';
 import useFennelRPC from '../../hooks/useFennelRPC';
 
 function GenerateKeypair() {
-  const [publicKey, setPublicKey] = useState('');
+  const [state, setState] = useState({publicKey: null});
   const {rpc} = useFennelRPC();
 
-  async function generateKeypair() {
+  function handleStateChange(o) {
+    console.log(o);
+    setState((prevState) => ({
+      ...prevState,
+      ...o
+    }));
+  }
+
+  async function generateKeypair(e) {
+    e.preventDefault();
     console.log('generate key pair');
 
-    rpc.generateKeypair((r) => {
-      setPublicKey(r);
-    });
-
-    console.log('done');
+    //rpc.generateKeypair((r) => {
+    //  handleStateChange({publicKey: r});
+    //});
   }
 
   return (
@@ -27,13 +34,21 @@ function GenerateKeypair() {
         <IdentitySubNav />
       </div>
       <div className="basis-3/4 px-8">
-        <PageTitle>Generate Identity</PageTitle>
-        <Text>{publicKey}</Text>
-        <p>
-          You will now create a keypair representing an identity associated with
-          your Fennel account.
-        </p>
-        <Button onClick={generateKeypair}>Generate</Button>
+        <PageTitle>Generate Keypair</PageTitle>
+        <Text>{state.publicKey}</Text>
+        {state.publicKey == null ? (
+          <div>
+            <p>
+              You will now create a keypair representing an identity associated
+              with your Fennel account.
+            </p>
+            <form onSubmit={generateKeypair}>
+              <Button class="mt-2">Generate</Button>
+            </form>
+          </div>
+        ) : (
+          <span>Success!</span>
+        )}
       </div>
     </div>
   );
