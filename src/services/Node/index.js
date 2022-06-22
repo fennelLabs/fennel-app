@@ -73,8 +73,7 @@ class Node {
 
   async announceKey(keymanager, fingerprint, location) {
     const node = await this.api();
-    let retval = false;
-    await node.tx.keystoreModule
+    let retval = await node.tx.keystoreModule
       .announceKey(fingerprint, location)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -89,10 +88,12 @@ class Node {
             console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
           });
 
-          unsub();
-          retval = true;
+          return true;
         }
+
+        return false;
       });
+
     return retval;
   }
 
