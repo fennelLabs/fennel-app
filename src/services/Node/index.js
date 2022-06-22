@@ -33,12 +33,11 @@ class Node {
     await node.tx.identityModule
       .createIdentity()
       .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
-        
         console.log(`Transaction hash ${txHash.toHex()}`);
 
         events.forEach(({phase, event: {data, method, section}}) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          if (section == "identityModule" && method == "IdentityCreated") {
+          if (section == 'identityModule' && method == 'IdentityCreated') {
             retval = `${data[0]}`;
             console.log(retval);
           }
@@ -47,7 +46,7 @@ class Node {
     return retval;
   }
 
-  async announceKey(fingerprint, location) {
+  async announceKey(keymanager, fingerprint, location) {
     const node = await this.api();
     let retval = false;
     await node.tx.keystoreModule
