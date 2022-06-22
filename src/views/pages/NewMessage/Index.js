@@ -138,6 +138,9 @@ function NewMessage() {
               <span className="label-text">Recipient</span>
             </label>
             <select name="recipient" onChange={handleRecipientChange}>
+              <option value="0" selected>
+                -- Select ---
+              </option>
               {recipients}
             </select>
             <label className="label">
