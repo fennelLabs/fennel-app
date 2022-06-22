@@ -16,6 +16,20 @@ code {
     monospace;
 }
 
+@layer base {
+  input {
+    @apply block w-full px-3 py-1.5;
+  }
+
+  input,
+  textarea {
+    @apply text-base font-normal text-gray-700 bg-white bg-clip-padding;
+    @apply border border-solid border-gray-300 rounded;
+    @apply transition ease-in-out m-0;
+    @apply focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none;
+  }
+}
+
 @layer components {
   .btn {
     @apply bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded-full shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150;
