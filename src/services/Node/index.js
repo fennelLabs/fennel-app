@@ -1,14 +1,29 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
 import NODE_URI_WS from '../../config';
 
 class Node {
+  /**
+   * @type {BehaviorSubject}
+   * @private
+   */
   _signals = new BehaviorSubject([]);
-  _balance = new BehaviorSubject(0);
-
   signals$ = this._signals.asObservable();
+
+  /**
+   * @type {BehaviorSubject}
+   * @private
+   */
+  _balance = new BehaviorSubject(0);
   balance$ = this._balance.asObservable();
+
+  /**
+   * @type {BehaviorSubject}
+   * @private
+   */
+  _defaultIdentity = new BehaviorSubject(undefined);
+  defaultIdentity$ = this._defaultIdentity.asObservable();
 
   constructor() {
     this._api = null;
@@ -26,23 +41,34 @@ class Node {
     }
   }
 
-  async createIdentity(keymanager) {
+  async createIdentity(keymanager, callback) {
     const node = await this.api();
-    let retval = null;
-    await node.tx.identityModule
+    const identitySubject = new Subject();
+    const sub = identitySubject.subscribe((id) => {
+      callback(id);
+      sub.unsubscribe();
+    });
+
+    node.tx.identityModule
       .createIdentity()
       .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
-
         events.forEach(({phase, event: {data, method, section}}) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          if (section == 'identityModule' && method == 'IdentityCreated') {
-            retval = `${data[0]}`;
-            console.log(retval);
+          let id = data[0];
+          if (
+            section == 'identityModule' &&
+            method == 'IdentityCreated' &&
+            id
+          ) {
+            identitySubject.next(id);
+
+            if (!this._defaultIdentity.value) {
+              this._defaultIdentity.next(id);
+            }
           }
         });
       });
-    return retval;
   }
 
   async announceKey(keymanager, fingerprint, location) {

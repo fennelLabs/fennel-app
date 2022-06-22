@@ -18,8 +18,10 @@ function Identity() {
   async function handleSubmit(e) {
     e.preventDefault();
     const node = new Node();
-    let identity_number = await node.createIdentity(keymanager);
-    alert(`New identity number is ${identity_number}`);
+    await node.createIdentity(keymanager, (identity) => {
+      setCreateIdentity(identity);
+      alert(`New identity number is ${identity}`);
+    });
   }
 
   return (
