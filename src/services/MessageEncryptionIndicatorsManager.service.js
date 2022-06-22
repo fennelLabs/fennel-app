@@ -6,7 +6,7 @@ export default class MessageEncryptionIndicatorsManager {
 
   message_encryption_indicators$ = this._message_encryption_indicators.asObservable();
 
-  async populateContacts() {
+  async populateIndicators() {
     let results = await axios
       .get(`http://localhost:1234/api/message_encryption_indicators/`, {
         headers: {

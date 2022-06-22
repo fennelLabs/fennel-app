@@ -15,7 +15,6 @@ class Node {
   }
 
   async getBalance(keymanager) {
-    console.log(`Getting balance for signer ${keymanager.name()}`);
     const node = await this.api();
     if (!keymanager.signer()) {
       this._balance.next(0);
@@ -33,8 +32,6 @@ class Node {
     let identity_number = await node.tx.identityModule
       .createIdentity()
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
-        console.log(`Current status is ${status.type}`);
-
         if (status.isFinalized) {
           console.log(
             `Transaction included at blockHash ${status.asFinalized}`
@@ -54,6 +51,7 @@ class Node {
 
   async announceKey(fingerprint, location) {
     const node = await this.api();
+    let retval = false;
     await node.tx.keystoreModule
       .announceKey(fingerprint, location)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
@@ -70,8 +68,10 @@ class Node {
           });
 
           unsub();
+          retval = true;
         }
       });
+    return retval;
   }
 
   async revokeKey(fingerprint) {

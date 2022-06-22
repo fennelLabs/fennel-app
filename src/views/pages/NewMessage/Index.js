@@ -25,6 +25,7 @@ function NewMessage() {
 
   const [recipientsList, setRecipientsList] = useState([]);
   const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const sub = contactsManager.identities$.subscribe((d) => {
@@ -36,6 +37,7 @@ function NewMessage() {
       });
 
     contactsManager.populateContacts();
+    indicatorsManager.populateIndicators();
 
     return () => {
       sub.remove();
@@ -44,6 +46,14 @@ function NewMessage() {
   }, []);
 
   const handleTextChange = (e) => {
+    const {name, value} = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSenderChange = (e) => {
     const {name, value} = e.target;
     setState((prevState) => ({
       ...prevState,
@@ -67,19 +77,33 @@ function NewMessage() {
     }));
   };
 
-  const submitMessage = (e) => {
+  const submitMessage = async (e) => {
     e.preventDefault();
-    service.sendMessage(state);
+    if (
+      await service.sendMessage(
+        state.message,
+        'Test',
+        'Test',
+        'Test',
+        state.sender,
+        state.recipient,
+        state.message_encryption_indicator
+      )
+    ) {
+      setSuccess(true);
+    } else {
+      setSuccess(false);
+    }
   };
 
   const recipients = recipientsList.map((item) => (
-    <option key={item.id} value={item.fingerprint}>
+    <option key={item.id} value={item.id}>
       {item.fingerprint}
     </option>
   ));
 
   const indicators = encryptionIndicatorsList.map((item) => (
-    <option key={item.id} value={item.name}>
+    <option key={item.id} value={item.id}>
       {item.name}
     </option>
   ));
@@ -91,9 +115,13 @@ function NewMessage() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>New Message</PageTitle>
-        <Text>
-          Some text explaining what this is all about and what to expect.
-        </Text>
+        {!success ? (
+          <Text>
+            Some text explaining what this is all about and what to expect.
+          </Text>
+        ) : (
+          <Text>Message sent successfully.</Text>
+        )}
         <form onSubmit={submitMessage}>
           <div className="form-control">
             <label className="label">
@@ -113,13 +141,28 @@ function NewMessage() {
               {recipients}
             </select>
             <label className="label">
+              <span className="label-text">Sender</span>
+            </label>
+            <select name="sender" onChange={handleSenderChange}>
+              <option value="0" selected>
+                -- Select ---
+              </option>
+              {recipients}
+            </select>
+            <label className="label">
               <span className="label-text">Encryption Mode</span>
             </label>
-            <select name="indicator" onChange={handleIndicatorChange}>
+            <select
+              name="message_encryption_indicator"
+              onChange={handleIndicatorChange}
+            >
+              <option value="0" selected>
+                -- Select ---
+              </option>
               {indicators}
             </select>
           </div>
-          <Button type="submit" class="mt-2">
+          <Button type="submit" className="mt-2">
             Send Message
           </Button>
         </form>
