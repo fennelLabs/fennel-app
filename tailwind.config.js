@@ -1,5 +1,11 @@
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx,html}', 'index.html'],
+  mode: 'jit',
+  content: [
+    './src/*.{js,jsx,ts,tsx,html,css}',
+    './src/views/**/*.{js,jsx,ts,tsx,html,css}',
+    './src/addons/**/*.{js,jsx,ts,tsx,html,css}',
+    'index.html'
+  ],
   theme: {
     extend: {}
   },
