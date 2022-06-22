@@ -36,7 +36,7 @@ function Account() {
       <div className="basis-3/4 px-8">
         <PageTitle>Account</PageTitle>
         <p>We need to say something about what they are doing.</p>
-        <form onSubmit={handleSubmit}>
+        <form className="w-[20rem]" onSubmit={handleSubmit}>
           <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">
