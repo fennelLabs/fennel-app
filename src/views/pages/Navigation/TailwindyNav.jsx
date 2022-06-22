@@ -62,7 +62,7 @@ function TailwindyNav() {
                 <Link to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
-                <Link to="/account" className="link">
+                <Link to="/identity" className="link">
                   Manage Identity
                 </Link>,
                 <Link to="/inbox" className="link">

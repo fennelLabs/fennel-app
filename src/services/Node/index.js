@@ -22,7 +22,6 @@ class Node {
       const {_, data: balance} = await node.query.system.account(
         keymanager.signer().address
       );
-      console.log(`${balance.free}`);
       this._balance.next(`${balance.free}`);
     }
   }

@@ -6,7 +6,7 @@ function IdentitySubNav({children, ...attributes}) {
   return (
     <ul className="menu bg-base-300 w-56 p-2 rounded-box">
       <li>
-        <Link to="/account">Identity</Link>
+        <Link to="/identity">Identity</Link>
       </li>
       <li>
         <Link to="/identity/generate-keypair">Generate Key</Link>

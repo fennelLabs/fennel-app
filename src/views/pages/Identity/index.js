@@ -46,7 +46,7 @@ function Identity() {
               />
             </label>
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">
                 <strong>Import Identity</strong>
@@ -60,15 +60,15 @@ function Identity() {
                 onClick={() => toggleChoice()}
               />
             </label>
-          </div>
+          </div> */}
           <div className="mt-2">
             {createIdentity && btnEnabled && (
               <Button type="submit">Create Identity</Button>
             )}
 
-            {!createIdentity && btnEnabled && (
+            {/* {!createIdentity && btnEnabled && (
               <Button type="submit">Import Identity</Button>
-            )}
+            )} */}
           </div>
         </form>
       </div>
