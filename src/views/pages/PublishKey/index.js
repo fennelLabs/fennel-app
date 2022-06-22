@@ -85,7 +85,7 @@ function PublishKey() {
               htmlFor="fingerprint"
               className="form-label inline-block mb-2 text-gray-700"
             >
-              Fingerprint
+              Public Key
             </label>
             <textarea
               id="fingerprint"
