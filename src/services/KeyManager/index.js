@@ -35,6 +35,7 @@ class KeyManager {
     console.log(`Restoring a wallet with ${this._name}`);
     this._pair = this._keyring.addFromUri(mnemonic, {name: name}, 'sr25519');
     console.log(`Address: ${this._pair.address}`);
+    return !!this._pair.address;
   }
 
   sign(message) {
