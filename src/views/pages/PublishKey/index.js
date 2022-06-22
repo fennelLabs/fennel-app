@@ -20,7 +20,11 @@ function PublishKey() {
     e.preventDefault();
     let result = await node.announceKey(keymanager, fingerprint, location);
     if (result) {
-      await contactsManager.createNewIdentity(fingerprint, result);
+      await contactsManager.createNewIdentity(
+        on_chain_identity_number,
+        fingerprint,
+        location
+      );
     }
     setSuccess(result);
   }

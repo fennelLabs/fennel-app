@@ -24,7 +24,7 @@ export default class ContactsManager {
     this._identities.next([...results]);
   }
 
-  async createNewIdentity(fingerprint, publicKey) {
+  async createNewIdentity(on_chain_identity_number, fingerprint, publicKey) {
     let results = await axios
       .post(`http://localhost:1234/api/identities/`, {
         headers: {
@@ -32,6 +32,7 @@ export default class ContactsManager {
         }
       },
       {
+        on_chain_identity_number: on_chain_identity_number,
         fingerprint: fingerprint,
         public_key: publicKey,
         shared_secret_key: "",
