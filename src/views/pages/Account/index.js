@@ -10,6 +10,8 @@ import {useNavigate} from 'react-router-dom';
 function Account() {
   const [createAccount, setCreateAccount] = useState({createAccount: true});
   const [btnEnabled, setBtnEnabled] = useState(false);
+  const [mnemonic, setMnemonic] = useState('');
+  const {_, keymanager} = useServiceContext();
   const navigate = useNavigate();
 
   function toggleChoice() {
@@ -19,7 +21,7 @@ function Account() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (createAccount) {
-      console.log('Create the account here, then redirect');
+      setMnemonic(keymanager.generateAccount('Main'));
       navigate('/identity/generate-keypair');
     } else {
       navigate('/identity/import-keypair');
