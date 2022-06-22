@@ -25,9 +25,13 @@ function ContactsList() {
 
   return (
     <div style={{width: '90%'}}>
-      {contactList.map(({id, fingerprint}) => (
-        <div key={id}>{fingerprint}</div>
-      ))}
+      {contactList.length > 0 ? (
+        contactList.map(({id, fingerprint}) => (
+          <div key={id}>{fingerprint}</div>
+        ))
+      ) : (
+        <div>No contacts.</div>
+      )}
     </div>
   );
 }
