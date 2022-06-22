@@ -29,24 +29,22 @@ class Node {
 
   async createIdentity(keymanager) {
     const node = await this.api();
-    let identity_number = await node.tx.identityModule
+    let retval = null;
+    await node.tx.identityModule
       .createIdentity()
-      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
-        if (status.isFinalized) {
-          console.log(
-            `Transaction included at blockHash ${status.asFinalized}`
-          );
-          console.log(`Transaction hash ${txHash.toHex()}`);
+      .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
+        
+        console.log(`Transaction hash ${txHash.toHex()}`);
 
-          events.forEach(({phase, event: {data, method, section}}) => {
-            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          });
-
-          unsub();
-          return 0;
-        }
+        events.forEach(({phase, event: {data, method, section}}) => {
+          console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          if (section == "identityModule" && method == "IdentityCreated") {
+            retval = `${data[0]}`;
+            console.log(retval);
+          }
+        });
       });
-    return identity_number;
+    return retval;
   }
 
   async announceKey(fingerprint, location) {
