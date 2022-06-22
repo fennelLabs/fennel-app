@@ -13,7 +13,7 @@ function ListView(props) {
   };
 
   return state.readingId == null ? (
-    <div style={{width: '90%'}}>
+    <div className="w-full">
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
