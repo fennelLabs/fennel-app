@@ -34,33 +34,29 @@ class MessageAPIService {
     } else {
       ciphertext = message;
     }
-    let retval = await axios
-      .post(
-        `${API_MESSAGES}/`,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        },
-        {
-          message: ciphertext,
-          public_key: publicKey,
-          signature: signature,
-          fingerprint: fingerprint,
-          sender: `${API_IDENTITIES}/${sender}/`,
-          recipient: `${API_IDENTITIES}/${recipient}/`,
-          message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${message_encryption_indicator}/`
-        }
-      )
-      .then(function (response) {
-        console.log(response.data.results);
-        return response.data.results;
+    let retval = await axios({
+      method: 'post',
+      url: `${API_MESSAGES}/`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: {
+        message: ciphertext,
+        public_key: publicKey,
+        signature: signature,
+        fingerprint: fingerprint,
+        sender: `${API_IDENTITIES}/${sender}/`,
+        recipient: `${API_IDENTITIES}/${recipient}/`,
+        message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${message_encryption_indicator}/`
+      }
+    })
+      .then(function (_) {
+        return true;
       })
-      .catch(function (error) {
-        console.error(error);
-        return [];
+      .catch(function (_) {
+        return false;
       });
-    this.__addSentMessage(retval);
+    return retval;
   }
 
   async checkMessages(recipientID) {
@@ -103,7 +99,10 @@ class MessageAPIService {
     data.forEach((message) => {
       // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
       // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
-      if (message.message_encryption_indicator == `${API_MESSAGE_ENCRYPTION_INDICATORS}/2`) {
+      if (
+        message.message_encryption_indicator ==
+        `${API_MESSAGE_ENCRYPTION_INDICATORS}/2`
+      ) {
         this._rpc.decrypt(message.message, (r) => {
           message.message = r;
         });

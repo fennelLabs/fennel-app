@@ -128,7 +128,7 @@ export class FennelRPC {
       .subscribe(callback);
   }
 
-  generateKeyPair(callback) {
+  generateKeypair(callback) {
     return this.send(
       {
         method: 'get_or_generate_keypair'

@@ -1,6 +1,7 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {BehaviorSubject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
+import NODE_URI_WS from '../../config';
 
 class Node {
   _signals = new BehaviorSubject([]);
@@ -14,7 +15,6 @@ class Node {
   }
 
   async getBalance(keymanager) {
-    console.log(`Getting balance for signer ${keymanager.name()}`);
     const node = await this.api();
     if (!keymanager.signer()) {
       this._balance.next(0);
@@ -29,30 +29,27 @@ class Node {
 
   async createIdentity(keymanager) {
     const node = await this.api();
-    let identity_number = await node.tx.identityModule
+    let retval = null;
+    await node.tx.identityModule
       .createIdentity()
-      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
-        console.log(`Current status is ${status.type}`);
+      .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
+        
+        console.log(`Transaction hash ${txHash.toHex()}`);
 
-        if (status.isFinalized) {
-          console.log(
-            `Transaction included at blockHash ${status.asFinalized}`
-          );
-          console.log(`Transaction hash ${txHash.toHex()}`);
-
-          events.forEach(({phase, event: {data, method, section}}) => {
-            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          });
-
-          unsub();
-          return 0;
-        }
+        events.forEach(({phase, event: {data, method, section}}) => {
+          console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+          if (section == "identityModule" && method == "IdentityCreated") {
+            retval = `${data[0]}`;
+            console.log(retval);
+          }
+        });
       });
-    return identity_number;
+    return retval;
   }
 
   async announceKey(fingerprint, location) {
     const node = await this.api();
+    let retval = false;
     await node.tx.keystoreModule
       .announceKey(fingerprint, location)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
@@ -69,8 +66,10 @@ class Node {
           });
 
           unsub();
+          retval = true;
         }
       });
+    return retval;
   }
 
   async revokeKey(fingerprint) {
@@ -208,7 +207,7 @@ class Node {
 
   async connect() {
     try {
-      const provider = new WsProvider('ws://127.0.0.1:9944');
+      const provider = new WsProvider(NODE_URI_WS);
       this._api = await ApiPromise.create({provider});
     } catch (error) {
       console.error(error);

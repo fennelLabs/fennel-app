@@ -18,6 +18,8 @@ import RestoreWallet from './views/pages/RestoreWallet';
 import Contacts from './views/pages/Contacts';
 import NewMessage from './views/pages/NewMessage';
 import Whiteflag from './views/pages/Whiteflag';
+import Account from './views/pages/Account';
+import ImportKeypair from './views/pages/ImportKeypair';
 
 function FennelAppRouter() {
   return (
@@ -30,13 +32,14 @@ function FennelAppRouter() {
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/diagnostics" element={<Diagnostics />} />
           <Route
-            path="/identity/import-generate-keypair"
+            path="/identity/generate-keypair"
             element={<GenerateKeypair />}
           />
           <Route path="/identity/profile" element={<Profile />} />
           <Route path="/identity/publish-key" element={<PublishKey />} />
           <Route path="/identity/backup-key" element={<BackupKey />} />
           <Route path="/identity/revoke-key" element={<RevokeKey />} />
+          <Route path="/identity/import-keypair" element={<ImportKeypair />} />
           <Route path="/identity" element={<Identity />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
@@ -45,6 +48,7 @@ function FennelAppRouter() {
           <Route path="/inbox/new" element={<NewMessage />} />
           <Route path="/wallet/generate" element={<GenerateWallet />} />
           <Route path="/wallet/restore" element={<RestoreWallet />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </PageContainer>
     </>
