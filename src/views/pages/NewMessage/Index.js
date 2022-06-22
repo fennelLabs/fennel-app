@@ -4,12 +4,11 @@ import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
 import Button from '../../components/Button';
 import MessageAPIService from '../../../services/MessageAPI';
-import ContactsManager from '../../../services/ContactsManager.service';
 import MessageEncryptionIndicatorsManager from '../../../services/MessageEncryptionIndicatorsManager.service';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
+import {useDefaultSender} from '../../hooks/useDefaultSender';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 const service = new MessageAPIService();
-const contactsManager = new ContactsManager();
 const indicatorsManager = new MessageEncryptionIndicatorsManager();
 
 function NewMessage() {
@@ -24,7 +23,8 @@ function NewMessage() {
     message_encryption_indicator: null
   });
 
-  const defaultIdentity = useDefaultIdentity();
+  const {contactsManager} = useServiceContext();
+  const defaultSender = useDefaultSender();
   const [recipientsList, setRecipientsList] = useState([]);
   const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
   const [success, setSuccess] = useState(false);
@@ -79,7 +79,7 @@ function NewMessage() {
         'Test',
         'Test',
         'Test',
-        parseInt(defaultIdentity),
+        parseInt(defaultSender),
         state.recipient,
         state.message_encryption_indicator
       )
@@ -116,45 +116,49 @@ function NewMessage() {
         ) : (
           <Text>Message sent successfully.</Text>
         )}
-        <form onSubmit={submitMessage}>
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Your Message</span>
-            </label>
-            <textarea
-              value={state.message}
-              name="message"
-              onChange={handleTextChange}
-              className="textarea textarea-bordered h-24"
-              placeholder="..."
-            ></textarea>
-            <label className="label">
-              <span className="label-text">Recipient</span>
-            </label>
-            <select
-              name="recipient"
-              onChange={handleRecipientChange}
-              defaultValue="0"
-            >
-              <option value="0">-- Select ---</option>
-              {recipients}
-            </select>
-            <label className="label">
-              <span className="label-text">Encryption Mode</span>
-            </label>
-            <select
-              name="message_encryption_indicator"
-              onChange={handleIndicatorChange}
-              defaultValue="0"
-            >
-              <option value="0">-- Select ---</option>
-              {indicators}
-            </select>
-          </div>
-          <Button type="submit" className="mt-2">
-            Send Message
-          </Button>
-        </form>
+        {defaultSender ? (
+          <form onSubmit={submitMessage}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Your Message</span>
+              </label>
+              <textarea
+                value={state.message}
+                name="message"
+                onChange={handleTextChange}
+                className="textarea textarea-bordered h-24"
+                placeholder="..."
+              ></textarea>
+              <label className="label">
+                <span className="label-text">Recipient</span>
+              </label>
+              <select
+                name="recipient"
+                onChange={handleRecipientChange}
+                defaultValue="0"
+              >
+                <option value="0">-- Select ---</option>
+                {recipients}
+              </select>
+              <label className="label">
+                <span className="label-text">Encryption Mode</span>
+              </label>
+              <select
+                name="message_encryption_indicator"
+                onChange={handleIndicatorChange}
+                defaultValue="0"
+              >
+                <option value="0">-- Select ---</option>
+                {indicators}
+              </select>
+            </div>
+            <Button type="submit" className="mt-2">
+              Send Message
+            </Button>
+          </form>
+        ) : (
+          <Text>Please create an identity to send a new message.</Text>
+        )}
       </div>
     </div>
   );

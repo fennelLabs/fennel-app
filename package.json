@@ -47,7 +47,7 @@
     "electron:dist": "electron-builder -mwl",
     "lint": "eslint --ext js,jsx src",
     "format": "prettier -w src/**/*",
-    "clean": "rm -rf ./build/ ./dist/",
+    "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
     "prod:build": "parcel build --public-url ./ ."
   },
   "build": {

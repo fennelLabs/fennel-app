@@ -11,9 +11,9 @@ function IdentitySubNav({children, ...attributes}) {
       <li>
         <Link to="/identity/generate-keypair">Generate Key</Link>
       </li>
-      <li>
+      {/* <li>
         <Link to="/identity/import-keypair">Import Key</Link>
-      </li>
+      </li> */}
       <li>
         <Link to="/identity/publish-key">Publish My Key</Link>
       </li>

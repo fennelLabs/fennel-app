@@ -4,11 +4,12 @@ import {FennelRPC} from '../services';
 import MessageAPIService from '../services/MessageAPI';
 import KeyManager from '../services/KeyManager';
 import Node from '../services/Node';
+import ContactsManager from '../services/ContactsManager.service';
 
 const ServiceContext = createContext({});
 
 /**
- * @returns {{messageService: MessageAPIService, rpc: FennelRPC, keymanager: KeyManager, node: Node}}
+ * @returns {{messageService: MessageAPIService, rpc: FennelRPC, keymanager: KeyManager, node: Node, contactsManager: ContactsManager}}
  */
 export const useServiceContext = () => useContext(ServiceContext);
 
@@ -21,8 +22,9 @@ export const ServiceContextProvider = ({children}) => {
     const rpc = new FennelRPC();
     const messageService = new MessageAPIService(rpc);
     const keymanager = new KeyManager('Main');
+    const contactsManager = new ContactsManager();
 
-    setServices({messageService, rpc, keymanager, node});
+    setServices({messageService, rpc, keymanager, node, contactsManager});
 
     return () => {
       setServices(undefined);

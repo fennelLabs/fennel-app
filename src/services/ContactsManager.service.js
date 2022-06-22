@@ -3,8 +3,10 @@ import axios from 'axios';
 
 export default class ContactsManager {
   _identities = new BehaviorSubject([]);
+  _default_sender = new BehaviorSubject(undefined);
 
   identities$ = this._identities.asObservable();
+  default_sender$ = this._default_sender.asObservable();
 
   populateContacts() {
     return axios
@@ -41,9 +43,15 @@ export default class ContactsManager {
       }
     })
       .then((response) => {
-        const r = response?.data?.results;
+        const r = response?.data;
+        console.log(r);
         if (r) {
-          this._identities.next([...this._identities.value, ...r]);
+          console.log("New identity created.");
+          this._identities.next([...this._identities.value, r]);
+          if (!this._default_sender.value) {
+            console.log("Setting new default sender.");
+            this._default_sender.next(r.id);
+          }
         }
         return r;
       })
