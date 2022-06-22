@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function IdentitySubNav({children, ...attributes}) {
   return (
@@ -12,7 +13,7 @@ function IdentitySubNav({children, ...attributes}) {
       <li>
         <Link to="/identity/publish-key">Publish My Key</Link>
       </li>
-      <li>
+      {/* <li>
         <Link to="/identity/profile">Edit My Profile</Link>
       </li>
       <li>
@@ -20,9 +21,13 @@ function IdentitySubNav({children, ...attributes}) {
       </li>
       <li>
         <Link to="/identity/revoke-key">Revoke Key</Link>
-      </li>
+      </li> */}
     </ul>
   );
 }
+
+IdentitySubNav.propTypes = {
+  children: PropTypes.array
+};
 
 export default IdentitySubNav;
