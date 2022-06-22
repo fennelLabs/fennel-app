@@ -27,7 +27,7 @@ function ListView(props) {
             {props.itemList.map((item) => (
               <tr key={item.id}>
                 <td>
-                <Button onClick={() => toggleItem(item.id)}>Read</Button>
+                  <Button onClick={() => toggleItem(item.id)}>Read</Button>
                 </td>
                 <td>
                   {item.fingerprint.length < 10
