@@ -15,6 +15,7 @@ function PublishKey() {
   const [location, setLocation] = useState('');
 
   async function publishKey(e) {
+    e.preventDefault();
     let result = await node.announceKey(fingerprint, location);
     if (result) {
       await contactsManager.createNewIdentity(fingerprint, publishKey);
