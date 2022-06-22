@@ -18,11 +18,12 @@ code {
 
 @layer base {
   input {
-    @apply block w-full px-3 py-1.5;
+    @apply block w-full;
   }
 
   input,
   textarea {
+    @apply px-3 py-1.5;
     @apply text-base font-normal text-gray-700 bg-white bg-clip-padding;
     @apply border border-solid border-gray-300 rounded;
     @apply transition ease-in-out m-0;
