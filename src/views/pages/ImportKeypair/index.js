@@ -3,11 +3,15 @@ import IdentitySubNav from '../../components/IdentitySubNav';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import {useNavigate} from 'react-router-dom';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function ImportKeypair() {
   const [state, setState] = useState({useJson: true, isComplete: false});
   const [btnEnabled, setBtnEnabled] = useState(false);
   const navigate = useNavigate();
+  const [mnemonic, setMnemonic] = useState('');
+  const [key, setKey] = useState('');
+  const {_, keymanager} = useServiceContext();
 
   function handleStateChange(o) {
     setState((prevState) => ({
@@ -25,9 +29,11 @@ function ImportKeypair() {
     handleStateChange({isComplete: true});
     if (state.useJson) {
       console.log('import json');
+      setMnemonic(keymanager.importAccount('Main', mnemonic));
       //navigate('/');
     } else {
       console.log('import phrase');
+      setMnemonic(keymanager.importAccount('Main', mnemonic));
       //navigate('/');
     }
   };
@@ -46,6 +52,7 @@ function ImportKeypair() {
               className="textarea textarea-bordered"
               placeholder=""
               name="keypair"
+              onChange={(event) => setKey(event.target.value)}
             ></textarea>
             <div className="form-control">
               <label className="label cursor-pointer">
@@ -82,7 +89,7 @@ function ImportKeypair() {
             </div>
           </form>
         ) : (
-          <span>Complete</span>
+          <span>Complete: {mnemonic}</span>
         )}
       </div>
     </div>
