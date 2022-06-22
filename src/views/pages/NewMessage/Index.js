@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import MessageAPIService from '../../../services/MessageAPI';
 import ContactsManager from '../../../services/ContactsManager.service';
 import MessageEncryptionIndicatorsManager from '../../../services/MessageEncryptionIndicatorsManager.service';
+import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 
 const service = new MessageAPIService();
 const contactsManager = new ContactsManager();
@@ -23,6 +24,7 @@ function NewMessage() {
     message_encryption_indicator: null
   });
 
+  const defaultIdentity = useDefaultIdentity();
   const [recipientsList, setRecipientsList] = useState([]);
   const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
   const [success, setSuccess] = useState(false);
@@ -46,14 +48,6 @@ function NewMessage() {
   }, []);
 
   const handleTextChange = (e) => {
-    const {name, value} = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
-  const handleSenderChange = (e) => {
     const {name, value} = e.target;
     setState((prevState) => ({
       ...prevState,
@@ -85,7 +79,7 @@ function NewMessage() {
         'Test',
         'Test',
         'Test',
-        state.sender,
+        parseInt(defaultIdentity),
         state.recipient,
         state.message_encryption_indicator
       )
@@ -137,19 +131,12 @@ function NewMessage() {
             <label className="label">
               <span className="label-text">Recipient</span>
             </label>
-            <select name="recipient" onChange={handleRecipientChange}>
-              <option value="0" selected>
-                -- Select ---
-              </option>
-              {recipients}
-            </select>
-            <label className="label">
-              <span className="label-text">Sender</span>
-            </label>
-            <select name="sender" onChange={handleSenderChange}>
-              <option value="0" selected>
-                -- Select ---
-              </option>
+            <select
+              name="recipient"
+              onChange={handleRecipientChange}
+              defaultValue="0"
+            >
+              <option value="0">-- Select ---</option>
               {recipients}
             </select>
             <label className="label">
@@ -158,10 +145,9 @@ function NewMessage() {
             <select
               name="message_encryption_indicator"
               onChange={handleIndicatorChange}
+              defaultValue="0"
             >
-              <option value="0" selected>
-                -- Select ---
-              </option>
+              <option value="0">-- Select ---</option>
               {indicators}
             </select>
           </div>
