@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import ListView from '../../components/ListView';
-import PropTypes from 'prop-types';
 import PageTitle from '../../components/PageTitle';
 import InboxSubNav from '../../components/InboxSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import {useDefaultSender} from '../../hooks/useDefaultSender';
 
 const test_messages = [
   {
@@ -31,28 +31,22 @@ const test_messages = [
   }
 ];
 
-function Inbox(props) {
+function Inbox() {
   const {messageService} = useServiceContext();
   const [messageList, setMessageList] = useState(null);
+  const defaultSender = useDefaultSender();
 
   useEffect(() => {
     const sub = messageService.received_messages$.subscribe((d) => {
       setMessageList(d && d.length > 0 ? d : null);
     });
 
-    let id = setInterval(() => {
-      messageService.checkMessages(props.user_identity);
-    }, 5000);
+    messageService.checkMessages(defaultSender);
 
     return () => {
       sub.remove();
-      clearInterval(id);
     };
-  }, []);
-
-  useEffect(() => {
-    messageService.checkMessages(props.user_identity);
-  }, [props.user_identity]);
+  }, [defaultSender, messageService]);
 
   return (
     <div className="flex flex-row">
@@ -71,9 +65,5 @@ function Inbox(props) {
     </div>
   );
 }
-
-Inbox.propTypes = {
-  user_identity: PropTypes.number
-};
 
 export default Inbox;

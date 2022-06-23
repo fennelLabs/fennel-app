@@ -1,20 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import ContactsManager from '../../../services/ContactsManager.service';
-
-const contactService = new ContactsManager();
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function ContactsList() {
+  const {contactsManager} = useServiceContext();
   const [contactList, setContactList] = useState([]);
 
   useEffect(() => {
-    const sub = contactService.identities$.subscribe((d) => {
+    const sub = contactsManager.identities$.subscribe((d) => {
       setContactList(d);
     });
 
-    contactService.populateContacts();
+    contactsManager.populateContacts();
 
     let id = setInterval(() => {
-      contactService.populateContacts();
+      contactsManager.populateContacts();
     }, 5000);
 
     return () => {

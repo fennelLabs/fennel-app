@@ -3,13 +3,12 @@ import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
-  const {keymanager} = useServiceContext();
+  const {keymanager, node} = useServiceContext();
 
   function toggleChoice() {
     setBtnEnabled(true);
@@ -17,7 +16,6 @@ function Identity() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const node = new Node();
     await node.createIdentity(keymanager, (identity) => {
       setCreateIdentity(identity);
       alert(`New identity number is ${identity}`);
