@@ -7,7 +7,7 @@ export function useDefaultSender() {
   const [sender, setDefaultSender] = useState(undefined);
 
   useEffect(() => {
-    const sub = contactsManager?.default_sender$
+    const sub = contactsManager?.defaultSender$
       .pipe(filter((i) => !!i))
       .subscribe((i) => {
         setDefaultSender(i);
