@@ -2,15 +2,12 @@ import React, {useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 import {usePublishKeyForm} from './usePublishKeyForm';
 
-const node = new Node();
-
 function PublishKey() {
-  const {keymanager, contactsManager} = useServiceContext();
+  const {node, keymanager, contactsManager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
   const [success, setSuccess] = useState(false);
 

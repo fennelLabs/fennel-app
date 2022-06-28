@@ -2,12 +2,10 @@ import React, {useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
-import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function NewFeedMessage() {
-  const {keymanager} = useServiceContext();
-  const node = new Node();
+  const {node, keymanager} = useServiceContext();
 
   const [value, setValue] = useState('');
 

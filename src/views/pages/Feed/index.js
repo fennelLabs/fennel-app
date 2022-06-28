@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import FeedSubNav from '../../components/FeedSubNav';
-import Node from '../../../services/Node';
 import FeedListView from '../../components/FeedListView';
-
-const node = new Node();
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function Feed() {
+  const {node} = useServiceContext();
   const [signalList, setSignalList] = useState([]);
 
   useEffect(() => {

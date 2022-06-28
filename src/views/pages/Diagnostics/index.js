@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import Node from '../../../services/Node';
+import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function Diagnostics() {
+  const {node} = useServiceContext();
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
     setData({pending: true, diagnostics: {}});
-    //const node = new Node();
-    //const data = node.createIdentity();
     const fetchData = async () => {
-      const node = new Node();
       const data = await node.getDiagnosticsData();
       return data;
     };
@@ -23,7 +21,6 @@ function Diagnostics() {
       .catch(console.error);
 
     const fetchMoreData = async () => {
-      const node = new Node();
       const data = await node.createIdentity();
       return data;
     };
