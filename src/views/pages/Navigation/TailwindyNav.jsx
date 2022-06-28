@@ -3,10 +3,8 @@ import {Link} from 'react-router-dom';
 import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
-const node = new Node();
-
 function TailwindyNav() {
-  const {_, keymanager} = useServiceContext();
+  const {node, keymanager} = useServiceContext();
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
