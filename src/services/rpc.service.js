@@ -1,4 +1,4 @@
-import {BehaviorSubject, filter, map, ReplaySubject} from 'rxjs';
+import {BehaviorSubject, filter, map, ReplaySubject, throwError} from 'rxjs';
 import {CLI_URI} from '../config';
 
 export class FennelRPC {
@@ -118,6 +118,7 @@ export class FennelRPC {
     } else {
       console.info('message queued: websocket is offline');
       this._offlineOutgoingMessageQueue.unshift(message);
+      throw('Message queued: websocket is offline.')
     }
 
     return this._incomingMessages

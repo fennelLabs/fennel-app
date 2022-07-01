@@ -6,11 +6,19 @@ import useFennelRPC from '../../hooks/useFennelRPC';
 function GenerateKeypair() {
   const [publicKey, setPublicKey] = useState(null);
   const {rpc} = useFennelRPC();
+  const [error, setError] = useState(undefined);
 
   function generateKeypair() {
-    rpc.generateKeypair((r) => {
-      setPublicKey(r);
-    });
+    try {
+      rpc.generateKeypair((r) => {
+        setPublicKey(r);
+      });
+      setError(undefined);
+    } catch {
+      setError(
+        'Key Pair generation has failed. Please try again. If you receive this message again, please contact:'
+      );
+    }
   }
 
   return (
@@ -27,6 +35,14 @@ function GenerateKeypair() {
                 You will now create a keypair representing an identity
                 associated with your Fennel account.
               </p>
+              {error && (
+                <div
+                  className="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3"
+                  role="alert"
+                >
+                  {error}
+                </div>
+              )}
               <div className="mt-2">
                 <button
                   type="button"
