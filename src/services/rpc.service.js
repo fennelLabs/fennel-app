@@ -1,4 +1,4 @@
-import {BehaviorSubject, filter, map, ReplaySubject, throwError} from 'rxjs';
+import {BehaviorSubject, filter, map, ReplaySubject} from 'rxjs';
 import {CLI_URI} from '../config';
 
 export class FennelRPC {
