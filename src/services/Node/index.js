@@ -1,4 +1,5 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
+import {node} from 'prop-types';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
 import NODE_URI_WS from '../../config';
@@ -41,6 +42,13 @@ class Node {
     }
   }
 
+  async getFeeForCreateIdentity(keymanager) {
+    return node.tx.identityModule
+      .createIdentity()
+      .paymentInfo(keymanager.signer())
+      .partialFee.toHuman();
+  }
+
   async createIdentity(keymanager, callback) {
     const node = await this.api();
     const identitySubject = new Subject();
@@ -71,6 +79,13 @@ class Node {
       });
   }
 
+  async getFeeForAnnounceKey(keymanager, fingerprint, location) {
+    return node.tx.keystoreModule
+      .announceKey(fingerprint, location)
+      .paymentInfo(keymanager.signer())
+      .partialFee.toHuman();
+  }
+
   async announceKey(keymanager, fingerprint, location) {
     const node = await this.api();
     let retval = await node.tx.keystoreModule
@@ -97,7 +112,14 @@ class Node {
     return retval;
   }
 
-  async revokeKey(fingerprint) {
+  async getFeeForRevokeKey(keymanager, fingerprint) {
+    return node.tx.keystoreModule
+      .revokeKey(fingerprint)
+      .paymentInfo(keymanager.signer())
+      .partialFee.toHuman();
+  }
+
+  async revokeKey(keymanager, fingerprint) {
     const node = await this.api();
     await node.tx.keystoreModule
       .revokeKey(fingerprint)
@@ -117,6 +139,13 @@ class Node {
           unsub();
         }
       });
+  }
+
+  async getFeeForSendNewSignal(keymanager, content) {
+    return node.tx.signalModule
+      .sendSignal(content)
+      .paymentInfo(keymanager.signer())
+      .partialFee.toHuman();
   }
 
   async sendNewSignal(keymanager, content) {
