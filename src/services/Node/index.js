@@ -1,5 +1,4 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
-import {node} from 'prop-types';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
 import NODE_URI_WS from '../../config';
@@ -43,6 +42,7 @@ class Node {
   }
 
   async getFeeForCreateIdentity(keymanager) {
+    const node = await this.api();
     return node.tx.identityModule
       .createIdentity()
       .paymentInfo(keymanager.signer())
@@ -80,6 +80,7 @@ class Node {
   }
 
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
+    const node = await this.api();
     return node.tx.keystoreModule
       .announceKey(fingerprint, location)
       .paymentInfo(keymanager.signer())
@@ -113,6 +114,7 @@ class Node {
   }
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
+    const node = await this.api();
     return node.tx.keystoreModule
       .revokeKey(fingerprint)
       .paymentInfo(keymanager.signer())
@@ -142,6 +144,7 @@ class Node {
   }
 
   async getFeeForSendNewSignal(keymanager, content) {
+    const node = await this.api();
     return node.tx.signalModule
       .sendSignal(content)
       .paymentInfo(keymanager.signer())
