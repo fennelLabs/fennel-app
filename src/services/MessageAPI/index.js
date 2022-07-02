@@ -67,8 +67,11 @@ class MessageAPIService {
         }
       })
       .then(function (response) {
-        console.log(response.data.results);
-        return response.data.results;
+        if (response.data) {
+          return response.data;
+        } else {
+          return [];
+        }
       })
       .catch(function (error) {
         console.error(error);
