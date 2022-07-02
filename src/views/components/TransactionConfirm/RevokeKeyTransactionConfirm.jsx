@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Text from '../../components/Text';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 export default function RevokeKeyTransactionConfirm(props) {
   const {node, keymanager} = useServiceContext();
 
-  const {visible, setVisible} = useState(false);
   const {fee, setFee} = useState(0);
   const {balance, setBalance} = useState(0);
 
@@ -17,10 +17,6 @@ export default function RevokeKeyTransactionConfirm(props) {
 
   function confirmTransaction() {
     node.revokeKey(keymanager, props.fingerprint);
-  }
-
-  function cancelTransaction() {
-    setVisible(false);
   }
 
   return (
@@ -40,14 +36,9 @@ export default function RevokeKeyTransactionConfirm(props) {
           >
             Confirm
           </button>
-          <button
-            className="btn"
-            onClick={() => {
-              cancelTransaction();
-            }}
-          >
+          <Link className="btn" to="/identity/revoke-key">
             Cancel
-          </button>
+          </Link>
         </div>
       ) : (
         <Text>

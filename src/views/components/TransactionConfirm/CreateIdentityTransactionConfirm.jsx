@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import Text from '../../components/Text';
+import {Link} from 'react-router-dom';
 
 export default function CreateIdentityTransactionConfirm() {
   const {node, keymanager} = useServiceContext();
 
-  const {visible, setVisible} = useState(false);
   const {fee, setFee} = useState(0);
   const {balance, setBalance} = useState(0);
 
@@ -16,10 +16,6 @@ export default function CreateIdentityTransactionConfirm() {
 
   function confirmTransaction() {
     node.createIdentity(keymanager);
-  }
-
-  function cancelTransaction() {
-    setVisible(false);
   }
 
   return (
@@ -39,14 +35,9 @@ export default function CreateIdentityTransactionConfirm() {
           >
             Confirm
           </button>
-          <button
-            className="btn"
-            onClick={() => {
-              cancelTransaction();
-            }}
-          >
+          <Link className="btn" to="/identity">
             Cancel
-          </button>
+          </Link>
         </div>
       ) : (
         <Text>

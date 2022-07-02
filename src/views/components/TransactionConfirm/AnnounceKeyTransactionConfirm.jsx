@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Text from '../../components/Text';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 export default function AnnounceKeyTransactionConfirm(props) {
   const {node, keymanager} = useServiceContext();
 
-  const {visible, setVisible} = useState(false);
   const {fee, setFee} = useState(0);
   const {balance, setBalance} = useState(0);
 
@@ -19,10 +19,6 @@ export default function AnnounceKeyTransactionConfirm(props) {
 
   function confirmTransaction() {
     node.announceKey(keymanager, props.fingerprint, props.location);
-  }
-
-  function cancelTransaction() {
-    setVisible(false);
   }
 
   return (
@@ -42,14 +38,9 @@ export default function AnnounceKeyTransactionConfirm(props) {
           >
             Confirm
           </button>
-          <button
-            className="btn"
-            onClick={() => {
-              cancelTransaction();
-            }}
-          >
+          <Link className="btn" to="/identity/publish-key">
             Cancel
-          </button>
+          </Link>
         </div>
       ) : (
         <Text>

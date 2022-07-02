@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Text from '../../components/Text';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 export default function SendNewSignalTransactionConfirm(props) {
   const {node, keymanager} = useServiceContext();
 
-  const {visible, setVisible} = useState(false);
   const {fee, setFee} = useState(0);
   const {balance, setBalance} = useState(0);
 
@@ -17,10 +17,6 @@ export default function SendNewSignalTransactionConfirm(props) {
 
   function confirmTransaction() {
     node.sendNewSignal(keymanager, props.content);
-  }
-
-  function cancelTransaction() {
-    setVisible(false);
   }
 
   return (
@@ -40,14 +36,9 @@ export default function SendNewSignalTransactionConfirm(props) {
           >
             Confirm
           </button>
-          <button
-            className="btn"
-            onClick={() => {
-              cancelTransaction();
-            }}
-          >
+          <Link className="btn" to="/feed/message">
             Cancel
-          </button>
+          </Link>
         </div>
       ) : (
         <Text>
