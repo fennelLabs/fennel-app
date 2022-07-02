@@ -36,10 +36,7 @@ function GenerateKeypair() {
                 associated with your Fennel account.
               </p>
               {error && (
-                <div
-                  className="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3"
-                  role="alert"
-                >
+                <div className="error" role="alert">
                   {error}
                 </div>
               )}
