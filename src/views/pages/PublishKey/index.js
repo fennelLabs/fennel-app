@@ -47,10 +47,12 @@ function PublishKey() {
         <PageTitle>Publish Key</PageTitle>
         {success && <Text>Keypair published successfully.</Text>}
         {defaultIdentity && PublishKeyForm}
-        {defaultIdentity == undefined && (
-          <Link to="/identity">
-            Please create an identity before publishing you key.
-          </Link>
+        {defaultIdentity ? (
+          PublishKeyForm
+        ) : (
+          <Text>
+            Create an on-chain identity through the Manage Identity tab first.
+          </Text>
         )}
         {error && (
           <div
