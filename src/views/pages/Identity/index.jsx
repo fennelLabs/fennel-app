@@ -14,7 +14,14 @@ function Identity() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Identity</PageTitle>
-        {account && <IdentityControls />}
+        {account ? (
+          <IdentityControls />
+        ) : (
+          <div className="text">
+            You must generate or restore your wallet before using the identity
+            tools
+          </div>
+        )}
       </div>
     </div>
   );
