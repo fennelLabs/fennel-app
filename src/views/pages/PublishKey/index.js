@@ -1,23 +1,32 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
-import {Link} from 'react-router-dom';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
-import {usePublishKeyForm} from './usePublishKeyForm';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useDefaultIdentity } from '../../hooks/useDefaultIdentity';
+import { usePublishKeyForm } from './usePublishKeyForm';
 
 function PublishKey() {
-  const {node, keymanager, contactsManager} = useServiceContext();
+  const { node, keymanager, contactsManager } = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
+
+  const { fee, setFee } = useState(0);
+  const { balance, setBalance } = useState(0);
 
   console.log(defaultIdentity);
 
   const [fingerprint, location, PublishKeyForm] = usePublishKeyForm({
     onSubmit: publishKey
   });
+
+  useEffect(() => {
+    setFee(
+      node.getFeeForAnnounceKey(keymanager, fingerprint, location)
+    );
+    setBalance(node.getBalance(keymanager));
+  }, [fingerprint, location]);
 
   async function publishKey() {
     try {
@@ -45,9 +54,10 @@ function PublishKey() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Publish Key</PageTitle>
+        <Text>This action will charge an estimated network fee of {fee}.</Text>
         {success && <Text>Keypair published successfully.</Text>}
-        {defaultIdentity && PublishKeyForm}
-        {defaultIdentity ? (
+        {balance <= fee && <Text>Insufficient balance.</Text>}
+        {balance > fee && defaultIdentity ? (
           PublishKeyForm
         ) : (
           <Text>

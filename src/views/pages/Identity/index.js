@@ -1,14 +1,21 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
-  const {keymanager, node} = useServiceContext();
+  const { keymanager, node } = useServiceContext();
+  const { fee, setFee } = useState(0);
+  const { balance, setBalance } = useState(0);
+
+  useEffect(() => {
+    setFee(node.getFeeForCreateIdentity(keymanager));
+    setBalance(node.getBalance(keymanager));
+  }, []);
 
   function toggleChoice() {
     setBtnEnabled(true);
@@ -30,7 +37,8 @@ function Identity() {
       <div className="basis-3/4 px-8">
         <PageTitle>Identity</PageTitle>
         <Text>You may use the links in the menu to manage your identity.</Text>
-        <form onSubmit={handleSubmit}>
+        <Text>This action will charge an estimated network fee of {fee}.</Text>
+        {balance > fee ? <form onSubmit={handleSubmit}>
           <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">
@@ -46,31 +54,12 @@ function Identity() {
               />
             </label>
           </div>
-          {/* <div className="form-control">
-            <label className="label cursor-pointer">
-              <span className="label-text">
-                <strong>Import Identity</strong>
-              </span>
-              <input
-                value="import"
-                type="radio"
-                name="radio"
-                className="radio checked:bg-blue-500"
-                onChange={() => setCreateIdentity(false)}
-                onClick={() => toggleChoice()}
-              />
-            </label>
-          </div> */}
           <div className="mt-2">
             {createIdentity && btnEnabled && (
               <Button type="submit">Create Identity</Button>
             )}
-
-            {/* {!createIdentity && btnEnabled && (
-              <Button type="submit">Import Identity</Button>
-            )} */}
           </div>
-        </form>
+        </form> : <Text>Insufficient balance.</Text>}
       </div>
     </div>
   );

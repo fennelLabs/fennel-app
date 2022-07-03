@@ -1,13 +1,20 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function NewFeedMessage() {
-  const {node, keymanager} = useServiceContext();
+  const { node, keymanager } = useServiceContext();
 
   const [value, setValue] = useState('');
+  const { fee, setFee } = useState(0);
+  const { balance, setBalance } = useState(0);
+
+  useEffect(() => {
+    setFee(node.getFeeForSendNewSignal(keymanager, value));
+    setBalance(node.getBalance(keymanager));
+  }, [value]);
 
   return (
     <div className="flex flex-row">
@@ -16,7 +23,8 @@ function NewFeedMessage() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>New Feed Message</PageTitle>
-        <form
+        <Text>This action will charge an estimated network fee of {fee}.</Text>
+        {balance > fee ? <form
           onSubmit={(event) => {
             event.preventDefault();
             node.sendNewSignal(keymanager, value);
@@ -32,7 +40,7 @@ function NewFeedMessage() {
             }}
           />
           <Button type="submit">Submit</Button>
-        </form>
+        </form> : <Text>Insufficient balance.</Text>}
       </div>
     </div>
   );
