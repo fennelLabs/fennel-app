@@ -44,7 +44,7 @@ export class FennelRPC {
 
     this._isWebSocketOpen
       .pipe(filter((isOpen) => isOpen))
-      .subscribe((_) => console.log('websocket opened'));
+      .subscribe((_) => console.log('RPC WebSocket opened.'));
   }
 
   /**
@@ -71,12 +71,12 @@ export class FennelRPC {
 
   open() {
     if (this.isOpenOrConnecting()) {
-      console.info('websocket is open or connecting');
+      console.info('RPC WebSocket is open or connecting.');
       return;
     }
 
     try {
-      this._ws = new WebSocket(CLI_URI);
+      this._ws = new WebSocket(`${CLI_URI}`);
     } catch (e) {
       throw 'RPC WebSocket instantiation failed. This may be due to endpoint inaccessibility or system misconfiguration.';
     }

@@ -8,6 +8,19 @@ function NewFeedMessage() {
   const {node, keymanager} = useServiceContext();
 
   const [value, setValue] = useState('');
+  const [error, setError] = useState(undefined);
+
+  function sendNewSignal(event, keymanager, value) {
+    event.preventDefault();
+    try {
+      node.sendNewSignal(keymanager, value);
+      setError(undefined);
+    } catch (e) {
+      setError(
+        'The transmission of the message failed. Please try again later.'
+      );
+    }
+  }
 
   return (
     <div className="flex flex-row">
@@ -16,10 +29,14 @@ function NewFeedMessage() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>New Feed Message</PageTitle>
+        {error && (
+          <div className="error" role="alert">
+            {error}
+          </div>
+        )}
         <form
           onSubmit={(event) => {
-            event.preventDefault();
-            node.sendNewSignal(keymanager, value);
+            sendNewSignal(event, keymanager, value);
           }}
         >
           <textarea
