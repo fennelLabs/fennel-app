@@ -56,7 +56,9 @@ function RestoreWallet(props) {
     if (isValid && error) {
       setError(null);
     } else if (!isValid && !error) {
-      setError('not a valid seed phrase');
+      setError(
+        'This is not a valid seed phrase. Please check the text input and try again.'
+      );
     }
 
     return isValid;
