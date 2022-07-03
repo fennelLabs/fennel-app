@@ -32,7 +32,7 @@ function RevokeKey() {
       <div className="basis-3/4 px-8">
         <PageTitle>Revoke Key</PageTitle>
         <Text>
-          Some text explaining what this is all about and what to expect.
+          Use this page to announce that a previous key should no longer be used.
         </Text>
         <form
           onSubmit={(e) => {
