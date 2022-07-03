@@ -3,8 +3,10 @@ import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
+import useModal from '../../../utils/useModal';
 
 function RevokeKey() {
+  const {open, close} = useModal('TransactionConfirm');
   return (
     <div className="flex flex-row">
       <div className="basis-1/4">

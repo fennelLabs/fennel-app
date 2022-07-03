@@ -4,11 +4,13 @@ import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import useModal from '../../../utils/useModal';
 
 function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
   const {keymanager, node} = useServiceContext();
+  const {open, close} = useModal('TransactionConfirm');
 
   function toggleChoice() {
     setBtnEnabled(true);

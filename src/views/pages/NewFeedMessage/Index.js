@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
+import useModal from '../../../utils/useModal';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function NewFeedMessage() {
   const {node, keymanager} = useServiceContext();
 
   const [value, setValue] = useState('');
+  const {open, close} = useModal('TransactionConfirm');
 
   return (
     <div className="flex flex-row">

@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
-import {Link} from 'react-router-dom';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 import {usePublishKeyForm} from './usePublishKeyForm';
+import useModal from '../../../utils/useModal';
 
 function PublishKey() {
   const {node, keymanager, contactsManager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
+  const {open, close} = useModal('TransactionConfirm');
 
   console.log(defaultIdentity);
 
