@@ -235,6 +235,7 @@ class Node {
       const provider = new WsProvider(NODE_URI_WS);
       this._api = await ApiPromise.create({provider});
     } catch (error) {
+      console.log('Unable to instantiate Fennel node webscoket connection.');
       console.error(error);
     }
   }
