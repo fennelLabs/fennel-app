@@ -18,7 +18,7 @@ function PublishKey() {
   console.log(defaultIdentity);
 
   const [fingerprint, location, PublishKeyForm] = usePublishKeyForm({
-    onSubmit: publishKey
+    onSubmit: () => setVisible(true)
   });
 
   async function publishKey() {
@@ -55,6 +55,7 @@ function PublishKey() {
             onConfirm={() => {
               setConfirmed(true);
               setVisible(false);
+              publishKey();
             }}
             onCancel={() => setVisible(false)}
           />
