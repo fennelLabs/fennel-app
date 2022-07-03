@@ -3,12 +3,10 @@ import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
 import Button from '../../components/Button';
-import MessageAPIService from '../../../services/MessageAPI';
 import MessageEncryptionIndicatorsManager from '../../../services/MessageEncryptionIndicatorsManager.service';
 import {useDefaultSender} from '../../hooks/useDefaultSender';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
-const service = new MessageAPIService();
 const indicatorsManager = new MessageEncryptionIndicatorsManager();
 
 function NewMessage() {
@@ -23,7 +21,7 @@ function NewMessage() {
     message_encryption_indicator: null
   });
 
-  const {contactsManager} = useServiceContext();
+  const {contactsManager, messageService} = useServiceContext();
   const defaultSender = useDefaultSender();
   const [recipientsList, setRecipientsList] = useState([]);
   const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
@@ -74,7 +72,7 @@ function NewMessage() {
   const submitMessage = async (e) => {
     e.preventDefault();
     if (
-      await service.sendMessage(
+      await messageService.sendMessage(
         state.message,
         'Test',
         'Test',

@@ -28,7 +28,7 @@ class MessageAPIService {
   ) {
     let ciphertext = null;
     if (message_encryption_indicator == 2) {
-      this._rpc.encrypt(message, (r) => {
+      this._rpc.encrypt(publicKey, message, (r) => {
         ciphertext = r;
       });
     } else {
@@ -95,7 +95,7 @@ class MessageAPIService {
         console.error(error);
         return [];
       });
-    this.__populateSentMessages(retval);
+    this.__decryptMessageList(retval);
   }
 
   __decryptMessageList(data) {
