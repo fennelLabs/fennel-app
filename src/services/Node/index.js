@@ -97,7 +97,7 @@ class Node {
     return retval;
   }
 
-  async revokeKey(fingerprint) {
+  async revokeKey(keymanager, fingerprint) {
     const node = await this.api();
     await node.tx.keystoreModule
       .revokeKey(fingerprint)

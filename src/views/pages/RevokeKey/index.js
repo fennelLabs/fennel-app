@@ -7,7 +7,7 @@ import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 
 function RevokeKey() {
   const [fingerprint, setFingerprint] = useState('');
-  const {node} = useServiceContext();
+  const {node, keymanager} = useServiceContext();
   const [success, setSuccess] = useState(false);
   const defaultIdentity = useDefaultIdentity();
 
@@ -17,7 +17,7 @@ function RevokeKey() {
   }
 
   async function revokeKey() {
-    let result = await node.revokeKey(fingerprint);
+    let result = await node.revokeKey(keymanager, fingerprint);
     if (result && defaultIdentity) {
       // Need a contactsManager function to delete contacts.
     }
