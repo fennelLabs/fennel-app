@@ -4,7 +4,6 @@ import ModalTemplate from '../Template';
 import PropTypes from 'prop-types';
 
 function TransactionConfirm(props) {
-  const {controls} = useContext(ModalContext);
   return (
     <ModalTemplate
       options={{
@@ -17,18 +16,18 @@ function TransactionConfirm(props) {
       <button
         onClick={() => {
           props.onConfirm();
-          controls.close();
         }}
       >
         Confirm
       </button>
-      <button onClick={() => controls.close()}>Cancel</button>
+      <button onClick={() => props.onCancel()}>Cancel</button>
     </ModalTemplate>
   );
 }
 
 TransactionConfirm.propTypes = {
-  onConfirm: PropTypes.function
+  onConfirm: PropTypes.function,
+  onCancel: PropTypes.function
 };
 
 export default TransactionConfirm;

@@ -3,10 +3,11 @@ import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import useModal from '../../../utils/useModal';
+import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 
 function RevokeKey() {
-  const {open, close} = useModal('TransactionConfirm');
+  const [confirmed, setConfirmed] = useState(false);
+  const [visible, setVisible] = useState(false);
   return (
     <div className="flex flex-row">
       <div className="basis-1/4">
@@ -17,6 +18,15 @@ function RevokeKey() {
         <Text>
           Some text explaining what this is all about and what to expect.
         </Text>
+        {visible && (
+          <TransactionConfirm
+            onConfirm={() => {
+              setConfirmed(true);
+              setVisible(false);
+            }}
+            onCancel={() => setVisible(false)}
+          />
+        )}
         <Button>Revoke Key</Button>
       </div>
     </div>

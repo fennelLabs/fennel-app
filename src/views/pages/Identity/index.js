@@ -4,24 +4,26 @@ import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
-import useModal from '../../../utils/useModal';
+import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 
 function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
   const {keymanager, node} = useServiceContext();
-  const {open, close} = useModal('TransactionConfirm');
+  const [confirmed, setConfirmed] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   function toggleChoice() {
     setBtnEnabled(true);
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    await node.createIdentity(keymanager, (identity) => {
-      setCreateIdentity(identity);
-      alert(`New identity number is ${identity}`);
-    });
+  async function handleSubmit() {
+    if (confirmed) {
+      await node.createIdentity(keymanager, (identity) => {
+        setCreateIdentity(identity);
+        alert(`New identity number is ${identity}`);
+      });
+    }
   }
 
   return (
@@ -32,7 +34,17 @@ function Identity() {
       <div className="basis-3/4 px-8">
         <PageTitle>Identity</PageTitle>
         <Text>You may use the links in the menu to manage your identity.</Text>
-        <form onSubmit={handleSubmit}>
+        {visible && (
+          <TransactionConfirm
+            onConfirm={() => {
+              setConfirmed(true);
+              setVisible(false);
+              handleSubmit();
+            }}
+            onCancel={() => setVisible(false)}
+          />
+        )}
+        <form onSubmit={() => setVisible(true)}>
           <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">
