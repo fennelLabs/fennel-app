@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 
 function RevokeKey() {
-  const { fee, setFee } = useState(0);
+  const [fee, setFee] = useState(0);
   const { balance, setBalance } = useState(0);
 
   useEffect(() => {

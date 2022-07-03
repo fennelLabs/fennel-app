@@ -1,7 +1,7 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
-import NODE_URI_WS from '../../config';
+import {NODE_URI_WS} from '../../config';
 
 class Node {
   /**

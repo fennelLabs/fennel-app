@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
@@ -12,7 +12,7 @@ function PublishKey() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
 
-  const { fee, setFee } = useState(0);
+  const [fee, setFee] = useState(0);
   const { balance, setBalance } = useState(0);
 
   console.log(defaultIdentity);

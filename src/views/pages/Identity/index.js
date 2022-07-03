@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
@@ -9,8 +9,8 @@ function Identity() {
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
   const { keymanager, node } = useServiceContext();
-  const { fee, setFee } = useState(0);
-  const { balance, setBalance } = useState(0);
+  const [fee, setFee] = useState(0);
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
     setFee(node.getFeeForCreateIdentity(keymanager));

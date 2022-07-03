@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
@@ -8,7 +8,7 @@ function NewFeedMessage() {
   const { node, keymanager } = useServiceContext();
 
   const [value, setValue] = useState('');
-  const { fee, setFee } = useState(0);
+  const [fee, setFee] = useState(0);
   const { balance, setBalance } = useState(0);
 
   useEffect(() => {
