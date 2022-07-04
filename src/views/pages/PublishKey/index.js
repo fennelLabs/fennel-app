@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
@@ -8,7 +8,7 @@ import {usePublishKeyForm} from './usePublishKeyForm';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 
 function PublishKey() {
-  const { node, keymanager, contactsManager } = useServiceContext();
+  const {node, keymanager, contactsManager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
@@ -16,12 +16,13 @@ function PublishKey() {
   const [visible, setVisible] = useState(false);
 
   const [fee, setFee] = useState(0);
-  const { balance, setBalance } = useState(0);
-
-  console.log(defaultIdentity);
+  const [balance, setBalance] = useState(0);
 
   const [fingerprint, location, PublishKeyForm] = usePublishKeyForm({
-    onSubmit: () => setVisible(true)
+    onSubmit: () => {
+      console.log('Setting visibility.');
+      setVisible(true);
+    }
   });
 
   useEffect(() => {
@@ -46,11 +47,11 @@ function PublishKey() {
       try {
         let result = await node.announceKey(keymanager, fingerprint, location);
         if (result && defaultIdentity) {
-          await contactsManager.createNewIdentity(
-            defaultIdentity,
-            fingerprint,
-            location
-          );
+          let response = await contactsManager
+            .createNewIdentity(defaultIdentity, fingerprint, location)
+            .then((response) => response.response.status);
+          console.log(response);
+          result = response == 200;
         }
         setSuccess(result);
         setError(undefined);
@@ -70,6 +71,14 @@ function PublishKey() {
       <div className="basis-3/4 px-8">
         <PageTitle>Publish Key</PageTitle>
         <Text>This action will charge an estimated network fee of {fee}.</Text>
+        {error && (
+          <div
+            className="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3"
+            role="alert"
+          >
+            {error}
+          </div>
+        )}
         {success && <Text>Keypair published successfully.</Text>}
         {balance <= fee && <Text>Insufficient balance.</Text>}
         {visible && (
@@ -82,21 +91,12 @@ function PublishKey() {
             onCancel={() => setVisible(false)}
           />
         )}
-        {defaultIdentity && PublishKeyForm}
         {balance > fee && defaultIdentity ? (
           PublishKeyForm
         ) : (
           <Text>
             Create an on-chain identity through the Manage Identity tab first.
           </Text>
-        )}
-        {error && (
-          <div
-            className="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3"
-            role="alert"
-          >
-            {error}
-          </div>
         )}
       </div>
     </div>

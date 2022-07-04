@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
+import Text from '../../components/Text';
 
 function NewFeedMessage() {
-  const { node, keymanager } = useServiceContext();
+  const {node, keymanager} = useServiceContext();
 
   const [value, setValue] = useState('');
   const [fee, setFee] = useState(0);
-  const { balance, setBalance } = useState(0);
+  const [balance, setBalance] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -23,7 +24,7 @@ function NewFeedMessage() {
     });
 
     node.getBalance(keymanager);
-    node.node.getFeeForSendNewSignal(keymanager, value);
+    node.getFeeForSendNewSignal(keymanager, value);
 
     return () => {
       balance_sub.remove();
@@ -48,25 +49,29 @@ function NewFeedMessage() {
             onCancel={() => setVisible(false)}
           />
         )}
-        {balance > fee ? <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            if (!confirmed) {
-              setVisible(true);
-            }
-          }}
-        >
-          <textarea
-            name="new_message"
-            rows={5}
-            cols={5}
-            value={value}
-            onChange={(event) => {
-              setValue(event.target.value);
+        {balance > fee ? (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (!confirmed) {
+                setVisible(true);
+              }
             }}
-          />
-          <Button type="submit">Submit</Button>
-        </form> : <Text>Insufficient balance.</Text>}
+          >
+            <textarea
+              name="new_message"
+              rows={5}
+              cols={5}
+              value={value}
+              onChange={(event) => {
+                setValue(event.target.value);
+              }}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        ) : (
+          <Text>Insufficient balance.</Text>
+        )}
       </div>
     </div>
   );

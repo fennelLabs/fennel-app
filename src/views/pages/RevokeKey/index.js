@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
-import { useServiceContext } from '../../../contexts/ServiceContext';
-import { useDefaultIdentity } from '../../hooks/useDefaultIdentity';
+import {useServiceContext} from '../../../contexts/ServiceContext';
+import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 
 function RevokeKey() {
-  const { node, keymanager } = useServiceContext();
+  const {node, keymanager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
 
   const [fee, setFee] = useState(0);
@@ -35,7 +35,7 @@ function RevokeKey() {
   }, [fingerprint]);
 
   function handleFingerprintChange(e) {
-    const { value } = e.target;
+    const {value} = e.target;
     setFingerprint(value);
   }
 
@@ -56,7 +56,8 @@ function RevokeKey() {
         <PageTitle>Revoke Key</PageTitle>
         <Text>This action will charge an estimated network fee of {fee}.</Text>
         <Text>
-          Use this page to announce that a previous key should no longer be used.
+          Use this page to announce that a previous key should no longer be
+          used.
         </Text>
         {visible && (
           <TransactionConfirm

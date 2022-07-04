@@ -1,33 +1,32 @@
-import React, {useContext} from 'react';
-import {ModalContext} from '../useModalContext';
+import React from 'react';
 import ModalTemplate from '../Template';
 import PropTypes from 'prop-types';
 
 function TransactionConfirm(props) {
   return (
-    <ModalTemplate
-      options={{
-        size: 'small',
-        title: 'Confirm Transaction',
-        backgroundColor: 'grey'
-      }}
-    >
-      This action will incur a Fennel Token fee.
+    <div>
+      <div>
+        This action will incur a Fennel Token fee. Are you sure you want to
+        continue?
+      </div>
       <button
+        className="btn"
         onClick={() => {
           props.onConfirm();
         }}
       >
         Confirm
       </button>
-      <button onClick={() => props.onCancel()}>Cancel</button>
-    </ModalTemplate>
+      <button className="btn" onClick={() => props.onCancel()}>
+        Cancel
+      </button>
+    </div>
   );
 }
 
 TransactionConfirm.propTypes = {
-  onConfirm: PropTypes.function,
-  onCancel: PropTypes.function
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func
 };
 
 export default TransactionConfirm;
