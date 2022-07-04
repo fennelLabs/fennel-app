@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
-import { useServiceContext } from '../../../contexts/ServiceContext';
+import {useServiceContext} from '../../../contexts/ServiceContext';
+import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 
 function NewFeedMessage() {
   const { node, keymanager } = useServiceContext();
@@ -10,6 +11,8 @@ function NewFeedMessage() {
   const [value, setValue] = useState('');
   const [fee, setFee] = useState(0);
   const { balance, setBalance } = useState(0);
+  const [confirmed, setConfirmed] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setFee(node.getFeeForSendNewSignal(keymanager, value));
@@ -22,12 +25,23 @@ function NewFeedMessage() {
         <FeedSubNav />
       </div>
       <div className="basis-3/4 px-8">
-        <PageTitle>New Feed Message</PageTitle>
-        <Text>This action will charge an estimated network fee of {fee}.</Text>
+        <PageTitle>New Feed Message</PageTitle>{' '}
+        {visible && (
+          <TransactionConfirm
+            onConfirm={() => {
+              setConfirmed(true);
+              setVisible(false);
+              node.sendNewSignal(keymanager, value);
+            }}
+            onCancel={() => setVisible(false)}
+          />
+        )}
         {balance > fee ? <form
           onSubmit={(event) => {
             event.preventDefault();
-            node.sendNewSignal(keymanager, value);
+            if (!confirmed) {
+              setVisible(true);
+            }
           }}
         >
           <textarea

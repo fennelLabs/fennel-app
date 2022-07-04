@@ -1,10 +1,12 @@
 import React from 'react';
 import MenuModal from './Menu';
 import OkDialog from './OkDialog';
+import TransactionConfirm from './TransactionConfirm';
 
 const ModalOptions = {
   Menu: MenuModal,
-  OkDialog: OkDialog
+  OkDialog: OkDialog,
+  TransactionConfirm: TransactionConfirm
 };
 
 function ModalDisplay({name}) {

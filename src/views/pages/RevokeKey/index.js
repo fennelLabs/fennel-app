@@ -3,10 +3,13 @@ import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
+import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 
 function RevokeKey() {
   const [fee, setFee] = useState(0);
   const { balance, setBalance } = useState(0);
+  const [confirmed, setConfirmed] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setFee(node.getFeeForRevokeKey(keymanager, props.fingerprint));
@@ -24,6 +27,15 @@ function RevokeKey() {
         <Text>
           Some text explaining what this is all about and what to expect.
         </Text>
+        {visible && (
+          <TransactionConfirm
+            onConfirm={() => {
+              setConfirmed(true);
+              setVisible(false);
+            }}
+            onCancel={() => setVisible(false)}
+          />
+        )}
         <Button>Revoke Key</Button>
       </div>
     </div>
