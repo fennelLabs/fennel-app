@@ -13,8 +13,20 @@ function Identity() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    setFee(node.getFeeForCreateIdentity(keymanager));
-    setBalance(node.getBalance(keymanager));
+    const balance_sub = node.balance$.subscribe((d) => {
+      setBalance(d);
+    });
+    const fee_sub = node.fee$.subscribe((d) => {
+      setFee(d);
+    });
+
+    node.getBalance(keymanager);
+    node.getFeeForCreateIdentity(keymanager);
+
+    return () => {
+      balance_sub.remove();
+      fee_sub.remove();
+    };
   }, []);
 
   function toggleChoice() {
@@ -37,29 +49,32 @@ function Identity() {
       <div className="basis-3/4 px-8">
         <PageTitle>Identity</PageTitle>
         <Text>You may use the links in the menu to manage your identity.</Text>
-        <Text>This action will charge an estimated network fee of {fee}.</Text>
-        {balance > fee ? <form onSubmit={handleSubmit}>
-          <div className="form-control">
-            <label className="label cursor-pointer">
-              <span className="label-text">
-                <strong>Create New Identity</strong>
-              </span>
-              <input
-                value="create"
-                type="radio"
-                name="radio"
-                className="radio checked:bg-blue-500"
-                onChange={() => setCreateIdentity(true)}
-                onClick={() => toggleChoice()}
-              />
-            </label>
-          </div>
-          <div className="mt-2">
-            {createIdentity && btnEnabled && (
-              <Button type="submit">Create Identity</Button>
-            )}
-          </div>
-        </form> : <Text>Insufficient balance.</Text>}
+        {!keymanager.signer() && <Text>Create or restore a Fennel account first.</Text>}
+        {keymanager.signer() && balance < fee && <Text>Insufficient balance.</Text>}
+        {keymanager.signer() && balance > fee && <div>
+          <Text>This action will charge an estimated network fee of {fee}.</Text>
+          <form onSubmit={handleSubmit}>
+            <div className="form-control">
+              <label className="label cursor-pointer">
+                <span className="label-text">
+                  <strong>Create New Identity</strong>
+                </span>
+                <input
+                  value="create"
+                  type="radio"
+                  name="radio"
+                  className="radio checked:bg-blue-500"
+                  onChange={() => setCreateIdentity(true)}
+                  onClick={() => toggleChoice()}
+                />
+              </label>
+            </div>
+            <div className="mt-2">
+              {createIdentity && btnEnabled && (
+                <Button type="submit">Create Identity</Button>
+              )}
+            </div>
+          </form></div>}
       </div>
     </div>
   );

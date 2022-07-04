@@ -1,7 +1,7 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {TextDecoder} from 'text-encoding';
-import {NODE_URI_WS} from '../../config';
+import { ApiPromise, WsProvider } from '@polkadot/api';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { TextDecoder } from 'text-encoding';
+import { NODE_URI_WS } from '../../config';
 
 class Node {
   /**
@@ -22,6 +22,13 @@ class Node {
    * @type {BehaviorSubject}
    * @private
    */
+  _fee = new BehaviorSubject(0);
+  fee$ = this._fee.asObservable();
+
+  /**
+   * @type {BehaviorSubject}
+   * @private
+   */
   _defaultIdentity = new BehaviorSubject(undefined);
   defaultIdentity$ = this._defaultIdentity.asObservable();
 
@@ -34,7 +41,7 @@ class Node {
     if (!keymanager.signer()) {
       this._balance.next(0);
     } else {
-      const {_, data: balance} = await node.query.system.account(
+      const { _, data: balance } = await node.query.system.account(
         keymanager.signer().address
       );
       this._balance.next(`${balance.free}`);
@@ -42,11 +49,12 @@ class Node {
   }
 
   async getFeeForCreateIdentity(keymanager) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.identityModule
+    const info = await node.tx.identityModule
       .createIdentity()
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async createIdentity(keymanager, callback) {
@@ -59,9 +67,9 @@ class Node {
 
     node.tx.identityModule
       .createIdentity()
-      .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
+      .signAndSend(keymanager.signer(), ({ events = [], txHash }) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
-        events.forEach(({phase, event: {data, method, section}}) => {
+        events.forEach(({ phase, event: { data, method, section } }) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
           let id = data[0];
           if (
@@ -80,18 +88,19 @@ class Node {
   }
 
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.keystoreModule
+    const info = await node.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async announceKey(keymanager, fingerprint, location) {
     const node = await this.api();
     let retval = await node.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+      .signAndSend(keymanager.signer(), ({ events = [], status, txHash }) => {
         console.log(`Current status is ${status.type}`);
 
         if (status.isFinalized) {
@@ -100,7 +109,7 @@ class Node {
           );
           console.log(`Transaction hash ${txHash.toHex()}`);
 
-          events.forEach(({phase, event: {data, method, section}}) => {
+          events.forEach(({ phase, event: { data, method, section } }) => {
             console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
           });
 
@@ -114,18 +123,19 @@ class Node {
   }
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.keystoreModule
+    const info = await node.tx.keystoreModule
       .revokeKey(fingerprint)
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async revokeKey(keymanager, fingerprint) {
     const node = await this.api();
     await node.tx.keystoreModule
       .revokeKey(fingerprint)
-      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+      .signAndSend(keymanager.signer(), ({ events = [], status, txHash }) => {
         console.log(`Current status is ${status.type}`);
 
         if (status.isFinalized) {
@@ -134,7 +144,7 @@ class Node {
           );
           console.log(`Transaction hash ${txHash.toHex()}`);
 
-          events.forEach(({phase, event: {data, method, section}}) => {
+          events.forEach(({ phase, event: { data, method, section } }) => {
             console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
           });
 
@@ -144,11 +154,12 @@ class Node {
   }
 
   async getFeeForSendNewSignal(keymanager, content) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.signalModule
+    const info = await node.tx.signalModule
       .sendSignal(content)
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async sendNewSignal(keymanager, content) {
@@ -181,14 +192,14 @@ class Node {
     const allRecords = await apiAt.query.system.events();
 
     signedBlock.block.extrinsics.forEach(
-      ({method: {method, section}}, index) => {
+      ({ method: { method, section } }, index) => {
         if (method == 'sendSignal' && section == 'signalModule') {
           const events = allRecords
             .filter(
-              ({phase}) =>
+              ({ phase }) =>
                 phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
             )
-            .map(({event}) => {
+            .map(({ event }) => {
               return {
                 id: event.index,
                 section: event.section,
@@ -250,7 +261,7 @@ class Node {
         jsonrpc: '2.0',
         method: 'state_getMetadata'
       }),
-      headers: {'Content-Type': 'application/json'}
+      headers: { 'Content-Type': 'application/json' }
     });
     return request;
   }
@@ -265,7 +276,7 @@ class Node {
   async connect() {
     try {
       const provider = new WsProvider(NODE_URI_WS);
-      this._api = await ApiPromise.create({provider});
+      this._api = await ApiPromise.create({ provider });
     } catch (error) {
       console.error(error);
     }
