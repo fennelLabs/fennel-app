@@ -46,10 +46,10 @@ export default class ContactsManager {
         const r = response?.data;
         console.log(r);
         if (r) {
-          console.log("New identity created.");
+          console.log('New identity created.');
           this._identities.next([...this._identities.value, r]);
           if (!this._defaultSender.value) {
-            console.log("Setting new default sender.");
+            console.log('Setting new default sender.');
             this._defaultSender.next(r.id);
           }
         }
