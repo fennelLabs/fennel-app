@@ -49,13 +49,13 @@ function PublishKey() {
         if (result && defaultIdentity) {
           let response = await contactsManager
             .createNewIdentity(defaultIdentity, fingerprint, location)
-            .then((response) => response.response.status);
-          console.log(response);
-          result = response == 200;
+            .then((response) => response);
+          result = !!response;
         }
         setSuccess(result);
         setError(undefined);
-      } catch {
+      } catch (e) {
+        console.log(e);
         setError(
           'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
         );
