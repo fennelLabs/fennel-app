@@ -52,11 +52,13 @@ export default class ContactsManager {
             console.log('Setting new default sender.');
             this._defaultSender.next(r.id);
           }
+        } else {
+          console.log('Undefined response.');
         }
         return r;
       })
       .catch((error) => {
-        console.error(error);
+        console.error(`Error status: ${error.status}`);
         return undefined;
       });
   }

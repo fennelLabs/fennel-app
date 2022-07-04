@@ -43,23 +43,23 @@ function PublishKey() {
   }, [fingerprint, location]);
 
   async function publishKey() {
-    if (confirmed) {
-      try {
-        let result = await node.announceKey(keymanager, fingerprint, location);
-        if (result && defaultIdentity) {
-          let response = await contactsManager
-            .createNewIdentity(defaultIdentity, fingerprint, location)
-            .then((response) => response);
-          result = !!response;
-        }
-        setSuccess(result);
-        setError(undefined);
-      } catch (e) {
-        console.log(e);
-        setError(
-          'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
-        );
+    try {
+      let result = await node.announceKey(keymanager, fingerprint, location);
+      if (result && defaultIdentity) {
+        let response = await contactsManager
+          .createNewIdentity(defaultIdentity, fingerprint, location)
+          .then((response) => response);
+        result = !!response;
       }
+      console.log(`Setting success state: ${result}`);
+      setSuccess(result);
+      setError(undefined);
+    } catch (e) {
+      console.log(e);
+      console.log(`Success state unchanged.`);
+      setError(
+        'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
+      );
     }
   }
 
