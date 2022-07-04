@@ -25,10 +25,20 @@ function PublishKey() {
   });
 
   useEffect(() => {
-    setFee(
-      node.getFeeForAnnounceKey(keymanager, fingerprint, location)
-    );
-    setBalance(node.getBalance(keymanager));
+    const balance_sub = node.balance$.subscribe((d) => {
+      setBalance(d);
+    });
+    const fee_sub = node.fee$.subscribe((d) => {
+      setFee(d);
+    });
+
+    node.getBalance(keymanager);
+    node.getFeeForAnnounceKey(keymanager, fingerprint, location);
+
+    return () => {
+      balance_sub.remove();
+      fee_sub.remove();
+    };
   }, [fingerprint, location]);
 
   async function publishKey() {

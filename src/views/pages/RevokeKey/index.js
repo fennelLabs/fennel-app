@@ -18,9 +18,21 @@ function RevokeKey() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    setFee(node.getFeeForRevokeKey(keymanager, props.fingerprint));
-    setBalance(node.getBalance(keymanager));
-  }, []);
+    const balance_sub = node.balance$.subscribe((d) => {
+      setBalance(d);
+    });
+    const fee_sub = node.fee$.subscribe((d) => {
+      setFee(d);
+    });
+
+    node.getBalance(keymanager);
+    node.getFeeForRevokeKey(keymanager, fingerprint);
+
+    return () => {
+      balance_sub.remove();
+      fee_sub.remove();
+    };
+  }, [fingerprint]);
 
   function handleFingerprintChange(e) {
     const { value } = e.target;

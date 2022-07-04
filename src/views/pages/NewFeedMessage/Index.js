@@ -15,8 +15,20 @@ function NewFeedMessage() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setFee(node.getFeeForSendNewSignal(keymanager, value));
-    setBalance(node.getBalance(keymanager));
+    const balance_sub = node.balance$.subscribe((d) => {
+      setBalance(d);
+    });
+    const fee_sub = node.fee$.subscribe((d) => {
+      setFee(d);
+    });
+
+    node.getBalance(keymanager);
+    node.node.getFeeForSendNewSignal(keymanager, value);
+
+    return () => {
+      balance_sub.remove();
+      fee_sub.remove();
+    };
   }, [value]);
 
   return (
