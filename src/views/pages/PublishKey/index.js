@@ -80,7 +80,9 @@ function PublishKey() {
           </div>
         )}
         {success && <Text>Keypair published successfully.</Text>}
-        {balance <= fee && <Text>Insufficient balance.</Text>}
+        {balance <= fee && defaultIdentity && (
+          <Text>Insufficient balance.</Text>
+        )}
         {visible && (
           <TransactionConfirm
             onConfirm={() => {
