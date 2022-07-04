@@ -14,8 +14,11 @@ function NewFeedMessage() {
     event.preventDefault();
 
     if (node.apiNotReady) {
-      setError('The Fennel Node is currently unavailable. Your message did not send. Please try later.');
+      setError(
+        'The Fennel Node is currently unavailable. Your message did not send. Please try later.'
+      );
     } else {
+      //Would love to try/catch here but we never actually get an error thrown if node down.
       node.sendNewSignal(keymanager, value);
       setError(undefined);
     }
