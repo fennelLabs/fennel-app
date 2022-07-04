@@ -3,10 +3,12 @@ import PageTitle from '../../components/PageTitle';
 import FeedSubNav from '../../components/FeedSubNav';
 import FeedListView from '../../components/FeedListView';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import Text from '../../components/Text';
 
 function Feed() {
   const {node} = useServiceContext();
   const [signalList, setSignalList] = useState([]);
+  const [nodeApiReady, setNodeApiReady] = useState(true);
 
   useEffect(() => {
     const sub = node.signals$.subscribe((d) => {
@@ -14,14 +16,19 @@ function Feed() {
     });
 
     let id = setInterval(() => {
-      node.listenForSignals();
+      if (node.apiNotReady) {
+        setNodeApiReady(false);
+      } else {
+        node.listenForSignals();
+        setNodeApiReady(true);
+      }
     }, 1000);
 
     return () => {
       sub.remove();
       clearInterval(id);
     };
-  });
+  }, [node]);
 
   return (
     <div className="flex flex-row">
@@ -30,6 +37,11 @@ function Feed() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Feed</PageTitle>
+        {!nodeApiReady && (
+          <div className="error" role="alert">
+            The Fennel Node is currently unavailable. Please try later.
+          </div>
+        )}
         <FeedListView itemList={signalList ?? []} />
       </div>
     </div>

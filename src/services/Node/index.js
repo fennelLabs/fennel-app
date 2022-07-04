@@ -273,13 +273,13 @@ class Node {
 
   async connect() {
     try {
-      const provider = new WsProvider(`${NODE_URI_WS}`);
+      const wsProvider = new WsProvider(`${NODE_URI_WS}`);
     } catch (e) {
       throw 'Unable to instantiate Fennel node websocket connection. No provider instantiated.';
     }
 
     try {
-      this._api = await ApiPromise.create({provider});
+      this._api = await ApiPromise.create({wsProvider});
     } catch (e) {
       throw 'Unable to instantiate Fennel node websocket connection. Provider instantiated.';
     }
