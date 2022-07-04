@@ -39,7 +39,7 @@ function Feed() {
         <PageTitle>Feed</PageTitle>
         {!nodeApiReady && (
           <div className="error" role="alert">
-            The Fennel Node is currently unavailable. Please try later.
+            The Fennel Node is currently unavailable. Please try again later.
           </div>
         )}
         <FeedListView itemList={signalList ?? []} />

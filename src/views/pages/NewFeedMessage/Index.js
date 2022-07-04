@@ -12,6 +12,11 @@ function NewFeedMessage() {
 
   function sendNewSignal(event, keymanager, value) {
     event.preventDefault();
+
+    if (node.apiNotReady) {
+      setError('The Fennel Node is currently unavailable. Please try later.');
+    }
+
     try {
       node.sendNewSignal(keymanager, value);
       setError(undefined);
