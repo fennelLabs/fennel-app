@@ -14,16 +14,10 @@ function NewFeedMessage() {
     event.preventDefault();
 
     if (node.apiNotReady) {
-      setError('The Fennel Node is currently unavailable. Please try later.');
-    }
-
-    try {
+      setError('The Fennel Node is currently unavailable. Your message did not send. Please try later.');
+    } else {
       node.sendNewSignal(keymanager, value);
       setError(undefined);
-    } catch (e) {
-      setError(
-        'The transmission of the message failed. Please try again later.'
-      );
     }
   }
 
@@ -45,6 +39,7 @@ function NewFeedMessage() {
           }}
         >
           <textarea
+            className="mb-2"
             name="new_message"
             rows={5}
             cols={5}
