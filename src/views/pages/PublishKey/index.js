@@ -10,11 +10,10 @@ import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 function PublishKey() {
   const {node, keymanager, contactsManager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
+
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
-  const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
-
   const [fee, setFee] = useState(0);
   const [balance, setBalance] = useState(0);
 
@@ -44,22 +43,27 @@ function PublishKey() {
 
   async function publishKey() {
     try {
-      let result = await node.announceKey(keymanager, fingerprint, location);
-      if (result && defaultIdentity) {
+      if (defaultIdentity) {
         let response = await contactsManager
           .createNewIdentity(defaultIdentity, fingerprint, location)
           .then((response) => response);
         result = !!response;
+        setSuccess(result);
+        if (!result) {
+          setError(response);
+        } else {
+          await node.announceKey(keymanager, fingerprint, location);
+        }
       }
-      console.log(`Setting success state: ${result}`);
-      setSuccess(result);
-      setError(undefined);
     } catch (e) {
-      console.log(e);
-      console.log(`Success state unchanged.`);
-      setError(
-        'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
-      );
+      let p = e.response.data;
+      if (p['on_chain_identity_number']) {
+        setError(p['on_chain_identity_number']);
+      } else {
+        setError(
+          'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
+        );
+      }
     }
   }
 
@@ -86,7 +90,6 @@ function PublishKey() {
         {visible && (
           <TransactionConfirm
             onConfirm={() => {
-              setConfirmed(true);
               setVisible(false);
               publishKey();
             }}
