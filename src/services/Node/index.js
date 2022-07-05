@@ -278,11 +278,7 @@ class Node {
       throw 'Unable to instantiate Fennel node websocket connection. No provider instantiated.';
     }
 
-    try {
-      this._api = await ApiPromise.create({wsProvider});
-    } catch (e) {
-      throw 'Unable to instantiate Fennel node websocket connection. Provider instantiated.';
-    }
+    this._api = await ApiPromise.create({wsProvider});
   }
 
   disconnect() {
