@@ -180,12 +180,8 @@ class Node {
 
     const decoder = new TextDecoder('utf-8');
     const node = await this.api();
-    try {
-      //If node is unavailable, this is actually where the error gets thrown, not the previous line.
-      const signedBlock = await node.rpc.chain.getBlock();
-    } catch (e) {
-      throw 'Node query failed.';
-    }
+
+    const signedBlock = await node.rpc.chain.getBlock();
     const apiAt = await node.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
