@@ -283,7 +283,7 @@ class Node {
   }
 
   apiNotReady() {
-    return this._api == null ? true : false;
+    return !this._api;
   }
 }
 

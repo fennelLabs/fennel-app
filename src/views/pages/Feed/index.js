@@ -16,7 +16,7 @@ function Feed() {
     });
 
     let id = setInterval(() => {
-      if (node.apiNotReady) {
+      if (node.apiNotReady()) {
         setNodeApiReady(false);
       } else {
         node.listenForSignals();
