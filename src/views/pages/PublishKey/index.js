@@ -56,12 +56,18 @@ function PublishKey() {
         }
       }
     } catch (e) {
-      let p = e.response.data;
-      if (p['on_chain_identity_number']) {
-        setError(p['on_chain_identity_number']);
+      if (!!e.response.data) {
+        let p = e.response.data;
+        if (p['on_chain_identity_number']) {
+          setError(p['on_chain_identity_number']);
+        } else {
+          setError(
+            'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
+          );
+        }
       } else {
         setError(
-          'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
+          'Unable to connect to the message server - this may be a temporary problem. If the problem persists, please contact:'
         );
       }
     }
