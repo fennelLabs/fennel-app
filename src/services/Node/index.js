@@ -178,7 +178,6 @@ class Node {
             console.log(
               `Transaction finalized at blockHash ${result.status.asFinalized}`
             );
-            unsub();
           }
         });
     } catch (e) {
