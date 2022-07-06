@@ -5,8 +5,10 @@ import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
+import {useAccount} from '../../hooks/useAccount';
 
 function Identity() {
+  const account = useAccount();
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
   const {keymanager, node} = useServiceContext();
@@ -64,13 +66,13 @@ function Identity() {
         {confirmed && (
           <Text>Request sent - wait a moment for your identity number.</Text>
         )}
-        {!keymanager.signer() && (
+        {!account && (
           <Text>Create or restore a Fennel account first.</Text>
         )}
-        {keymanager.signer() && balance < fee && (
+        {account && balance < fee && (
           <Text>Insufficient balance.</Text>
         )}
-        {keymanager.signer() && balance > fee && !confirmed && (
+        {account && balance > fee && !confirmed && (
           <div>
             <Text>
               This action will charge an estimated network fee of {fee}.
