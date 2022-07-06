@@ -1,5 +1,4 @@
 import React from 'react';
-import ModalTemplate from '../Template';
 import PropTypes from 'prop-types';
 
 function TransactionConfirm(props) {
