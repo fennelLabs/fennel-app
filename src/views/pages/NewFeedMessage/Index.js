@@ -8,6 +8,21 @@ function NewFeedMessage() {
   const {node, keymanager} = useServiceContext();
 
   const [value, setValue] = useState('');
+  const [error, setError] = useState(undefined);
+
+  function sendNewSignal(event, keymanager, value) {
+    event.preventDefault();
+
+    if (node.apiNotReady()) {
+      setError(
+        'The Fennel Node is currently unavailable. Your message did not send. Please try later.'
+      );
+    } else {
+      //Would love to try/catch here but we never actually get an error thrown if node down.
+      node.sendNewSignal(keymanager, value);
+      setError(undefined);
+    }
+  }
 
   return (
     <div className="flex flex-row">
@@ -16,13 +31,18 @@ function NewFeedMessage() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>New Feed Message</PageTitle>
+        {error && (
+          <div className="error" role="alert">
+            {error}
+          </div>
+        )}
         <form
           onSubmit={(event) => {
-            event.preventDefault();
-            node.sendNewSignal(keymanager, value);
+            sendNewSignal(event, keymanager, value);
           }}
         >
           <textarea
+            className="mb-2"
             name="new_message"
             rows={5}
             cols={5}

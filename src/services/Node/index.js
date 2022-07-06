@@ -1,7 +1,7 @@
 import {ApiPromise, WsProvider} from '@polkadot/api';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
-import NODE_URI_WS from '../../config';
+import {NODE_URI_WS} from '../../config';
 
 class Node {
   /**
@@ -152,23 +152,27 @@ class Node {
   }
 
   async sendNewSignal(keymanager, content) {
-    const node = await this.api();
-    await node.tx.signalModule
-      .sendSignal(content)
-      .signAndSend(keymanager.signer(), (result) => {
-        console.log(`Current status is ${result.status}`);
+    try {
+      const node = await this.api();
+      await node.tx.signalModule
+        .sendSignal(content)
+        .signAndSend(keymanager.signer(), (result) => {
+          console.log(`Current status is ${result.status}`);
 
-        if (result.status.isInBlock) {
-          console.log(
-            `Transaction included at blockHash ${result.status.asInBlock}`
-          );
-        } else if (result.status.isFinalized) {
-          console.log(
-            `Transaction finalized at blockHash ${result.status.asFinalized}`
-          );
-          unsub();
-        }
-      });
+          if (result.status.isInBlock) {
+            console.log(
+              `Transaction included at blockHash ${result.status.asInBlock}`
+            );
+          } else if (result.status.isFinalized) {
+            console.log(
+              `Transaction finalized at blockHash ${result.status.asFinalized}`
+            );
+            unsub();
+          }
+        });
+    } catch (e) {
+      throw 'sendNewSignal() failed.';
+    }
   }
 
   async listenForSignals() {
@@ -176,6 +180,7 @@ class Node {
 
     const decoder = new TextDecoder('utf-8');
     const node = await this.api();
+
     const signedBlock = await node.rpc.chain.getBlock();
     const apiAt = await node.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
@@ -263,12 +268,8 @@ class Node {
   }
 
   async connect() {
-    try {
-      const provider = new WsProvider(NODE_URI_WS);
-      this._api = await ApiPromise.create({provider});
-    } catch (error) {
-      console.error(error);
-    }
+    const wsProvider = new WsProvider(`${NODE_URI_WS}`);
+    this._api = await ApiPromise.create({wsProvider});
   }
 
   disconnect() {
