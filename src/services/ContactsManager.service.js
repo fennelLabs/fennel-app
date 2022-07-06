@@ -41,23 +41,16 @@ export default class ContactsManager {
         public_key: publicKey,
         shared_secret_key: '_blank'
       }
-    })
-      .then((response) => {
-        const r = response?.data;
-        console.log(r);
-        if (r) {
-          console.log("New identity created.");
-          this._identities.next([...this._identities.value, r]);
-          if (!this._defaultSender.value) {
-            console.log("Setting new default sender.");
-            this._defaultSender.next(r.id);
-          }
+    }).then((response) => {
+      const r = response?.data;
+      console.log(r);
+      if (r) {
+        this._identities.next([...this._identities.value, r]);
+        if (!this._defaultSender.value) {
+          this._defaultSender.next(r.id);
         }
-        return r;
-      })
-      .catch((error) => {
-        console.error(error);
-        return [];
-      });
+      }
+      return r;
+    });
   }
 }
