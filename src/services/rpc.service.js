@@ -123,7 +123,7 @@ export class FennelRPC {
     } else {
       console.info('message queued: websocket is offline');
       this._offlineOutgoingMessageQueue.unshift(message);
-      throw('Message queued: websocket is offline.')
+      throw 'Message queued: websocket is offline.';
     }
 
     return this._incomingMessages

@@ -22,6 +22,13 @@ class Node {
    * @type {BehaviorSubject}
    * @private
    */
+  _fee = new BehaviorSubject(0);
+  fee$ = this._fee.asObservable();
+
+  /**
+   * @type {BehaviorSubject}
+   * @private
+   */
   _defaultIdentity = new BehaviorSubject(undefined);
   defaultIdentity$ = this._defaultIdentity.asObservable();
 
@@ -42,11 +49,12 @@ class Node {
   }
 
   async getFeeForCreateIdentity(keymanager) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.identityModule
+    const info = await node.tx.identityModule
       .createIdentity()
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async createIdentity(keymanager, callback) {
@@ -80,11 +88,12 @@ class Node {
   }
 
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.keystoreModule
+    const info = await node.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async announceKey(keymanager, fingerprint, location) {
@@ -114,11 +123,12 @@ class Node {
   }
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.keystoreModule
+    const info = await node.tx.keystoreModule
       .revokeKey(fingerprint)
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async revokeKey(keymanager, fingerprint) {
@@ -144,11 +154,12 @@ class Node {
   }
 
   async getFeeForSendNewSignal(keymanager, content) {
+    if (!keymanager.signer()) return;
     const node = await this.api();
-    return node.tx.signalModule
+    const info = await node.tx.signalModule
       .sendSignal(content)
-      .paymentInfo(keymanager.signer())
-      .partialFee.toHuman();
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
   }
 
   async sendNewSignal(keymanager, content) {
@@ -167,7 +178,6 @@ class Node {
             console.log(
               `Transaction finalized at blockHash ${result.status.asFinalized}`
             );
-            unsub();
           }
         });
     } catch (e) {

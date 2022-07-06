@@ -4,7 +4,8 @@ import axios from 'axios';
 export default class MessageEncryptionIndicatorsManager {
   _message_encryption_indicators = new BehaviorSubject([]);
 
-  message_encryption_indicators$ = this._message_encryption_indicators.asObservable();
+  message_encryption_indicators$ =
+    this._message_encryption_indicators.asObservable();
 
   async populateIndicators() {
     let results = await axios
