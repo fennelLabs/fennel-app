@@ -4,22 +4,17 @@ import {useServiceContext} from '../../../contexts/ServiceContext';
 import queryChainConnection from '../../hooks/queryChainConnection';
 
 function TailwindyNav() {
-  const {node, keymanager} = useServiceContext();
-  const [balance, setBalance] = useState(0);
+  const {chainAccountService} = useServiceContext();
   const connectedToChain = queryChainConnection();
+  const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    const sub = node.balance$.subscribe((d) => {
+    const sub = chainAccountService.balance$.subscribe((d) => {
       setBalance(d);
     });
 
-    let id = setInterval(() => {
-      node.getBalance(keymanager);
-    }, 1000);
-
     return () => {
       sub.remove();
-      clearInterval(id);
     };
   }, []);
 
