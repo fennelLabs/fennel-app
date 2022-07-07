@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import Node from '../../../services/Node';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 
 function TailwindyNav() {
-  const {node, keymanager} = useServiceContext();
+  const {node, keymanager, polkadotApi} = useServiceContext();
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
@@ -60,17 +59,17 @@ function TailwindyNav() {
                 <Link to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
-                node && (
+                polkadotApi && (
                   <Link to="/identity" className="link">
                     Manage Identity
                   </Link>
                 ),
-                node && (
+                polkadotApi && (
                   <Link to="/inbox" className="link">
                     Messaging & Inbox
                   </Link>
                 ),
-                node && (
+                polkadotApi && (
                   <Link to="/feed" className="link">
                     Feed
                   </Link>
