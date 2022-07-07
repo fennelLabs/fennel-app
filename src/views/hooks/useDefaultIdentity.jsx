@@ -7,7 +7,7 @@ export function useDefaultIdentity() {
   const [identity, setDefaultIdentity] = useState(undefined);
 
   useEffect(() => {
-    const sub = node?.defaultIdentity$
+    const sub = node.defaultIdentity$
       .pipe(filter((i) => !!i))
       .subscribe((i) => {
         setDefaultIdentity(i);

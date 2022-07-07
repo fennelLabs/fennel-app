@@ -1,4 +1,4 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import {ApiPromise} from '@polkadot/api';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
 import {NODE_URI_WS} from '../../config';
@@ -32,46 +32,62 @@ class Node {
   _defaultIdentity = new BehaviorSubject(undefined);
   defaultIdentity$ = this._defaultIdentity.asObservable();
 
-  constructor() {
-    this._api = null;
+  /**
+   * @type {ApiPromise}
+   * @private
+   */
+  _api;
+
+  /**
+   * @param {ApiPromise} api
+   */
+  constructor(api) {
+    this._api = api;
   }
 
-  async getBalance(keymanager) {
-    const node = await this.api();
-    if (!keymanager.signer()) {
-      this._balance.next(0);
-    } else {
-      const {_, data: balance} = await node.query.system.account(
-        keymanager.signer().address
-      );
-      this._balance.next(`${balance.free}`);
+  getBalance(keymanager) {
+    try {
+      if (!keymanager.signer()) {
+        this._balance.next(0);
+      } else {
+        this.api().then(async (a) => {
+          const {_, data: balance} = await a.query.system.account(
+            keymanager.signer().address
+          );
+          const amount = balance?.free ?? 0;
+          this._balance.next(`${amount}`);
+        });
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 
   async getFeeForCreateIdentity(keymanager) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.identityModule
+
+    const api = await this.api();
+    const info = await api.tx.identityModule
       .createIdentity()
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async createIdentity(keymanager, callback) {
-    const node = await this.api();
     const identitySubject = new Subject();
     const sub = identitySubject.subscribe((id) => {
       callback(id);
       sub.unsubscribe();
     });
 
-    node.tx.identityModule
+    const api = await this.api();
+    await api.tx.identityModule
       .createIdentity()
       .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
         events.forEach(({phase, event: {data, method, section}}) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          let id = data[0];
+          let id = parseInt(data[0].toString());
           if (
             section == 'identityModule' &&
             method == 'IdentityCreated' &&
@@ -89,16 +105,17 @@ class Node {
 
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.keystoreModule
+
+    const api = await this.api();
+    const info = await api.tx.keystoreModule
       .announceKey(fingerprint, location)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async announceKey(keymanager, fingerprint, location) {
-    const node = await this.api();
-    let retval = await node.tx.keystoreModule
+    const api = await this.api();
+    return await api.tx.keystoreModule
       .announceKey(fingerprint, location)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -118,22 +135,21 @@ class Node {
 
         return false;
       });
-
-    return retval;
   }
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.keystoreModule
+
+    const api = await this.api();
+    const info = await api.tx.keystoreModule
       .revokeKey(fingerprint)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async revokeKey(keymanager, fingerprint) {
-    const node = await this.api();
-    await node.tx.keystoreModule
+    const api = await this.api();
+    await api.tx.keystoreModule
       .revokeKey(fingerprint)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -155,8 +171,9 @@ class Node {
 
   async getFeeForSendNewSignal(keymanager, content) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.signalModule
+
+    const api = await this.api();
+    const info = await api.tx.signalModule
       .sendSignal(content)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
@@ -164,8 +181,8 @@ class Node {
 
   async sendNewSignal(keymanager, content) {
     try {
-      const node = await this.api();
-      await node.tx.signalModule
+      const api = await this.api();
+      await api.tx.signalModule
         .sendSignal(content)
         .signAndSend(keymanager.signer(), (result) => {
           console.log(`Current status is ${result.status}`);
@@ -189,10 +206,11 @@ class Node {
     var events_list = [];
 
     const decoder = new TextDecoder('utf-8');
-    const node = await this.api();
 
-    const signedBlock = await node.rpc.chain.getBlock();
-    const apiAt = await node.at(signedBlock.block.header.hash);
+    const api = await this.api();
+
+    const signedBlock = await api.rpc.chain.getBlock();
+    const apiAt = await api.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
     signedBlock.block.extrinsics.forEach(
@@ -231,13 +249,14 @@ class Node {
   }
 
   async getDiagnosticsData() {
-    const node = await this.api();
+    const api = await this.api();
+
     try {
       let data = await Promise.all([
-        node.genesisHash.toHex(),
-        node.rpc.system.chain(),
-        node.rpc.system.name(),
-        node.rpc.system.version()
+        api.genesisHash.toHex(),
+        api.rpc.system.chain(),
+        api.rpc.system.name(),
+        api.rpc.system.version()
       ]);
       await this.disconnect();
       return data;
@@ -247,9 +266,9 @@ class Node {
   }
 
   async getMetaData() {
-    const node = await this.api();
     try {
-      let data = await Promise.all([node.rpc.rpc.methods()]);
+      const api = await this.api();
+      let data = await Promise.all([await api.rpc.methods()]);
       await this.disconnect();
       return data;
     } catch (error) {
@@ -270,26 +289,17 @@ class Node {
     return request;
   }
 
-  async api() {
-    if (this.apiNotReady()) {
-      await this.connect();
-    }
-    return this._api;
-  }
-
-  async connect() {
-    const wsProvider = new WsProvider(`${NODE_URI_WS}`);
-    this._api = await ApiPromise.create({wsProvider});
-  }
-
   disconnect() {
-    if (this._api) {
-      this._api.disconnect();
-    }
+    this.api().then((a) => a.disconnect());
   }
 
   apiNotReady() {
-    return !this._api;
+    return !this._api?.isConnected;
+  }
+
+  async api() {
+    await this._api.isReady;
+    return this._api;
   }
 }
 
