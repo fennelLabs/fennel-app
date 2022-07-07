@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import queryChainConnection from '../../hooks/queryChainConnection';
 
 function TailwindyNav() {
-  const {node, keymanager, polkadotApi} = useServiceContext();
+  const {node, keymanager} = useServiceContext();
   const [balance, setBalance] = useState(0);
+  const connectedToChain = queryChainConnection();
 
   useEffect(() => {
     const sub = node.balance$.subscribe((d) => {
@@ -19,7 +21,7 @@ function TailwindyNav() {
       sub.remove();
       clearInterval(id);
     };
-  });
+  }, []);
 
   return (
     <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-amber-500 mb-3">
@@ -59,17 +61,17 @@ function TailwindyNav() {
                 <Link to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
-                polkadotApi && (
+                connectedToChain && (
                   <Link to="/identity" className="link">
                     Manage Identity
                   </Link>
                 ),
-                polkadotApi && (
+                connectedToChain && (
                   <Link to="/inbox" className="link">
                     Messaging & Inbox
                   </Link>
                 ),
-                polkadotApi && (
+                connectedToChain && (
                   <Link to="/feed" className="link">
                     Feed
                   </Link>
