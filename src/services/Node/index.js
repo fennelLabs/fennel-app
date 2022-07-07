@@ -1,4 +1,4 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import {ApiPromise} from '@polkadot/api';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {TextDecoder} from 'text-encoding';
 import {NODE_URI_WS} from '../../config';
@@ -32,16 +32,24 @@ class Node {
   _defaultIdentity = new BehaviorSubject(undefined);
   defaultIdentity$ = this._defaultIdentity.asObservable();
 
-  constructor() {
-    this._api = null;
+  /**
+   * @type {ApiPromise}
+   * @private
+   */
+  _api;
+
+  /**
+   * @param {ApiPromise} api
+   */
+  constructor(api) {
+    this._api = api;
   }
 
   async getBalance(keymanager) {
-    const node = await this.api();
     if (!keymanager.signer()) {
       this._balance.next(0);
     } else {
-      const {_, data: balance} = await node.query.system.account(
+      const {_, data: balance} = await this._api.query.system.account(
         keymanager.signer().address
       );
       this._balance.next(`${balance.free}`);
@@ -50,28 +58,26 @@ class Node {
 
   async getFeeForCreateIdentity(keymanager) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.identityModule
+    const info = await this._api.tx.identityModule
       .createIdentity()
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async createIdentity(keymanager, callback) {
-    const node = await this.api();
     const identitySubject = new Subject();
     const sub = identitySubject.subscribe((id) => {
       callback(id);
       sub.unsubscribe();
     });
 
-    node.tx.identityModule
+    this._api.tx.identityModule
       .createIdentity()
       .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
         events.forEach(({phase, event: {data, method, section}}) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          let id = data[0];
+          let id = parseInt(data[0].toString());
           if (
             section == 'identityModule' &&
             method == 'IdentityCreated' &&
@@ -89,16 +95,15 @@ class Node {
 
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.keystoreModule
+
+    const info = await this._api.tx.keystoreModule
       .announceKey(fingerprint, location)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async announceKey(keymanager, fingerprint, location) {
-    const node = await this.api();
-    let retval = await node.tx.keystoreModule
+    let retval = await this._api.tx.keystoreModule
       .announceKey(fingerprint, location)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -124,16 +129,15 @@ class Node {
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.keystoreModule
+
+    const info = await this._api.tx.keystoreModule
       .revokeKey(fingerprint)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async revokeKey(keymanager, fingerprint) {
-    const node = await this.api();
-    await node.tx.keystoreModule
+    await this._api.tx.keystoreModule
       .revokeKey(fingerprint)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -155,8 +159,8 @@ class Node {
 
   async getFeeForSendNewSignal(keymanager, content) {
     if (!keymanager.signer()) return;
-    const node = await this.api();
-    const info = await node.tx.signalModule
+
+    const info = await this._api.tx.signalModule
       .sendSignal(content)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
@@ -164,8 +168,7 @@ class Node {
 
   async sendNewSignal(keymanager, content) {
     try {
-      const node = await this.api();
-      await node.tx.signalModule
+      await this._api.tx.signalModule
         .sendSignal(content)
         .signAndSend(keymanager.signer(), (result) => {
           console.log(`Current status is ${result.status}`);
@@ -189,10 +192,9 @@ class Node {
     var events_list = [];
 
     const decoder = new TextDecoder('utf-8');
-    const node = await this.api();
 
-    const signedBlock = await node.rpc.chain.getBlock();
-    const apiAt = await node.at(signedBlock.block.header.hash);
+    const signedBlock = await this._api.rpc.chain.getBlock();
+    const apiAt = await this._api.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
     signedBlock.block.extrinsics.forEach(
@@ -231,13 +233,12 @@ class Node {
   }
 
   async getDiagnosticsData() {
-    const node = await this.api();
     try {
       let data = await Promise.all([
-        node.genesisHash.toHex(),
-        node.rpc.system.chain(),
-        node.rpc.system.name(),
-        node.rpc.system.version()
+        this._api.genesisHash.toHex(),
+        this._api.rpc.system.chain(),
+        this._api.rpc.system.name(),
+        this._api.rpc.system.version()
       ]);
       await this.disconnect();
       return data;
@@ -247,9 +248,8 @@ class Node {
   }
 
   async getMetaData() {
-    const node = await this.api();
     try {
-      let data = await Promise.all([node.rpc.rpc.methods()]);
+      let data = await Promise.all([this._api.rpc.rpc.methods()]);
       await this.disconnect();
       return data;
     } catch (error) {
@@ -268,18 +268,6 @@ class Node {
       headers: {'Content-Type': 'application/json'}
     });
     return request;
-  }
-
-  async api() {
-    if (this.apiNotReady()) {
-      await this.connect();
-    }
-    return this._api;
-  }
-
-  async connect() {
-    const wsProvider = new WsProvider(`${NODE_URI_WS}`);
-    this._api = await ApiPromise.create({wsProvider});
   }
 
   disconnect() {

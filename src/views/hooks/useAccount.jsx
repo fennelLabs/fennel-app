@@ -7,7 +7,7 @@ export function useAccount() {
   const [account, setAccount] = useState(undefined);
 
   useEffect(() => {
-    const sub = keymanager?.pair$.pipe(filter((a) => !!a)).subscribe((a) => {
+    const sub = keymanager.pair$.pipe(filter((a) => !!a)).subscribe((a) => {
       setAccount(a);
     });
 

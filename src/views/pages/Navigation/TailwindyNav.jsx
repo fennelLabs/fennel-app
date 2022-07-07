@@ -8,16 +8,16 @@ function TailwindyNav() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    const sub = node.balance$.subscribe((d) => {
+    const sub = node?.balance$.subscribe((d) => {
       setBalance(d);
     });
 
     let id = setInterval(() => {
-      node.getBalance(keymanager);
+      node?.getBalance(keymanager);
     }, 1000);
 
     return () => {
-      sub.remove();
+      sub?.remove();
       clearInterval(id);
     };
   });
@@ -60,15 +60,21 @@ function TailwindyNav() {
                 <Link to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
-                <Link to="/identity" className="link">
-                  Manage Identity
-                </Link>,
-                <Link to="/inbox" className="link">
-                  Messaging & Inbox
-                </Link>,
-                <Link to="/feed" className="link">
-                  Feed
-                </Link>,
+                node && (
+                  <Link to="/identity" className="link">
+                    Manage Identity
+                  </Link>
+                ),
+                node && (
+                  <Link to="/inbox" className="link">
+                    Messaging & Inbox
+                  </Link>
+                ),
+                node && (
+                  <Link to="/feed" className="link">
+                    Feed
+                  </Link>
+                ),
                 <Link to="/whiteflag" className="link">
                   Whiteflag
                 </Link>
