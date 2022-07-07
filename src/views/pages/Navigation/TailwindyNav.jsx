@@ -7,16 +7,16 @@ function TailwindyNav() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    const sub = node?.balance$.subscribe((d) => {
+    const sub = node.balance$.subscribe((d) => {
       setBalance(d);
     });
 
     let id = setInterval(() => {
-      node?.getBalance(keymanager);
+      node.getBalance(keymanager);
     }, 1000);
 
     return () => {
-      sub?.remove();
+      sub.remove();
       clearInterval(id);
     };
   });

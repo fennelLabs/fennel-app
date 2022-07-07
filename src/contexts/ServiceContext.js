@@ -28,36 +28,22 @@ const ServiceContext = createContext({});
 export const useServiceContext = () => useContext(ServiceContext);
 
 export const ServiceContextProvider = ({children}) => {
+  const polkadotApi = useRef(connect());
   const rpc = useRef(new FennelRPC());
   const messageService = useRef(new MessageAPIService(rpc));
   const keymanager = useRef(new KeyManager('Main'));
   const contactsManager = useRef(new ContactsManager());
-  const node = useRef(new Node(undefined));
-
-  const [polkadotApi, setPolkadotApi] = useState(undefined);
-
-  useEffect(() => {
-    connect().then((api) => {
-      setPolkadotApi(api);
-      api.on('disconnected', () => {
-        setPolkadotApi(undefined);
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    node.current = new Node(polkadotApi);
-  }, [polkadotApi]);
+  const node = useRef(new Node(polkadotApi.current));
 
   return (
     <ServiceContext.Provider
       value={{
+        polkadotApi: polkadotApi.current,
         messageService: messageService.current,
         rpc: rpc.current,
         keymanager: keymanager.current,
         node: node.current,
-        contactsManager: contactsManager.current,
-        polkadotApi: polkadotApi
+        contactsManager: contactsManager.current
       }}
     >
       {children}

@@ -45,20 +45,29 @@ class Node {
     this._api = api;
   }
 
-  async getBalance(keymanager) {
-    if (!keymanager.signer()) {
-      this._balance.next(0);
-    } else {
-      const {_, data: balance} = await this._api.query.system.account(
-        keymanager.signer().address
-      );
-      this._balance.next(`${balance.free}`);
+  getBalance(keymanager) {
+    try {
+      if (!keymanager.signer()) {
+        this._balance.next(0);
+      } else {
+        this.api().then(async (a) => {
+          const {_, data: balance} = await a.query.system.account(
+            keymanager.signer().address
+          );
+          const amount = balance?.free ?? 0;
+          this._balance.next(`${amount}`);
+        });
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 
   async getFeeForCreateIdentity(keymanager) {
     if (!keymanager.signer()) return;
-    const info = await this._api.tx.identityModule
+
+    const api = await this.api();
+    const info = await api.tx.identityModule
       .createIdentity()
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
@@ -71,7 +80,8 @@ class Node {
       sub.unsubscribe();
     });
 
-    this._api.tx.identityModule
+    const api = await this.api();
+    await api.tx.identityModule
       .createIdentity()
       .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
@@ -96,14 +106,16 @@ class Node {
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
     if (!keymanager.signer()) return;
 
-    const info = await this._api.tx.keystoreModule
+    const api = await this.api();
+    const info = await api.tx.keystoreModule
       .announceKey(fingerprint, location)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async announceKey(keymanager, fingerprint, location) {
-    let retval = await this._api.tx.keystoreModule
+    const api = await this.api();
+    return await api.tx.keystoreModule
       .announceKey(fingerprint, location)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -123,21 +135,21 @@ class Node {
 
         return false;
       });
-
-    return retval;
   }
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
     if (!keymanager.signer()) return;
 
-    const info = await this._api.tx.keystoreModule
+    const api = await this.api();
+    const info = await api.tx.keystoreModule
       .revokeKey(fingerprint)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
   async revokeKey(keymanager, fingerprint) {
-    await this._api.tx.keystoreModule
+    const api = await this.api();
+    await api.tx.keystoreModule
       .revokeKey(fingerprint)
       .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
@@ -160,7 +172,8 @@ class Node {
   async getFeeForSendNewSignal(keymanager, content) {
     if (!keymanager.signer()) return;
 
-    const info = await this._api.tx.signalModule
+    const api = await this.api();
+    const info = await api.tx.signalModule
       .sendSignal(content)
       .paymentInfo(keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
@@ -168,7 +181,8 @@ class Node {
 
   async sendNewSignal(keymanager, content) {
     try {
-      await this._api.tx.signalModule
+      const api = await this.api();
+      await api.tx.signalModule
         .sendSignal(content)
         .signAndSend(keymanager.signer(), (result) => {
           console.log(`Current status is ${result.status}`);
@@ -193,8 +207,10 @@ class Node {
 
     const decoder = new TextDecoder('utf-8');
 
-    const signedBlock = await this._api.rpc.chain.getBlock();
-    const apiAt = await this._api.at(signedBlock.block.header.hash);
+    const api = await this.api();
+
+    const signedBlock = await api.rpc.chain.getBlock();
+    const apiAt = await api.at(signedBlock.block.header.hash);
     const allRecords = await apiAt.query.system.events();
 
     signedBlock.block.extrinsics.forEach(
@@ -233,12 +249,14 @@ class Node {
   }
 
   async getDiagnosticsData() {
+    const api = await this.api();
+
     try {
       let data = await Promise.all([
-        this._api.genesisHash.toHex(),
-        this._api.rpc.system.chain(),
-        this._api.rpc.system.name(),
-        this._api.rpc.system.version()
+        api.genesisHash.toHex(),
+        api.rpc.system.chain(),
+        api.rpc.system.name(),
+        api.rpc.system.version()
       ]);
       await this.disconnect();
       return data;
@@ -249,7 +267,8 @@ class Node {
 
   async getMetaData() {
     try {
-      let data = await Promise.all([this._api.rpc.rpc.methods()]);
+      const api = await this.api();
+      let data = await Promise.all([await api.rpc.methods()]);
       await this.disconnect();
       return data;
     } catch (error) {
@@ -271,13 +290,16 @@ class Node {
   }
 
   disconnect() {
-    if (this._api) {
-      this._api.disconnect();
-    }
+    this.api().then((a) => a.disconnect());
   }
 
   apiNotReady() {
-    return !this._api;
+    return !this._api?.isConnected;
+  }
+
+  async api() {
+    await this._api.isReady;
+    return this._api;
   }
 }
 
