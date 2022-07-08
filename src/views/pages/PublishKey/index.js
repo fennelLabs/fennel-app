@@ -53,6 +53,7 @@ function PublishKey() {
           setError(response);
         } else {
           await node.announceKey(keymanager, fingerprint, location);
+          setError(undefined);
         }
       }
     } catch (e) {
