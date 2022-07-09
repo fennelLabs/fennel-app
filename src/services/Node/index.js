@@ -15,13 +15,6 @@ class Node {
    * @type {BehaviorSubject}
    * @private
    */
-  _balance = new BehaviorSubject(0);
-  balance$ = this._balance.asObservable();
-
-  /**
-   * @type {BehaviorSubject}
-   * @private
-   */
   _fee = new BehaviorSubject(0);
   fee$ = this._fee.asObservable();
 
@@ -43,24 +36,6 @@ class Node {
    */
   constructor(api) {
     this._api = api;
-  }
-
-  getBalance(keymanager) {
-    try {
-      if (!keymanager.signer()) {
-        this._balance.next(0);
-      } else {
-        this.api().then(async (a) => {
-          const {_, data: balance} = await a.query.system.account(
-            keymanager.signer().address
-          );
-          const amount = balance?.free ?? 0;
-          this._balance.next(`${amount}`);
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
   }
 
   async getFeeForCreateIdentity(keymanager) {

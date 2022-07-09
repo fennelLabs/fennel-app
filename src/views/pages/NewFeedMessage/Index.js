@@ -5,30 +5,26 @@ import FeedSubNav from '../../components/FeedSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import Text from '../../components/Text';
+import {useAccount} from '../../hooks/useAccount';
 
 function NewFeedMessage() {
   const {node, keymanager} = useServiceContext();
+  const {balance} = useAccount();
 
   const [value, setValue] = useState('');
   const [fee, setFee] = useState(0);
-  const [balance, setBalance] = useState(0);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(undefined);
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    const balance_sub = node.balance$.subscribe((d) => {
-      setBalance(d);
-    });
     const fee_sub = node.fee$.subscribe((d) => {
       setFee(d);
     });
 
-    node.getBalance(keymanager);
     node.getFeeForSendNewSignal(keymanager, value);
 
     return () => {
-      balance_sub.remove();
       fee_sub.remove();
     };
   }, [value]);

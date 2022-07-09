@@ -6,16 +6,17 @@ import {useServiceContext} from '../../../contexts/ServiceContext';
 import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 import {usePublishKeyForm} from './usePublishKeyForm';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
+import {useAccount} from '../../hooks/useAccount';
 
 function PublishKey() {
   const {node, keymanager, contactsManager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
+  const {balance} = useAccount();
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
   const [visible, setVisible] = useState(false);
   const [fee, setFee] = useState(0);
-  const [balance, setBalance] = useState(0);
 
   const [fingerprint, location, PublishKeyForm] = usePublishKeyForm({
     onSubmit: () => {
@@ -25,18 +26,13 @@ function PublishKey() {
   });
 
   useEffect(() => {
-    const balance_sub = node.balance$.subscribe((d) => {
-      setBalance(d);
-    });
     const fee_sub = node.fee$.subscribe((d) => {
       setFee(d);
     });
 
-    node.getBalance(keymanager);
     node.getFeeForAnnounceKey(keymanager, fingerprint, location);
 
     return () => {
-      balance_sub.remove();
       fee_sub.remove();
     };
   }, [fingerprint, location]);
