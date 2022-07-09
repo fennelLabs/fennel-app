@@ -2,12 +2,16 @@ import {ApiRx} from '@polkadot/api';
 import {BehaviorSubject, filter, switchMap} from 'rxjs';
 import KeyManager from './KeyManager';
 
-class ChainAccountService {
+class AccountBalanceService {
   /**
    * @private
    */
   _balance = new BehaviorSubject(0);
   balance$ = this._balance.asObservable();
+
+  get balance() {
+    return this._balance.value;
+  }
 
   /**
    * @private
@@ -43,4 +47,4 @@ class ChainAccountService {
   }
 }
 
-export default ChainAccountService;
+export default AccountBalanceService;
