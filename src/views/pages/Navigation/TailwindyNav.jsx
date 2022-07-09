@@ -1,10 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import queryChainConnection from '../../hooks/queryChainConnection';
 import {useAccount} from '../../hooks/useAccount';
 
 function TailwindyNav() {
-  const connectedToChain = queryChainConnection();
   const {balance} = useAccount();
 
   return (
@@ -45,21 +43,15 @@ function TailwindyNav() {
                 <Link to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
-                connectedToChain && (
-                  <Link to="/identity" className="link">
-                    Manage Identity
-                  </Link>
-                ),
-                connectedToChain && (
-                  <Link to="/inbox" className="link">
-                    Messaging & Inbox
-                  </Link>
-                ),
-                connectedToChain && (
-                  <Link to="/feed" className="link">
-                    Feed
-                  </Link>
-                ),
+                <Link to="/identity" className="link">
+                  Manage Identity
+                </Link>,
+                <Link to="/inbox" className="link">
+                  Messaging & Inbox
+                </Link>,
+                <Link to="/feed" className="link">
+                  Feed
+                </Link>,
                 <Link to="/whiteflag" className="link">
                   Whiteflag
                 </Link>
