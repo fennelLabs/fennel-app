@@ -5,31 +5,27 @@ import IdentitySubNav from '../../components/IdentitySubNav';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
+import {useAccount} from '../../hooks/useAccount';
 
 function RevokeKey() {
   const {node, keymanager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
+  const {balance} = useAccount();
 
   const [fee, setFee] = useState(0);
-  const [balance, setBalance] = useState(0);
   const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [fingerprint, setFingerprint] = useState('');
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    const balance_sub = node.balance$.subscribe((d) => {
-      setBalance(d);
-    });
     const fee_sub = node.fee$.subscribe((d) => {
       setFee(d);
     });
 
-    node.getBalance(keymanager);
     node.getFeeForRevokeKey(keymanager, fingerprint);
 
     return () => {
-      balance_sub.remove();
       fee_sub.remove();
     };
   }, [fingerprint]);

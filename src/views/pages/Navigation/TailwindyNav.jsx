@@ -1,22 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
-import {useServiceContext} from '../../../contexts/ServiceContext';
 import queryChainConnection from '../../hooks/queryChainConnection';
+import {useAccount} from '../../hooks/useAccount';
 
 function TailwindyNav() {
-  const {chainAccountService} = useServiceContext();
   const connectedToChain = queryChainConnection();
-  const [balance, setBalance] = useState(0);
-
-  useEffect(() => {
-    const sub = chainAccountService.balance$.subscribe((d) => {
-      setBalance(d);
-    });
-
-    return () => {
-      sub.remove();
-    };
-  }, []);
+  const {balance} = useAccount();
 
   return (
     <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-amber-500 mb-3">

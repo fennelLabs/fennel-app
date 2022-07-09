@@ -8,28 +8,22 @@ import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import {useAccount} from '../../hooks/useAccount';
 
 function Identity() {
-  const account = useAccount();
+  const {account, balance} = useAccount();
   const [createIdentity, setCreateIdentity] = useState(true);
   const [btnEnabled, setBtnEnabled] = useState(false);
   const {keymanager, node} = useServiceContext();
   const [fee, setFee] = useState(0);
-  const [balance, setBalance] = useState(0);
   const [visible, setVisible] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
-    const balance_sub = node.balance$.subscribe((d) => {
-      setBalance(d);
-    });
     const fee_sub = node.fee$.subscribe((d) => {
       setFee(d);
     });
 
-    node.getBalance(keymanager);
     node.getFeeForCreateIdentity(keymanager);
 
     return () => {
-      balance_sub.remove();
       fee_sub.remove();
     };
   }, []);
@@ -66,12 +60,8 @@ function Identity() {
         {confirmed && (
           <Text>Request sent - wait a moment for your identity number.</Text>
         )}
-        {!account && (
-          <Text>Create or restore a Fennel account first.</Text>
-        )}
-        {account && balance < fee && (
-          <Text>Insufficient balance.</Text>
-        )}
+        {!account && <Text>Create or restore a Fennel account first.</Text>}
+        {account && balance < fee && <Text>Insufficient balance.</Text>}
         {account && balance > fee && !confirmed && (
           <div>
             <Text>
