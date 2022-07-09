@@ -8,10 +8,10 @@ import ContactsManager from '../services/ContactsManager.service';
 import {ApiPromise} from '@polkadot/api';
 import connect, {listenForConnection} from '../utils/loadPolkadotApi';
 import AccountBalanceService from '../services/AccountBalance.service';
-import {BehaviorSubject} from 'rxjs';
+import {Observable} from 'rxjs';
 
 const {promise, rxjs} = connect();
-const connected = listenForConnection(promise);
+const connected = listenForConnection(rxjs);
 const rpc = new FennelRPC();
 const messageService = new MessageAPIService(rpc);
 const keymanager = new KeyManager('Main');
@@ -41,7 +41,7 @@ const ServiceContext = createContext(services);
  * @property {Node} node
  * @property {ContactsManager} contactsManager
  * @property {ApiPromise} polkadotApi
- * @property {BehaviorSubject<boolean>} connected
+ * @property {{$: Observable<boolean>, value: () => boolean}} connected
  * @property {AccountBalanceService} accountBalanceService
  */
 

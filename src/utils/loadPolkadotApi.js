@@ -1,6 +1,6 @@
 import {ApiPromise, ApiRx, WsProvider} from '@polkadot/api';
 import {ApiBase} from '@polkadot/api/base';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {NODE_URI_WS} from '../config';
 
 function connect() {
@@ -11,26 +11,28 @@ function connect() {
 /**
  *
  * @param {ApiBase} promise
- * @returns {BehaviorSubject<boolean>}
+ * @returns {{$: Observable<boolean>, value: () => boolean}}
  */
 export function listenForConnection(promise) {
   const connected = new BehaviorSubject(promise.isConnected);
-  console.log('outside react: setting up event callbacks');
 
   const disconnectedCallback = () => {
-    console.log('disconnected outside react!');
     connected.next(false);
   };
 
   const connectedCallback = () => {
-    console.log('connected outside react!');
     connected.next(true);
   };
 
   promise.on('disconnected', disconnectedCallback);
   promise.on('connected', connectedCallback);
 
-  return connected;
+  return {
+    $: connected.asObservable(),
+    value: () => {
+      return connected.value;
+    }
+  };
 }
 
 export default connect;

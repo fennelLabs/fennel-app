@@ -3,13 +3,10 @@ import {useServiceContext} from '../../contexts/ServiceContext';
 
 function queryChainConnection() {
   const {connected} = useServiceContext();
-  const [isConnected, setIsConnected] = useState(connected.value);
-
-  console.log('is connected inside hook?: ', isConnected);
+  const [isConnected, setIsConnected] = useState(connected.value());
 
   useEffect(() => {
-    console.log('inside react hook: setting up event callbacks');
-    const sub = connected.subscribe((c) => setIsConnected(c));
+    const sub = connected.$.subscribe((c) => setIsConnected(c));
 
     return () => {
       sub.unsubscribe();
