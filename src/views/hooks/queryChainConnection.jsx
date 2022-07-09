@@ -2,19 +2,18 @@ import React, {useState, useEffect} from 'react';
 import {useServiceContext} from '../../contexts/ServiceContext';
 
 function queryChainConnection() {
-  const {polkadotApi} = useServiceContext();
-  const [connected, setConnected] = useState(polkadotApi.isConnected);
+  const {connected} = useServiceContext();
+  const [isConnected, setIsConnected] = useState(connected.value());
 
   useEffect(() => {
-    polkadotApi.on('disconnected', () => {
-      setConnected(false);
-    });
-    polkadotApi.on('connected', () => {
-      setConnected(true);
-    });
+    const sub = connected.$.subscribe((c) => setIsConnected(c));
+
+    return () => {
+      sub.unsubscribe();
+    };
   }, []);
 
-  return connected;
+  return isConnected;
 }
 
 export default queryChainConnection;
