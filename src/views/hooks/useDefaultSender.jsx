@@ -8,7 +8,7 @@ export function useDefaultSender() {
 
   useEffect(() => {
     const sub = contactsManager?.defaultSender$
-      .pipe(filter((i) => !!i))
+      //.pipe(filter((i) => !!i)) This line never let the value through.
       .subscribe((i) => {
         setDefaultSender(i);
       });

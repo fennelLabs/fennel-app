@@ -41,7 +41,10 @@ function Inbox() {
       setMessageList(d && d.length > 0 ? d : null);
     });
 
-    messageService.checkMessages(defaultSender);
+    console.log(`Getting messages for ${defaultSender}`);
+    if (!!defaultSender) {
+      messageService.checkMessages(defaultSender);
+    }
 
     return () => {
       sub.remove();
