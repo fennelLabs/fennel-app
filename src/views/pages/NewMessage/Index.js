@@ -74,9 +74,9 @@ function NewMessage() {
     if (
       await messageService.sendMessage(
         state.message,
-        'Test',
-        'Test',
-        'Test',
+        state.fingerprint,
+        state.signature,
+        state.public_key,
         parseInt(defaultSender),
         state.recipient,
         state.message_encryption_indicator
