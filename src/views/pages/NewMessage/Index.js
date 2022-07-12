@@ -59,6 +59,14 @@ function NewMessage() {
       ...prevState,
       [name]: value
     }));
+    if (value != 0) {
+      contactsManager.getContactKey(value, (key) => {
+        setState((prevState) => ({
+          ...prevState,
+          public_key: key
+        }));
+      });
+    }
   };
 
   const handleIndicatorChange = (e) => {

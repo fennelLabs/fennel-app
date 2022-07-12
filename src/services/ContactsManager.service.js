@@ -1,4 +1,4 @@
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import axios from 'axios';
 
 export default class ContactsManager {
@@ -7,6 +7,28 @@ export default class ContactsManager {
 
   identities$ = this._identities.asObservable();
   defaultSender$ = this._defaultSender.asObservable();
+
+  getContactKey(contact_id, callback) {
+    const checkedContact = new Subject();
+    const sub = checkedContact.subscribe((id) => {
+      callback(id);
+      sub.unsubscribe();
+    });
+    axios
+      .get(`http://localhost:1234/api/identities/${contact_id}`, {
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        console.log(response);
+        const r = response?.data?.public_key;
+        console.log(r);
+        checkedContact.next(r);
+      })
+      .catch((error) => {
+        console.error(error);
+        checkedContact.next(undefined);
+      });
+  }
 
   populateContacts() {
     return axios
@@ -18,6 +40,7 @@ export default class ContactsManager {
       .then((response) => {
         const r = response?.data?.results;
         if (r) {
+          console.log(`contact object: ${r}`);
           this._identities.next([...r]);
         }
         return r;
