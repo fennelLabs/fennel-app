@@ -20,7 +20,7 @@ export default class ContactsManager {
       })
       .then((response) => {
         console.log(response);
-        const r = response?.data?.public_key;
+        const r = response?.data;
         console.log(r);
         checkedContact.next(r);
       })

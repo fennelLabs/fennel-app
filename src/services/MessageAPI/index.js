@@ -9,6 +9,8 @@ import {
 class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
   _received_messages = new BehaviorSubject([]);
+  _message = new BehaviorSubject(undefined);
+  _semaphore = new BehaviorSubject(false);
 
   sent_messages$ = this._sent_messages.asObservable();
   received_messages$ = this._received_messages.asObservable();
@@ -26,14 +28,21 @@ class MessageAPIService {
     recipient,
     message_encryption_indicator
   ) {
-    let ciphertext = null;
     if (message_encryption_indicator == 2) {
+      // `await`ing this doesn't change the race condition.
       this._rpc.encrypt(publicKey, message, (r) => {
-        ciphertext = r;
+        console.log(`Encrypting to ciphertext: ${r}`);
+        this._message.next(r); // This doesn't get set early enough.
+        this._semaphore.next(true);
       });
     } else {
-      ciphertext = message;
+      this._message.next(message);
+      this._semaphore.next(true);
     }
+    // Just give the RPC a second to respond.
+    await new Promise(sleep => setTimeout(sleep, 1000));
+    console.log(`Semaphore state: ${this._semaphore.value}`);
+    console.log(`Message: ${this._message.value}`);
     let retval = await axios({
       method: 'post',
       url: `${API_MESSAGES}/`,
@@ -41,7 +50,7 @@ class MessageAPIService {
         'Content-Type': 'application/json'
       },
       data: {
-        message: ciphertext,
+        message: this._message.value,
         public_key: publicKey,
         signature: signature,
         fingerprint: fingerprint,

@@ -63,7 +63,8 @@ function NewMessage() {
       contactsManager.getContactKey(value, (key) => {
         setState((prevState) => ({
           ...prevState,
-          public_key: key
+          fingerprint: key.fingerprint,
+          public_key: key.public_key
         }));
       });
     }
@@ -79,11 +80,12 @@ function NewMessage() {
 
   const submitMessage = async (e) => {
     e.preventDefault();
+    let signature = 'TEST'; // This will be replaced by a call to RPC->sign.
     if (
       await messageService.sendMessage(
         state.message,
         state.fingerprint,
-        state.signature,
+        signature,
         state.public_key,
         parseInt(defaultSender),
         state.recipient,
