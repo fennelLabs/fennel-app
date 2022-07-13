@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import ListView from '../../components/ListView';
 import PageTitle from '../../components/PageTitle';
 import InboxSubNav from '../../components/InboxSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultSender} from '../../hooks/useDefaultSender';
+import {inboxMessagesService} from '../../../contexts/ServiceContext';
+import {filter} from 'rxjs';
 
 const test_messages = [
   {
@@ -32,28 +32,22 @@ const test_messages = [
 ];
 
 function Inbox() {
-  const {messageService} = useServiceContext();
   const [messageList, setMessageList] = useState(null);
-  const defaultSender = useDefaultSender();
 
   useEffect(() => {
-    console.info('subscribing to messages');
-    const sub = messageService.received_messages$.subscribe((d) => {
-      console.info('getting new messages', d);
-      setMessageList(d && d.length > 0 ? d : null);
+    // eventually syncing our client side message history will be more sophisticated
+    inboxMessagesService.refreshMessages();
+
+    const sub = inboxMessagesService.messages.$.pipe(
+      filter((m) => !!m)
+    ).subscribe((m) => {
+      setMessageList(m);
     });
 
     return () => {
       sub.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    console.info('checking messages for ', defaultSender);
-    if (!!defaultSender) {
-      messageService.checkMessages(defaultSender);
-    }
-  }, [defaultSender]);
 
   return (
     <div className="flex flex-row">

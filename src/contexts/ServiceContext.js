@@ -9,6 +9,7 @@ import {ApiPromise} from '@polkadot/api';
 import connect, {listenForConnection} from '../utils/loadPolkadotApi';
 import AccountBalanceService from '../services/AccountBalance.service';
 import {Observable} from 'rxjs';
+import InboxMessagesService from '../services/InboxMessages.service';
 
 const {promise, rxjs} = connect();
 const connected = listenForConnection(rxjs);
@@ -18,6 +19,11 @@ const keymanager = new KeyManager('Main');
 const contactsManager = new ContactsManager();
 const node = new Node(promise);
 const accountBalanceService = new AccountBalanceService(rxjs, keymanager);
+
+export const inboxMessagesService = new InboxMessagesService(
+  messageService,
+  contactsManager
+);
 
 const services = {
   polkadotApi: promise,
@@ -54,9 +60,16 @@ export const ServiceContextProvider = ({children}) => {
   useEffect(() => {
     promise.isReady;
     rxjs.isReady;
-    const sub = accountBalanceService.listenForBalanceChanges();
+
+    const subscriptions = [
+      accountBalanceService.listenForBalanceChanges(),
+      inboxMessagesService.reloadMessagesIfSenderSwitches()
+    ];
+
     return () => {
-      sub.unsubscribe();
+      subscriptions.forEach((s) => {
+        s.unsubscribe();
+      });
     };
   }, []);
 
