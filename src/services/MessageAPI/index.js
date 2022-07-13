@@ -69,8 +69,10 @@ class MessageAPIService {
   }
 
   async checkMessages(recipientID) {
+    let url = `http://localhost:1234/api/messages/?recipient=${recipientID}`;
+    console.log(url);
     let results = await axios
-      .get(`http://localhost:1234/api/messages/?recipient=${recipientID}`, {
+      .get(url, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -90,8 +92,9 @@ class MessageAPIService {
   }
 
   async getSentMessages(senderID) {
+    let url = `http://localhost:1234/api/messages/?sender=${senderID}`;
     let retval = await axios
-      .get(`http://localhost:1234/api/messages/?sender=${senderID}`, {
+      .get(url, {
         headers: {
           'Content-Type': 'application/json'
         }

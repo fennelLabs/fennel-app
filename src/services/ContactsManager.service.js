@@ -70,6 +70,7 @@ export default class ContactsManager {
       if (r) {
         this._identities.next([...this._identities.value, r]);
         if (!this._defaultSender.value) {
+          console.log(`Setting defaultSender to ${r.id}`);
           this._defaultSender.next(r.id);
         }
       }
