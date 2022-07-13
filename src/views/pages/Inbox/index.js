@@ -44,7 +44,7 @@ function Inbox() {
     });
 
     return () => {
-      sub.remove();
+      sub.unsubscribe();
     };
   }, []);
 
