@@ -8,13 +8,8 @@ export default class ContactsManager {
   identities$ = this._identities.asObservable();
   defaultSender$ = this._defaultSender.asObservable();
 
-  getContactKey(contact_id, callback) {
-    const checkedContact = new Subject();
-    const sub = checkedContact.subscribe((id) => {
-      callback(id);
-      sub.unsubscribe();
-    });
-    axios
+  async getContactKey(contact_id) {
+    return await axios
       .get(`http://localhost:1234/api/identities/${contact_id}`, {
         headers: {'Content-Type': 'application/json'}
       })
@@ -22,11 +17,11 @@ export default class ContactsManager {
         console.log(response);
         const r = response?.data;
         console.log(r);
-        checkedContact.next(r);
+        return r;
       })
       .catch((error) => {
         console.error(error);
-        checkedContact.next(undefined);
+        return null;
       });
   }
 
