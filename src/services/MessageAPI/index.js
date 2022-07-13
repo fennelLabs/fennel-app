@@ -10,7 +10,6 @@ class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
   _received_messages = new BehaviorSubject([]);
   _message = new BehaviorSubject(undefined);
-  _semaphore = new BehaviorSubject(false);
 
   sent_messages$ = this._sent_messages.asObservable();
   received_messages$ = this._received_messages.asObservable();
@@ -31,18 +30,13 @@ class MessageAPIService {
     if (message_encryption_indicator == 2) {
       // `await`ing this doesn't change the race condition.
       this._rpc.encrypt(publicKey, message, (r) => {
-        console.log(`Encrypting to ciphertext: ${r}`);
         this._message.next(r); // This doesn't get set early enough.
-        this._semaphore.next(true);
       });
     } else {
       this._message.next(message);
-      this._semaphore.next(true);
     }
     // Just give the RPC a second to respond.
-    await new Promise(sleep => setTimeout(sleep, 1000));
-    console.log(`Semaphore state: ${this._semaphore.value}`);
-    console.log(`Message: ${this._message.value}`);
+    await new Promise((sleep) => setTimeout(sleep, 1000));
     let retval = await axios({
       method: 'post',
       url: `${API_MESSAGES}/`,
@@ -70,7 +64,6 @@ class MessageAPIService {
 
   async checkMessages(recipientID) {
     let url = `http://localhost:1234/api/messages/?recipient=${recipientID}`;
-    console.log(url);
     let results = await axios
       .get(url, {
         headers: {
@@ -88,7 +81,7 @@ class MessageAPIService {
         console.error(error);
         return [];
       });
-    this.__populateReceivedMessages(results);
+    this.__decryptMessageList(results);
   }
 
   async getSentMessages(senderID) {
@@ -100,7 +93,6 @@ class MessageAPIService {
         }
       })
       .then(function (response) {
-        console.log(response.data.results);
         return response.data.results;
       })
       .catch(function (error) {
@@ -110,19 +102,38 @@ class MessageAPIService {
     this.__decryptMessageList(retval);
   }
 
-  __decryptMessageList(data) {
-    data.forEach((message) => {
+  async __decryptMessageList(data) {
+    console.log('Decrypting messages.');
+    data.forEach(async (message) => {
+      console.log('Checking for decrypt on: ');
+      console.log(`${message.message_encryption_indicator}`);
+      console.log(`${API_MESSAGE_ENCRYPTION_INDICATORS}/2/`);
       // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
       // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
       if (
         message.message_encryption_indicator ==
-        `${API_MESSAGE_ENCRYPTION_INDICATORS}/2`
+        `${API_MESSAGE_ENCRYPTION_INDICATORS}/2/`
       ) {
+        console.log(`Decrypting ${message.message}`);
         this._rpc.decrypt(message.message, (r) => {
-          message.message = r;
+          // Thanks to Denys Séguret at https://stackoverflow.com/a/13698172 for a clean way to de-hex.
+          // Doing this as an anonymous lambda since we're not using it anywhere else.
+          message.message = ((hex) => {
+            var str = '';
+            for (var i = 0; i < hex.length; i += 2) {
+              var v = parseInt(hex.substr(i, 2), 16);
+              if (v) str += String.fromCharCode(v);
+            }
+            return str;
+          })(r);
+          console.log('Finished decryption.');
         });
+        // Going to let the RPC catch up with us here too.
+        await new Promise((sleep) => setTimeout(sleep, 1000));
       }
-      this._receive_messages.next([...this._receive_messages.value, message]);
+      console.log('Adding message.');
+      // I'm thinking about doing a quick visual effect where you see the ciphertext and then watch messages decrypt in real time.
+      this._received_messages.next([...this._received_messages.value, message]);
     });
   }
 
