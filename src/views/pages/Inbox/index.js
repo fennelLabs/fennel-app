@@ -37,18 +37,23 @@ function Inbox() {
   const defaultSender = useDefaultSender();
 
   useEffect(() => {
+    console.info('subscribing to messages');
     const sub = messageService.received_messages$.subscribe((d) => {
+      console.info('getting new messages', d);
       setMessageList(d && d.length > 0 ? d : null);
     });
-
-    if (!!defaultSender) {
-      messageService.checkMessages(defaultSender);
-    }
 
     return () => {
       sub.remove();
     };
-  }, [defaultSender, messageService]);
+  }, []);
+
+  useEffect(() => {
+    console.info('checking messages for ', defaultSender);
+    if (!!defaultSender) {
+      messageService.checkMessages(defaultSender);
+    }
+  }, [defaultSender]);
 
   return (
     <div className="flex flex-row">
