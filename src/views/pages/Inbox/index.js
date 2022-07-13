@@ -41,15 +41,7 @@ function Inbox() {
       setMessageList(d && d.length > 0 ? d : null);
     });
 
-    console.log(`Getting messages for ${defaultSender}`);
     if (!!defaultSender) {
-      // This doesn't do what the pipe line does.
-      // In the case that defaultSender is undefined,
-      // which is what happens if that pipe doesn't filter anything
-      // and therefore doesn't setDefaultSender, this guy stops us
-      // from trying to call the API with `undefined` as an argument.
-      // This therefore stops the entire message retrieve process from
-      // erroring out.
       messageService.checkMessages(defaultSender);
     }
 
