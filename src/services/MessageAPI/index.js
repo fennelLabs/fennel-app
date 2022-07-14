@@ -8,10 +8,7 @@ import {
 
 class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
-  _received_messages = new BehaviorSubject([]);
-
   sent_messages$ = this._sent_messages.asObservable();
-  received_messages$ = this._received_messages.asObservable();
 
   constructor(rpc) {
     this._rpc = rpc;
@@ -59,27 +56,31 @@ class MessageAPIService {
     return retval;
   }
 
+  /**
+   *
+   * @param {number} recipientID
+   * @returns {Promise<[]>}
+   */
   async checkMessages(recipientID) {
-    let url = `http://localhost:1234/api/messages/?recipient=${recipientID}`;
-    console.log(url);
-    let results = await axios
+    const url = `http://localhost:1234/api/messages/?recipient=${recipientID}`;
+    console.log('requesting: ', url);
+    return axios
       .get(url, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
       .then(function (response) {
-        if (response.data) {
+        if (response?.data) {
           return response.data;
-        } else {
-          return [];
         }
+
+        return [];
       })
       .catch(function (error) {
         console.error(error);
         return [];
       });
-    this.__populateReceivedMessages(results);
   }
 
   async getSentMessages(senderID) {
@@ -115,10 +116,6 @@ class MessageAPIService {
       }
       this._receive_messages.next([...this._receive_messages.value, message]);
     });
-  }
-
-  __populateReceivedMessages(data) {
-    this._received_messages.next([...data]);
   }
 
   __populateSentMessages(data) {

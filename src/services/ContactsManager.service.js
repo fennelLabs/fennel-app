@@ -2,11 +2,22 @@ import {BehaviorSubject} from 'rxjs';
 import axios from 'axios';
 
 export default class ContactsManager {
+  /**
+   * @private
+   */
   _identities = new BehaviorSubject([]);
+
+  /**
+   * @private
+   */
   _defaultSender = new BehaviorSubject(undefined);
 
   identities$ = this._identities.asObservable();
-  defaultSender$ = this._defaultSender.asObservable();
+
+  defaultSender = {
+    $: this._defaultSender.asObservable(),
+    current: () => this._defaultSender.value
+  };
 
   populateContacts() {
     return axios
@@ -43,7 +54,6 @@ export default class ContactsManager {
       }
     }).then((response) => {
       const r = response?.data;
-      console.log(r);
       if (r) {
         this._identities.next([...this._identities.value, r]);
         if (!this._defaultSender.value) {
