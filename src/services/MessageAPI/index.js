@@ -9,7 +9,6 @@ import {
 class MessageAPIService {
   _sent_messages = new BehaviorSubject([]);
   _received_messages = new BehaviorSubject([]);
-  _message = new BehaviorSubject(undefined);
 
   sent_messages$ = this._sent_messages.asObservable();
   received_messages$ = this._received_messages.asObservable();
@@ -27,39 +26,31 @@ class MessageAPIService {
     recipient,
     message_encryption_indicator
   ) {
-    if (message_encryption_indicator == 2) {
-      // `await`ing this doesn't change the race condition.
-      this._rpc.encrypt(publicKey, message, (r) => {
-        this._message.next(r); // This doesn't get set early enough.
-      });
-    } else {
-      this._message.next(message);
-    }
-    // Just give the RPC a second to respond.
-    await new Promise((sleep) => setTimeout(sleep, 1000));
-    let retval = await axios({
-      method: 'post',
-      url: `${API_MESSAGES}/`,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: {
-        message: this._message.value,
-        public_key: publicKey,
-        signature: signature,
-        fingerprint: fingerprint,
-        sender: `${API_IDENTITIES}/${sender}/`,
-        recipient: `${API_IDENTITIES}/${recipient}/`,
-        message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${message_encryption_indicator}/`
+    return new Promise((res, rej) => {
+      try {
+        if (message_encryption_indicator == 2) {
+          this._rpc.encrypt(publicKey, message, (r) => {
+            res(r);
+          });
+        } else {
+          res(message);
+        }
+      } catch (e) {
+        rej(e);
       }
-    })
-      .then(function (_) {
-        return true;
-      })
-      .catch(function (_) {
-        return false;
-      });
-    return retval;
+    }).then((message) =>
+      sendMessage(
+        message,
+        {
+          publicKey,
+          signature,
+          fingerprint,
+          sender,
+          recipient
+        },
+        message_encryption_indicator
+      )
+    );
   }
 
   async checkMessages(recipientID) {
@@ -148,6 +139,31 @@ class MessageAPIService {
   __addSentMessage(data) {
     this._sent_messages.next([...data]);
   }
+}
+
+function sendMessage(
+  message,
+  {publicKey, signature, fingerprint, sender, recipient},
+  indicator
+) {
+  return axios({
+    method: 'post',
+    url: `${API_MESSAGES}/`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: {
+      message,
+      public_key: publicKey,
+      signature: signature,
+      fingerprint: fingerprint,
+      sender: `${API_IDENTITIES}/${sender}/`,
+      recipient: `${API_IDENTITIES}/${recipient}/`,
+      message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${indicator}/`
+    }
+  })
+    .then(() => true)
+    .catch(() => false);
 }
 
 export default MessageAPIService;
