@@ -8,8 +8,8 @@ export default class ContactsManager {
   identities$ = this._identities.asObservable();
   defaultSender$ = this._defaultSender.asObservable();
 
-  async getContactKey(contact_id) {
-    return await axios
+  getContactKey(contact_id) {
+    return axios
       .get(`http://localhost:1234/api/identities/${contact_id}`, {
         headers: {'Content-Type': 'application/json'}
       })
