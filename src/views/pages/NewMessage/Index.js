@@ -47,14 +47,18 @@ function NewMessage() {
   }, []);
 
   useEffect(() => {
-    if (recipient != 0) {
-      contactsManager.getContactKey(recipient).then((key) => {
-        setState((prevState) => ({
-          ...prevState,
-          fingerprint: key.fingerprint,
-          public_key: key.public_key
-        }));
-      });
+    if (recipient && recipient > 0) {
+      console.log('recipient is: ', recipient);
+      contactsManager
+        .getContactKey(recipient)
+        .then((key) => {
+          setState((prevState) => ({
+            ...prevState,
+            fingerprint: key.fingerprint,
+            public_key: key.public_key
+          }));
+        })
+        .catch(console.error);
     }
   }, [recipient]);
 

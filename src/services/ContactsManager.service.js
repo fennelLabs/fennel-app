@@ -21,7 +21,7 @@ export default class ContactsManager {
       })
       .catch((error) => {
         console.error(error);
-        return null;
+        throw error;
       });
   }
 
