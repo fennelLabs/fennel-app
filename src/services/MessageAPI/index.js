@@ -94,38 +94,25 @@ class MessageAPIService {
   }
 
   async __decryptMessageList(data) {
-    console.log('Decrypting messages.');
-    data.forEach(async (message) => {
-      console.log('Checking for decrypt on: ');
-      console.log(`${message.message_encryption_indicator}`);
-      console.log(`${API_MESSAGE_ENCRYPTION_INDICATORS}/2/`);
-      // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
-      // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
-      if (
-        message.message_encryption_indicator ==
-        `${API_MESSAGE_ENCRYPTION_INDICATORS}/2/`
-      ) {
-        console.log(`Decrypting ${message.message}`);
-        this._rpc.decrypt(message.message, (r) => {
-          // Thanks to Denys Séguret at https://stackoverflow.com/a/13698172 for a clean way to de-hex.
-          // Doing this as an anonymous lambda since we're not using it anywhere else.
-          message.message = ((hex) => {
-            var str = '';
-            for (var i = 0; i < hex.length; i += 2) {
-              var v = parseInt(hex.substr(i, 2), 16);
-              if (v) str += String.fromCharCode(v);
-            }
-            return str;
-          })(r);
-          console.log('Finished decryption.');
+    const messages = await Promise.all(
+      data.map((message) => {
+        return new Promise((res, rej) => {
+          // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
+          // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
+          if (message.message_encryption_indicator.endsWith('2/')) {
+            this._rpc.decrypt(message.message, (r) => {
+              message.message = decodeHex(r);
+              res(message);
+            });
+          } else {
+            res(message);
+          }
         });
-        // Going to let the RPC catch up with us here too.
-        await new Promise((sleep) => setTimeout(sleep, 1000));
-      }
-      console.log('Adding message.');
-      // I'm thinking about doing a quick visual effect where you see the ciphertext and then watch messages decrypt in real time.
-      this._received_messages.next([...this._received_messages.value, message]);
-    });
+      })
+    );
+
+    // I'm thinking about doing a quick visual effect where you see the ciphertext and then watch messages decrypt in real time.
+    this._received_messages.next(messages);
   }
 
   __populateReceivedMessages(data) {
@@ -139,6 +126,16 @@ class MessageAPIService {
   __addSentMessage(data) {
     this._sent_messages.next([...data]);
   }
+}
+
+// Thanks to Denys Séguret at https://stackoverflow.com/a/13698172 for a clean way to de-hex.
+function decodeHex(hex) {
+  var str = '';
+  for (var i = 0; i < hex.length; i += 2) {
+    var v = parseInt(hex.substr(i, 2), 16);
+    if (v) str += String.fromCharCode(v);
+  }
+  return str;
 }
 
 function sendMessage(
