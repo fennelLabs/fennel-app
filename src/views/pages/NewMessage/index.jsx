@@ -17,9 +17,10 @@ function NewMessage() {
     signature: '',
     fingerprint: '',
     sender: null,
-    recipient: null,
     message_encryption_indicator: null
   });
+
+  const [recipient, setRecipient] = useState(null);
 
   const {contactsManager, messageService} = useServiceContext();
   const defaultSender = useDefaultSender();
@@ -45,6 +46,22 @@ function NewMessage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (recipient && recipient > 0) {
+      console.log('recipient is: ', recipient);
+      contactsManager
+        .getContactKey(recipient)
+        .then((key) => {
+          setState((prevState) => ({
+            ...prevState,
+            fingerprint: key.fingerprint,
+            public_key: key.public_key
+          }));
+        })
+        .catch(console.error);
+    }
+  }, [recipient]);
+
   const handleTextChange = (e) => {
     const {name, value} = e.target;
     setState((prevState) => ({
@@ -54,20 +71,8 @@ function NewMessage() {
   };
 
   const handleRecipientChange = (e) => {
-    const {name, value} = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-    if (value != 0) {
-      contactsManager.getContactKey(value, (key) => {
-        setState((prevState) => ({
-          ...prevState,
-          fingerprint: key.fingerprint,
-          public_key: key.public_key
-        }));
-      });
-    }
+    const {value} = e.target;
+    setRecipient(value);
   };
 
   const handleIndicatorChange = (e) => {
@@ -88,7 +93,7 @@ function NewMessage() {
         signature,
         state.public_key,
         parseInt(defaultSender),
-        state.recipient,
+        recipient,
         state.message_encryption_indicator
       )
     ) {
