@@ -26,42 +26,35 @@ class MessageAPIService {
     recipient,
     message_encryption_indicator
   ) {
-    let ciphertext = null;
-    if (message_encryption_indicator == 2) {
-      this._rpc.encrypt(publicKey, message, (r) => {
-        ciphertext = r;
-      });
-    } else {
-      ciphertext = message;
-    }
-    let retval = await axios({
-      method: 'post',
-      url: `${API_MESSAGES}/`,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: {
-        message: ciphertext,
-        public_key: publicKey,
-        signature: signature,
-        fingerprint: fingerprint,
-        sender: `${API_IDENTITIES}/${sender}/`,
-        recipient: `${API_IDENTITIES}/${recipient}/`,
-        message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${message_encryption_indicator}/`
+    return new Promise((res, rej) => {
+      try {
+        if (message_encryption_indicator == 2) {
+          this._rpc.encrypt(publicKey, message, (r) => {
+            res(r);
+          });
+        } else {
+          res(message);
+        }
+      } catch (e) {
+        rej(e);
       }
-    })
-      .then(function (_) {
-        return true;
-      })
-      .catch(function (_) {
-        return false;
-      });
-    return retval;
+    }).then((message) =>
+      sendMessage(
+        message,
+        {
+          publicKey,
+          signature,
+          fingerprint,
+          sender,
+          recipient
+        },
+        message_encryption_indicator
+      )
+    );
   }
 
   async checkMessages(recipientID) {
     let url = `http://localhost:1234/api/messages/?recipient=${recipientID}`;
-    console.log(url);
     let results = await axios
       .get(url, {
         headers: {
@@ -79,7 +72,7 @@ class MessageAPIService {
         console.error(error);
         return [];
       });
-    this.__populateReceivedMessages(results);
+    this.__decryptMessageList(results);
   }
 
   async getSentMessages(senderID) {
@@ -91,7 +84,6 @@ class MessageAPIService {
         }
       })
       .then(function (response) {
-        console.log(response.data.results);
         return response.data.results;
       })
       .catch(function (error) {
@@ -101,20 +93,26 @@ class MessageAPIService {
     this.__decryptMessageList(retval);
   }
 
-  __decryptMessageList(data) {
-    data.forEach((message) => {
-      // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
-      // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
-      if (
-        message.message_encryption_indicator ==
-        `${API_MESSAGE_ENCRYPTION_INDICATORS}/2`
-      ) {
-        this._rpc.decrypt(message.message, (r) => {
-          message.message = r;
+  async __decryptMessageList(data) {
+    const messages = await Promise.all(
+      data.map((message) => {
+        return new Promise((res, rej) => {
+          // If the message is marked with indicator 1 (UNENCRYPTED), treat it as plaintext.
+          // If the message is marked with indicator 2 (RSA_ENCRYPTED), treat it as an RSA-encrypted message.
+          if (message.message_encryption_indicator.endsWith('2/')) {
+            this._rpc.decrypt(message.message, (r) => {
+              message.message = decodeHex(r);
+              res(message);
+            });
+          } else {
+            res(message);
+          }
         });
-      }
-      this._receive_messages.next([...this._receive_messages.value, message]);
-    });
+      })
+    );
+
+    // I'm thinking about doing a quick visual effect where you see the ciphertext and then watch messages decrypt in real time.
+    this._received_messages.next(messages);
   }
 
   __populateReceivedMessages(data) {
@@ -128,6 +126,41 @@ class MessageAPIService {
   __addSentMessage(data) {
     this._sent_messages.next([...data]);
   }
+}
+
+// Thanks to Denys Séguret at https://stackoverflow.com/a/13698172 for a clean way to de-hex.
+function decodeHex(hex) {
+  var str = '';
+  for (var i = 0; i < hex.length; i += 2) {
+    var v = parseInt(hex.substr(i, 2), 16);
+    if (v) str += String.fromCharCode(v);
+  }
+  return str;
+}
+
+function sendMessage(
+  message,
+  {publicKey, signature, fingerprint, sender, recipient},
+  indicator
+) {
+  return axios({
+    method: 'post',
+    url: `${API_MESSAGES}/`,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: {
+      message,
+      public_key: publicKey,
+      signature: signature,
+      fingerprint: fingerprint,
+      sender: `${API_IDENTITIES}/${sender}/`,
+      recipient: `${API_IDENTITIES}/${recipient}/`,
+      message_encryption_indicator: `${API_MESSAGE_ENCRYPTION_INDICATORS}/${indicator}/`
+    }
+  })
+    .then(() => true)
+    .catch(() => false);
 }
 
 export default MessageAPIService;

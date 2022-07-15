@@ -1,5 +1,8 @@
 import {BehaviorSubject} from 'rxjs';
 import axios from 'axios';
+import {
+  API_IDENTITIES,
+} from '../config';
 
 export default class ContactsManager {
   _identities = new BehaviorSubject([]);
@@ -8,9 +11,26 @@ export default class ContactsManager {
   identities$ = this._identities.asObservable();
   defaultSender$ = this._defaultSender.asObservable();
 
+  getContactKey(contact_id) {
+    return axios
+      .get(`${API_IDENTITIES}/${contact_id}`, {
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then((response) => {
+        console.log(response);
+        const r = response?.data;
+        console.log(r);
+        return r;
+      })
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      });
+  }
+
   populateContacts() {
     return axios
-      .get(`http://localhost:1234/api/identities/`, {
+      .get(`${API_IDENTITIES}/`, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -18,6 +38,7 @@ export default class ContactsManager {
       .then((response) => {
         const r = response?.data?.results;
         if (r) {
+          console.log(`contact object: ${r}`);
           this._identities.next([...r]);
         }
         return r;
@@ -31,7 +52,7 @@ export default class ContactsManager {
   createNewIdentity(on_chain_identity_number, fingerprint, publicKey) {
     return axios({
       method: 'post',
-      url: 'http://localhost:1234/api/identities/',
+      url: `${API_IDENTITIES}/`,
       headers: {
         'Content-Type': 'application/json'
       },

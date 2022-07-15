@@ -37,8 +37,8 @@ function Inbox() {
   const defaultSender = useDefaultSender();
 
   useEffect(() => {
-    const sub = messageService.received_messages$.subscribe((d) => {
-      setMessageList(d && d.length > 0 ? d : null);
+    const sub = messageService.received_messages$.subscribe((messages) => {
+      setMessageList(messages);
     });
 
     if (!!defaultSender) {
@@ -46,9 +46,9 @@ function Inbox() {
     }
 
     return () => {
-      sub.remove();
+      sub.unsubscribe();
     };
-  }, [defaultSender, messageService]);
+  }, [defaultSender]);
 
   return (
     <div className="flex flex-row">

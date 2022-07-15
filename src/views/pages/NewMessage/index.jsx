@@ -17,9 +17,10 @@ function NewMessage() {
     signature: '',
     fingerprint: '',
     sender: null,
-    recipient: null,
     message_encryption_indicator: null
   });
+
+  const [recipient, setRecipient] = useState(null);
 
   const {contactsManager, messageService} = useServiceContext();
   const defaultSender = useDefaultSender();
@@ -45,6 +46,22 @@ function NewMessage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (recipient && recipient > 0) {
+      console.log('recipient is: ', recipient);
+      contactsManager
+        .getContactKey(recipient)
+        .then((key) => {
+          setState((prevState) => ({
+            ...prevState,
+            fingerprint: key.fingerprint,
+            public_key: key.public_key
+          }));
+        })
+        .catch(console.error);
+    }
+  }, [recipient]);
+
   const handleTextChange = (e) => {
     const {name, value} = e.target;
     setState((prevState) => ({
@@ -54,11 +71,8 @@ function NewMessage() {
   };
 
   const handleRecipientChange = (e) => {
-    const {name, value} = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
+    const {value} = e.target;
+    setRecipient(value);
   };
 
   const handleIndicatorChange = (e) => {
@@ -71,21 +85,18 @@ function NewMessage() {
 
   const submitMessage = async (e) => {
     e.preventDefault();
-    if (
+    let signature = 'TEST'; // This will be replaced by a call to RPC->sign.
+    setSuccess(
       await messageService.sendMessage(
         state.message,
-        'Test',
-        'Test',
-        'Test',
+        state.fingerprint,
+        signature,
+        state.public_key,
         parseInt(defaultSender),
-        state.recipient,
+        recipient,
         state.message_encryption_indicator
       )
-    ) {
-      setSuccess(true);
-    } else {
-      setSuccess(false);
-    }
+    );
   };
 
   const recipients = recipientsList.map((item) => (
