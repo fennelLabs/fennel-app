@@ -85,12 +85,11 @@ function NewMessage() {
 
   const submitMessage = async (e) => {
     e.preventDefault();
-    let signature = 'TEST'; // This will be replaced by a call to RPC->sign.
     setSuccess(
       await messageService.sendMessage(
         state.message,
         state.fingerprint,
-        signature,
+        await messageService.signMessage(state.message),
         state.public_key,
         parseInt(defaultSender),
         recipient,
