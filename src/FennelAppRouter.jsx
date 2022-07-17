@@ -20,6 +20,7 @@ import NewMessage from './views/pages/NewMessage';
 import Whiteflag from './views/pages/Whiteflag';
 import Account from './views/pages/Account';
 import ImportKeypair from './views/pages/ImportKeypair';
+import SendToken from './views/pages/SendToken';
 
 function FennelAppRouter() {
   return (
@@ -48,6 +49,7 @@ function FennelAppRouter() {
           <Route path="/inbox/new" element={<NewMessage />} />
           <Route path="/wallet/generate" element={<GenerateWallet />} />
           <Route path="/wallet/restore" element={<RestoreWallet />} />
+          <Route path="/token/send" element={<SendToken />} />
           <Route path="/account" element={<Account />} />
         </Routes>
       </PageContainer>

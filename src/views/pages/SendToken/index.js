@@ -23,7 +23,10 @@ function SendToken() {
       setFee(d);
     });
 
-    node.getFeeForTransferToken(keymanager, address, amount);
+    // The RPC hates it if you send it an empty address.
+    if (address) {
+      node.getFeeForTransferToken(keymanager, address, amount);
+    }
 
     return () => {
       fee_sub.remove();
@@ -63,6 +66,7 @@ function SendToken() {
               setVisible(false);
               transferToken(keymanager, address, amount);
             }}
+            onCancel={() => setVisible(false)}
           />
         )}
         {error && (
@@ -92,7 +96,12 @@ function SendToken() {
                 name="amount"
                 value={amount}
                 onChange={(event) => {
-                  setAmount(event.target.value);
+                  // IF avoids a really irritating NaN problem.
+                  if (event.target.value) {
+                    setAmount(parseInt(event.target.value));
+                  } else {
+                    setAmount(0);
+                  }
                 }}
               />
               <Button type="submit">Submit</Button>
@@ -104,4 +113,4 @@ function SendToken() {
   );
 }
 
-export default NewFeedMessage;
+export default SendToken;
