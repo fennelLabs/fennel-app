@@ -58,7 +58,7 @@ class Node {
     const api = await this.api();
     await api.tx.identityModule
       .createIdentity()
-      .signAndSend(keymanager.address(), keymanager.signer(), ({events = [], txHash}) => {
+      .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
         events.forEach(({phase, event: {data, method, section}}) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
@@ -92,7 +92,7 @@ class Node {
     const api = await this.api();
     return await api.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .signAndSend(keymanager.address(), keymanager.signer(), ({events = [], status, txHash}) => {
+      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
 
         if (status.isFinalized) {
@@ -126,7 +126,7 @@ class Node {
     const api = await this.api();
     await api.tx.keystoreModule
       .revokeKey(fingerprint)
-      .signAndSend(keymanager.address(), keymanager.signer(), ({events = [], status, txHash}) => {
+      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
 
         if (status.isFinalized) {
@@ -159,7 +159,7 @@ class Node {
       const api = await this.api();
       await api.tx.signalModule
         .sendSignal(content)
-        .signAndSend(keymanager.address(), keymanager.signer(), (result) => {
+        .signAndSend(keymanager.signer(), (result) => {
           console.log(`Current status is ${result.status}`);
 
           if (result.status.isInBlock) {
