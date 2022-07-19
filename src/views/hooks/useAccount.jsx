@@ -4,11 +4,19 @@ import {useServiceContext} from '../../contexts/ServiceContext';
 
 export function useAccount() {
   const {keymanager, accountBalanceService} = useServiceContext();
+
+  const [address, setAddress] = useState(undefined);
   const [account, setAccount] = useState(undefined);
   const [balance, setBalance] = useState(accountBalanceService.balance);
 
   useEffect(() => {
     let subscriptions = [];
+
+    subscriptions.push(
+      keymanager.address$.pipe(filter((a) => !!a)).subscribe((a) => {
+        setAddress(a);
+      })
+    );
 
     subscriptions.push(
       keymanager.pair$.pipe(filter((a) => !!a)).subscribe((a) => {
@@ -29,5 +37,5 @@ export function useAccount() {
     };
   }, []);
 
-  return {account, balance};
+  return {address, account, balance};
 }

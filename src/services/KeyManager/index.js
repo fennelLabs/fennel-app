@@ -7,6 +7,11 @@ import {
 } from '@polkadot/util-crypto';
 import {stringToU8a, u8aToHex} from '@polkadot/util';
 import {BehaviorSubject} from 'rxjs';
+import {
+  web3Accounts,
+  web3Enable,
+  web3FromSource
+} from '@polkadot/extension-dapp';
 
 class KeyManager {
   /**
@@ -16,9 +21,18 @@ class KeyManager {
   _pair = new BehaviorSubject(null);
   pair$ = this._pair.asObservable();
 
+  // Added this to bridge the mismatches between the
+  // extension's signer type and the Keypair type.
+  _address = new BehaviorSubject(null);
+  address$ = this._address.asObservable();
+
   constructor(name) {
     this._name = name; // For debugging.
     this._keyring = new Keyring();
+    // If the extension is working, this gets what it needs
+    // from that. Otherwise it doesn't do anything and the
+    // app works like it did before.
+    this.getExtension();
   }
 
   name() {
@@ -27,6 +41,22 @@ class KeyManager {
 
   signer() {
     return this._pair.value;
+  }
+
+  address() {
+    return this._address.value;
+  }
+
+  async getExtension() {
+    const extensions = await web3Enable('fennel-labs');
+    if (extensions.length === 0) {
+      return;
+    }
+    const allAccounts = await web3Accounts();
+    const account = allAccounts[0];
+    const injector = await web3FromSource(account.meta.source);
+    this._pair.next(injector.signer);
+    this._address.next(account.address);
   }
 
   generateAccount(name) {
@@ -63,6 +93,7 @@ class KeyManager {
       this._keyring.addFromUri(mnemonic, {name: name}, 'sr25519')
     );
     console.log(`Address: ${this._pair.value.address}`);
+    this._address.next(this._pair.value.address);
   }
 }
 
