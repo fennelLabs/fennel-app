@@ -69,7 +69,8 @@ function TailwindyNav() {
                 <Link key={7} to="/whiteflag" className="link">
                   Whiteflag
                 </Link>
-              ].map((e) => <li key={8}>{e}</li>)
+                // eslint-disable-next-line react/jsx-key
+              ].map((e) => <li>{e}</li>)
             )}
           </ul>
         </div>
