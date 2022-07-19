@@ -78,6 +78,24 @@ class Node {
       });
   }
 
+  async getFeeForTransferToken(keymanager, address, amount) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.balances
+      .transfer(address, amount)
+      .paymentInfo(keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async transferToken(keymanager, address, amount) {
+    const api = await this.api();
+    const txHash = await api.tx.balances
+      .transfer(address, amount)
+      .signAndSend(keymanager.signer());
+    console.log(`Submitted with hash ${txHash}`);
+  }
+
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
     if (!keymanager.signer()) return;
 
