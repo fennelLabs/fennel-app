@@ -62,6 +62,7 @@ function NewFeedMessage() {
               setVisible(false);
               sendNewSignal(keymanager, value);
             }}
+            onCancel={() => setVisible(false)}
           />
         )}
         {error && (
