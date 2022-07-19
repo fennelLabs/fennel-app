@@ -7,11 +7,12 @@ import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import Text from '../../components/Text';
 import {useAccount} from '../../hooks/useAccount';
 
-function NewFeedMessage() {
+function SendToken() {
   const {node, keymanager} = useServiceContext();
   const {balance} = useAccount();
 
-  const [value, setValue] = useState('');
+  const [amount, setAmount] = useState(0);
+  const [address, setAddress] = useState('');
   const [fee, setFee] = useState(0);
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState(undefined);
@@ -22,21 +23,24 @@ function NewFeedMessage() {
       setFee(d);
     });
 
-    node.getFeeForSendNewSignal(keymanager, value);
+    // The RPC hates it if you send it an empty address.
+    if (address) {
+      node.getFeeForTransferToken(keymanager, address, amount);
+    }
 
     return () => {
       fee_sub.remove();
     };
-  }, [value]);
+  }, [address, amount]);
 
-  function sendNewSignal(keymanager, value) {
+  function transferToken(keymanager, address, amount) {
     if (node.apiNotReady()) {
       setError(
-        'The Fennel Node is currently unavailable. Your message did not send. Please try later.'
+        'The Fennel Node is currently unavailable. Your transaction did not send. Please try later.'
       );
     } else {
       //Would love to try/catch here but we never actually get an error thrown if node down.
-      node.sendNewSignal(keymanager, value);
+      node.transferToken(keymanager, address, amount);
       setSuccess(true);
       setError(undefined);
     }
@@ -48,19 +52,19 @@ function NewFeedMessage() {
         <FeedSubNav />
       </div>
       <div className="basis-3/4 px-8">
-        <PageTitle>New Feed Message</PageTitle>
-        {success && <Text>Message sent successfully.</Text>}
+        <PageTitle>Send UNIT</PageTitle>
+        {success && <Text>Transaction sent successfully.</Text>}
         {!keymanager.signer() && (
           <Text>Create or restore a Fennel account first.</Text>
         )}
-        {keymanager.signer() && balance < fee && (
+        {keymanager.signer() && balance < amount + fee && (
           <Text>Insufficient balance.</Text>
         )}
         {visible && (
           <TransactionConfirm
             onConfirm={() => {
               setVisible(false);
-              sendNewSignal(keymanager, value);
+              transferToken(keymanager, address, amount);
             }}
             onCancel={() => setVisible(false)}
           />
@@ -81,13 +85,23 @@ function NewFeedMessage() {
                 setVisible(true);
               }}
             >
-              <textarea
-                name="new_message"
-                rows={5}
-                cols={5}
-                value={value}
+              <input
+                name="address"
+                value={address}
                 onChange={(event) => {
-                  setValue(event.target.value);
+                  setAddress(event.target.value);
+                }}
+              />
+              <input
+                name="amount"
+                value={amount}
+                onChange={(event) => {
+                  // IF avoids a really irritating NaN problem.
+                  if (event.target.value) {
+                    setAmount(parseInt(event.target.value));
+                  } else {
+                    setAmount(0);
+                  }
                 }}
               />
               <Button type="submit">Submit</Button>
@@ -99,4 +113,4 @@ function NewFeedMessage() {
   );
 }
 
-export default NewFeedMessage;
+export default SendToken;
