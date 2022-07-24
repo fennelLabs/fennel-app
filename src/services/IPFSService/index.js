@@ -1,4 +1,4 @@
-export default class IPFS {
+export default class IPFSService {
   constructor(ipfs) {
     this._ipfs = ipfs;
     this._encoder = new TextEncoder();

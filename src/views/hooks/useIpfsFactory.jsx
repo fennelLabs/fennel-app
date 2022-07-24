@@ -2,8 +2,10 @@
 // https://raw.githubusercontent.com/ipfs-examples/js-ipfs-examples/master/examples/browser-create-react-app/src/hooks/use-ipfs-factory.js
 import {create} from 'ipfs-core';
 import {useEffect, useState} from 'react';
+import IPFSService from '../../services/IPFSService';
 
 let ipfs = null;
+let ipfsService = null;
 
 export default function useIpfsFactory() {
   const [isIpfsReady, setIpfsReady] = useState(!!ipfs);
@@ -27,6 +29,7 @@ export default function useIpfsFactory() {
     } else if (window.ipfs && window.ipfs.enable) {
       console.log('Found window.ipfs');
       ipfs = await window.ipfs.enable({commands: ['id']});
+      ipfsService = new IPFSService(ipfs);
     } else {
       try {
         console.time('IPFS Started');
@@ -42,5 +45,5 @@ export default function useIpfsFactory() {
     setIpfsReady(Boolean(ipfs));
   }
 
-  return {ipfs, isIpfsReady, ipfsInitError};
+  return {ipfs, ipfsService, isIpfsReady, ipfsInitError};
 }
