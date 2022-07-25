@@ -40,7 +40,7 @@
   },
   "scripts": {
     "start": "parcel -p 3000 --target web-app --dist-dir build .",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm start\" \"npm:electron:start\"",
     "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
@@ -50,6 +50,11 @@
     "format": "prettier -w src/**/*",
     "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
     "prod:build": "parcel build --public-url ./ ."
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
   },
   "build": {
     "extends": null,
