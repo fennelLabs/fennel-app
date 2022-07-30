@@ -52,9 +52,18 @@
     "prod:build": "parcel build --public-url ./ ."
   },
   "jest": {
+    "verbose": true,
     "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    }
+      "^.+\\.(ts|tsx)?$": "ts-jest",
+      "^.+\\.(js|jsx)$": "babel-jest"
+    },
+    "modulePaths": [
+      "./src/views/hooks",
+      "./node_modules/"
+    ],
+    "moduleDirectories": [
+      "./node_modules/"
+    ]
   },
   "build": {
     "extends": null,
@@ -117,6 +126,7 @@
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.7",
+    "babel-jest": "^28.1.3",
     "babel-plugin-named-exports-order": "^0.0.2",
     "concurrently": "^7.2.1",
     "electron": "^19.0.1",
@@ -132,7 +142,9 @@
     "prettier": "2.6.2",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",
+    "react-test-renderer": "^18.2.0",
     "tailwindcss": "^3.0.24",
+    "ts-jest": "^28.0.7",
     "wait-on": "^6.0.1"
   },
   "optionalDependencies": {
