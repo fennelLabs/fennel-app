@@ -52,19 +52,6 @@
     "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
     "prod:build": "parcel build --public-url ./ ."
   },
-  "jest": {
-    "verbose": true,
-    "transform": {
-      "^.+\\.(ts|tsx)?$": "ts-jest",
-      "^.+\\.(js|jsx)$": "babel-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts",
-      "jsx"
-    ]
-  },
   "build": {
     "extends": null,
     "appId": "com.fennellabs",
