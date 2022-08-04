@@ -1,3 +1,5 @@
+/* TODO move this and use mocha
+
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import expect from 'expect';
@@ -12,3 +14,4 @@ describe('BackupKey', () => {
     expect(output.type).toBe('div');
   });
 });
+*/
