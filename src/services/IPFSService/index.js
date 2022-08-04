@@ -1,4 +1,5 @@
 export default class IPFSService {
+  
   constructor(ipfs) {
     this._ipfs = ipfs;
     this._encoder = new TextEncoder();
@@ -7,14 +8,14 @@ export default class IPFSService {
 
   // Given an IPFS CID, returns the material stored at that CID.
   async getFile(cid) {
-    const block = await ipfs.block.get(cid, {timeout: 3000});
+    const block = await this._ipfs.block.get(cid, {timeout: 3000});
     return this._decoder.decode(block);
   }
 
   // Given file content, encodes, submits, verifies, and returns the CID at which the argument is stored.
   async putFile(content) {
-    const encoded_content = this._encoder(content);
-    const cid = await ipfs.block.put(encoded_content, {
+    const encoded_content = this._encoder.encode(content);
+    const cid = await this._ipfs.block.put(encoded_content, {
       timeout: 3000,
       pin: true
     });

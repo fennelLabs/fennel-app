@@ -1,8 +1,8 @@
 // Adapted from JS-IPFS at:
 // https://raw.githubusercontent.com/ipfs-examples/js-ipfs-examples/master/examples/browser-create-react-app/src/hooks/use-ipfs-factory.js
-import {create} from 'ipfs-core';
+import * as IPFS from 'ipfs-core';
 import {useEffect, useState} from 'react';
-import IPFSService from '../../services/IPFSService';
+import IPFSService from '../../services/IPFSService/index.js';
 
 let ipfs = null;
 let ipfsService = null;
@@ -33,7 +33,7 @@ export default function useIpfsFactory() {
     } else {
       try {
         console.time('IPFS Started');
-        ipfs = await create();
+        ipfs = await IPFS.create();
         console.timeEnd('IPFS Started');
       } catch (error) {
         console.error('IPFS init error:', error);

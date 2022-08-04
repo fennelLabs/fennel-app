@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "fennel-app",
   "author": {
     "name": "Fennel Labs",
@@ -40,7 +41,7 @@
   },
   "scripts": {
     "start": "parcel -p 3000 --target web-app --dist-dir build .",
-    "test": "jest",
+    "test": "mocha",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm start\" \"npm:electron:start\"",
     "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
@@ -57,12 +58,11 @@
       "^.+\\.(ts|tsx)?$": "ts-jest",
       "^.+\\.(js|jsx)$": "babel-jest"
     },
-    "modulePaths": [
-      "./src/views/hooks",
-      "./node_modules/"
-    ],
-    "moduleDirectories": [
-      "./node_modules/"
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts",
+      "jsx"
     ]
   },
   "build": {
@@ -128,6 +128,7 @@
     "autoprefixer": "^10.4.7",
     "babel-jest": "^28.1.3",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "chai": "^4.3.6",
     "concurrently": "^7.2.1",
     "electron": "^19.0.1",
     "electron-builder": "^23.0.3",
@@ -137,6 +138,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
+    "mocha": "^9.2.2",
     "parcel": "^2.6.0",
     "postcss": "^8.4.14",
     "prettier": "2.6.2",
