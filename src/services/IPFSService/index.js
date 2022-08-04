@@ -25,7 +25,7 @@ export default class IPFSService {
   // Given a CID, tries to delete the CID and returns whether the operation succeeded or not.
   // Check the Javascript console to determine the reason for negative returns.
   async delFile(cid) {
-    for await (const result of ipfs.block.rm(cid, {timeout: 3000})) {
+    for await (let result of this._ipfs.block.rm(cid, {timeout: 3000})) {
       if (result.error) {
         console.error(
           `Failed to remove block ${result.cid} due to ${result.error.message}`
