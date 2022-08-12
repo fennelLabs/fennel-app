@@ -1,6 +1,8 @@
 import React, {useEffect, createContext, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {FennelRPC} from '../services';
+//import IPFSService from '../services/IPFSService';
+import useIpfsFactory from '../views/hooks/useIpfsFactory';
 import MessageAPIService from '../services/MessageAPI';
 import KeyManager from '../services/KeyManager';
 import Node from '../services/Node';

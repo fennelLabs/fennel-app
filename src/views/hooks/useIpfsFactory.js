@@ -7,7 +7,7 @@ import IPFSService from '../../services/IPFSService/index.js';
 let ipfs = null;
 let ipfsService = null;
 
-export default function useIpfsFactory() {
+function useIpfsFactory() {
   const [isIpfsReady, setIpfsReady] = useState(!!ipfs);
   const [ipfsInitError, setIpfsInitError] = useState(null);
 
@@ -47,3 +47,5 @@ export default function useIpfsFactory() {
 
   return {ipfs, ipfsService, isIpfsReady, ipfsInitError};
 }
+
+export default useIpfsFactory;
