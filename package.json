@@ -54,6 +54,9 @@
     "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
     "prod:build": "parcel build --public-url ./ ."
   },
+  "alias": {
+    "ipfs-http-client": "/node_modules/ipfs-http-client/src/index.js"
+  },
   "jest": {
     "verbose": true,
     "transform": {
