@@ -11,6 +11,7 @@ import {ApiPromise} from '@polkadot/api';
 import connect, {listenForConnection} from '../utils/loadPolkadotApi';
 import AccountBalanceService from '../services/AccountBalance.service';
 import {Observable} from 'rxjs';
+import IPFSService from '../services/IPFSService';
 
 const {promise, rxjs} = connect();
 const connected = listenForConnection(rxjs);
@@ -20,6 +21,7 @@ const keymanager = new KeyManager('Main');
 const contactsManager = new ContactsManager();
 const node = new Node(promise);
 const accountBalanceService = new AccountBalanceService(rxjs, keymanager);
+//const ipfs = new IPFSService();
 
 const services = {
   polkadotApi: promise,
@@ -29,7 +31,8 @@ const services = {
   keymanager,
   contactsManager,
   node,
-  accountBalanceService
+  accountBalanceService,
+  //ipfs
 };
 
 const ServiceContext = createContext(services);
