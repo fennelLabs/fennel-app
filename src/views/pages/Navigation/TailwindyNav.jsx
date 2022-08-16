@@ -37,12 +37,6 @@ function TailwindyNav() {
           <ul className="flex flex-col lg:flex-row list-none ml-auto">
             {React.Children.toArray(
               [
-                <Link key={0} to="/wallet/generate" className="link">
-                  Generate Wallet
-                </Link>,
-                <Link key={1} to="/wallet/restore" className="link">
-                  Restore Wallet
-                </Link>,
                 <Link key={2} to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
