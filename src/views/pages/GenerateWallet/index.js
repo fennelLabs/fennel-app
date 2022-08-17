@@ -1,15 +1,18 @@
 import React, {useState, useContext} from 'react';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import {useIpfsFactory} from '../../hooks/useIpfsFactory';
 import Button from '../../components/Button';
 
 function GenerateWallet() {
   const [mnemonic, setMnemonic] = useState('');
-  const {keymanager} = useServiceContext();
+  const {keymanager, ipfs} = useServiceContext();
   const [error, setError] = useState(undefined);
 
-  function generateMnemonic() {
+  async function generateMnemonic() {
     try {
       setMnemonic(keymanager.generateAccount('Main'));
+      //test ipfs here
+      const cid = await ipfs.putFile('abc');
       setError(undefined);
     } catch {
       setError('Key Manager has failed. Please try again.');

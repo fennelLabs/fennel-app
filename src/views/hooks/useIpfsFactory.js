@@ -1,9 +1,13 @@
 // Adapted from JS-IPFS at:
 // https://raw.githubusercontent.com/ipfs-examples/js-ipfs-examples/master/examples/browser-create-react-app/src/hooks/use-ipfs-factory.js
-import * as IPFS from 'ipfs-core';
+//import * as IPFS from 'ipfs-core';
 import {useEffect, useState} from 'react';
 import IPFSService from '../../services/IPFSService/index.js';
+<<<<<<< HEAD
 //import {create} from 'ipfs-http-client';
+=======
+import {create} from 'ipfs-http-client';
+>>>>>>> 11c1c33
 import config from '../../config/ipfs';
 
 let ipfs = null;
@@ -31,8 +35,14 @@ function useIpfsFactory() {
       console.log('client already enabled');
     } else {
       try {
+<<<<<<< HEAD
         //const client = create(config.PUBLIC_GATEWAY);
         //ipfsService = new IPFSService(client);
+=======
+        const client = create(config.PUBLIC_GATEWAY);
+        ipfsService = new IPFSService(client);
+        console.log('service', ipfsService);
+>>>>>>> 11c1c33
       } catch (error) {
         console.error('IPFS client error:', error);
         client = null;
