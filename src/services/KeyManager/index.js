@@ -53,6 +53,7 @@ class KeyManager {
       return;
     }
     const allAccounts = await web3Accounts();
+    console.log(allAccounts);
     const account = allAccounts[0];
     const injector = await web3FromSource(account.meta.source);
     this._pair.next(injector.signer);

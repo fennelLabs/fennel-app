@@ -89,9 +89,12 @@ class Node {
   }
 
   async transferToken(keymanager, address, amount) {
+    console.log("TransferToken");
+    console.log(`Address: ${address}`);
+    console.log(`Amount: ${amount}`);
     const api = await this.api();
     const txHash = await api.tx.balances
-      .transfer(address, amount)
+      .transfer(address, parseInt(amount))
       .signAndSend(keymanager.address(), {signer: keymanager.signer()});
     console.log(`Submitted with hash ${txHash}`);
   }
