@@ -32,7 +32,8 @@ function useIpfsFactory() {
     } else {
       try {
         const client = create(config.PUBLIC_GATEWAY);
-        //ipfsService = new IPFSService(client);
+        ipfsService = new IPFSService(client);
+        console.log('service', ipfsService);
       } catch (error) {
         console.error('IPFS client error:', error);
         client = null;

@@ -30,6 +30,7 @@
     "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "daisyui": "^2.15.2",
+    "dotenv": "^16.0.1",
     "ipfs": "^0.63.5",
     "libp2p": "^0.37.3",
     "react": "^18.1.0",
@@ -55,7 +56,20 @@
     "prod:build": "parcel build --public-url ./ ."
   },
   "alias": {
-    "ipfs-http-client": "/node_modules/ipfs-http-client/src/index.js"
+    "@multiformats/multiaddr-to-uri": "/node_modules/@multiformats/multiaddr-to-uri/src/index.ts",
+    "ipfs-core-utils/agent": "/node_modules/ipfs-core-utils/src/agent.js",
+    "ipfs-core-utils/pins/normalise-input": "/node_modules/ipfs-core-utils/src/pins/normalise-input.js",
+    "ipfs-core-utils/to-url-string": "/node_modules/ipfs-core-utils/src/to-url-string.js",
+    "@libp2p/interface-peer-id": "/node_modules/@libp2p/interface-peer-id/dist/src/index.js",
+    "ipfs-http-client": "/node_modules/ipfs-http-client/src/index.js",
+    "@multiformats/multiaddr": "/node_modules/@multiformats/multiaddr/dist/src/index.js",
+    "ipfs-core-utils/multibases": "/node_modules/ipfs-core-utils/src/multibases.js",
+    "@libp2p/logger": "/node_modules/@libp2p/logger/dist/src/index.js",
+    "@libp2p/peer-id": "/node_modules/@libp2p/peer-id/dist/src/index.js",
+    "ipfs-core-utils/multicodecs": "/node_modules/ipfs-core-utils/src/multicodecs.js",
+    "ipfs-core-utils/multihashes": "/node_modules/ipfs-core-utils/src/multihashes.js",
+    "ipfs-core-utils/files/normalise-input-single": "/node_modules/ipfs-core-utils/src/files/normalise-input-single.js",
+    "ipfs-core-utils/multipart-request": "/node_modules/ipfs-core-utils/src/multipart-request.js"
   },
   "jest": {
     "verbose": true,

@@ -1,7 +1,6 @@
 import React, {useEffect, createContext, useContext} from 'react';
 import PropTypes from 'prop-types';
 import {FennelRPC} from '../services';
-//import IPFSService from '../services/IPFSService';
 import useIpfsFactory from '../views/hooks/useIpfsFactory';
 import MessageAPIService from '../services/MessageAPI';
 import KeyManager from '../services/KeyManager';
@@ -12,6 +11,7 @@ import connect, {listenForConnection} from '../utils/loadPolkadotApi';
 import AccountBalanceService from '../services/AccountBalance.service';
 import {Observable} from 'rxjs';
 import IPFSService from '../services/IPFSService';
+import config from '../config/ipfs';
 
 const {promise, rxjs} = connect();
 const connected = listenForConnection(rxjs);
@@ -21,7 +21,7 @@ const keymanager = new KeyManager('Main');
 const contactsManager = new ContactsManager();
 const node = new Node(promise);
 const accountBalanceService = new AccountBalanceService(rxjs, keymanager);
-//const ipfs = new IPFSService();
+const ipfs = new IPFSService();
 
 const services = {
   polkadotApi: promise,
@@ -32,7 +32,7 @@ const services = {
   contactsManager,
   node,
   accountBalanceService,
-  //ipfs
+  ipfs
 };
 
 const ServiceContext = createContext(services);
