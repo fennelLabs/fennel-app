@@ -1,46 +1,56 @@
-import {create} from 'ipfs-http-client';
+import axios from 'axios';
+
+class IPFSClient {
+  constructor() {
+    this._url = '127.0.0.1:5001';
+    this._block_api = 'api/v0/block';
+  }
+
+  async get(cid) {
+    return axios({
+      method: 'get',
+      url: `${this._url}/${this._block_api}/get?arg=${cid}`
+    });
+  }
+
+  async put(content) {
+    return axios({
+      method: 'post',
+      url: `${this._url}/${this._block_api}/put?cid-codec=raw&mhtype=sha2-256&mhlen=-1&pin=false&allow-big-block=false`,
+      data: content,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
+
+  async rm(cid) {
+    return axios({
+      method: 'get',
+      url: `${this._url}/${this._block_api}/rm?arg=${cid}`
+    });
+  }
+}
 
 export default class IPFSService {
   constructor() {
-    const auth =
-      'Basic ' +
-      Buffer.from(
-        '2DMn6TctOLnneU2JPp2njs7TnGP' + ':' + 'a638858baeed39f827fd1f697e222306'
-      ).toString('base64');
-    console.log(auth);
-
-    const client = create({
-      host: 'ipfs.infura.io',
-      port: 5001,
-      protocol: 'https',
-      apiPath: '/api/v0',
-      headers: {
-        'Sec-Fetch-Mode': 'no-cors',
-        authorization: auth,
-        Origin: 'http://127.0.0.1:3000',
-        'User-Agent':
-          'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19'
-      }
-    });
-    this._ipfs = client;
+    this._ipfs = new IPFSClient();
     this._encoder = new TextEncoder();
     this._decoder = new TextDecoder();
   }
 
   // Given an IPFS CID, returns the material stored at that CID.
   async getFile(cid) {
-    const block = await this._ipfs.block.get(cid, {timeout: 3000});
+    const block = await this._ipfs.get(cid);
     return this._decoder.decode(block);
   }
 
   // Given file content, encodes, submits, verifies, and returns the CID at which the argument is stored.
   async putFile(content) {
-    const buf = new TextEncoder().encode('a serialized object');
-    const decoder = new TextDecoder();
     try {
       //const block = await this._ipfs.block.put(buf);
-      this._ipfs.block
-        .put(buf)
+      this._ipfs
+        .put(content)
         .then((success) => {
           console.log('success');
           console.debug(success);
@@ -59,7 +69,7 @@ export default class IPFSService {
   // Given a CID, tries to delete the CID and returns whether the operation succeeded or not.
   // Check the Javascript console to determine the reason for negative returns.
   async delFile(cid) {
-    for await (let result of this._ipfs.block.rm(cid, {timeout: 3000})) {
+    for await (let result of this._ipfs.rm(cid)) {
       if (result.error) {
         console.error(
           `Failed to remove block ${result.cid} due to ${result.error.message}`
