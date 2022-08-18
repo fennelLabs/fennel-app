@@ -74,19 +74,6 @@
     "ipfs-core-utils/files/normalise-input-single": "/node_modules/ipfs-core-utils/src/files/normalise-input-single.js",
     "ipfs-core-utils/multipart-request": "/node_modules/ipfs-core-utils/src/multipart-request.js"
   },
-  "jest": {
-    "verbose": true,
-    "transform": {
-      "^.+\\.(ts|tsx)?$": "ts-jest",
-      "^.+\\.(js|jsx)$": "babel-jest"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts",
-      "jsx"
-    ]
-  },
   "build": {
     "extends": null,
     "appId": "com.fennellabs",
