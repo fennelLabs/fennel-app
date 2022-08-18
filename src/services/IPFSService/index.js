@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class IPFSClient {
   constructor() {
-    this._url = '127.0.0.1:5001';
+    this._url = 'http://127.0.0.1:5001';
     this._block_api = 'api/v0/block';
   }
 
@@ -14,13 +14,12 @@ class IPFSClient {
   }
 
   async put(content) {
+    const data = new FormData();
+    data.append('data', content);
     return axios({
       method: 'post',
       url: `${this._url}/${this._block_api}/put?cid-codec=raw&mhtype=sha2-256&mhlen=-1&pin=false&allow-big-block=false`,
-      data: content,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+      data: data
     });
   }
 
