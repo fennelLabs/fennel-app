@@ -10,7 +10,12 @@ class IPFSClient {
     return axios({
       method: 'get',
       url: `${this._url}/${this._block_api}/get?arg=${cid}`
-    });
+    })
+      .then((success) => success)
+      .catch((error) => {
+        console.log(error);
+        return null;
+      });
   }
 
   async put(content) {
@@ -20,14 +25,24 @@ class IPFSClient {
       method: 'post',
       url: `${this._url}/${this._block_api}/put?cid-codec=raw&mhtype=sha2-256&mhlen=-1&pin=false&allow-big-block=false`,
       data: data
-    });
+    })
+      .then((success) => {
+        console.debug(success);
+        return success['data']['Key'];
+      })
+      .catch((error) => {
+        console.log(error);
+        return null;
+      });
   }
 
   async rm(cid) {
     return axios({
       method: 'get',
       url: `${this._url}/${this._block_api}/rm?arg=${cid}`
-    });
+    })
+      .then(() => true)
+      .catch(() => false);
   }
 }
 
@@ -46,23 +61,18 @@ export default class IPFSService {
 
   // Given file content, encodes, submits, verifies, and returns the CID at which the argument is stored.
   async putFile(content) {
-    try {
-      //const block = await this._ipfs.block.put(buf);
-      this._ipfs
-        .put(content)
-        .then((success) => {
-          console.log('success');
-          console.debug(success);
-          return success;
-        })
-        .catch((error) => {
-          console.log('error');
-          console.debug(error);
-        });
-      //return cid;
-    } catch (error) {
-      console.error(error);
-    }
+    return await this._ipfs
+      .put(content)
+      .then((success) => {
+        console.log('success');
+        console.debug(success);
+        return success;
+      })
+      .catch((error) => {
+        console.log('error');
+        console.debug(error);
+        return null;
+      });
   }
 
   // Given a CID, tries to delete the CID and returns whether the operation succeeded or not.
