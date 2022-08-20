@@ -13,6 +13,7 @@ class IPFSClient {
     })
       .then((success) => {
         console.log(success);
+        return success['data'];
       })
       .catch((error) => {
         console.log('error');
@@ -58,8 +59,7 @@ export default class IPFSService {
 
   // Given an IPFS CID, returns the material stored at that CID.
   async getFile(cid) {
-    const block = await this._ipfs.get(cid);
-    return this._decoder.decode(block);
+    return await this._ipfs.get(cid);
   }
 
   // Given file content, encodes, submits, verifies, and returns the CID at which the argument is stored.
