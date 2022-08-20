@@ -45,6 +45,7 @@
     "text-encoding": "^0.7.0",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "127.0.0.1:5001",
   "scripts": {
     "start": "parcel -p 3000 --target web-app --dist-dir build .",
     "test": "mocha ",
