@@ -1,8 +1,9 @@
 import axios from 'axios';
+import IPFS_CONFIG from '../../config/ipfs.js';
 
 class IPFSClient {
   constructor() {
-    this._url = 'http://127.0.0.1:5001';
+    this._url = `${IPFS_CONFIG.API_ENDPOINT}`;
     this._block_api = 'api/v0/block';
   }
 
@@ -12,17 +13,15 @@ class IPFSClient {
       url: `${this._url}/${this._block_api}/get?arg=${cid}`
     })
       .then((success) => {
-        console.log(success);
         return success['data'];
       })
       .catch((error) => {
-        console.log('error');
-        console.log(error);
         return null;
       });
   }
 
   async put(content) {
+    console.log(this._url);
     const data = new FormData();
     data.append('data', content);
     return axios({
@@ -31,11 +30,9 @@ class IPFSClient {
       data: data
     })
       .then((success) => {
-        console.log(success);
         return success['data']['Key'];
       })
       .catch((error) => {
-        console.log(error);
         return null;
       });
   }
@@ -67,13 +64,9 @@ export default class IPFSService {
     return await this._ipfs
       .put(content)
       .then((success) => {
-        console.log('success');
-        console.debug(success);
         return success;
       })
       .catch((error) => {
-        console.log('error');
-        console.debug(error);
         return null;
       });
   }

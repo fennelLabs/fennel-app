@@ -1,4 +1,4 @@
-const config = {
-  IPFS_API: 'https://ipfs.infura.io:5001'
+const IPFS_CONFIG = {
+  API_ENDPOINT: 'http://127.0.0.1:5001'
 };
-export default config;
+export default IPFS_CONFIG;

@@ -51,17 +51,30 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 
 This appliction makes use of IPFS. You may run a localhost node to interact with IPFS.
 
-Installation:
+Download/Installation:
 
-`$ npm install -g ipfs`
+https://github.com/ipfs/ipfs-desktop
 
-Running the node:
+Be sure to enable POST in the Access-Control-Allow-Methods section in the configuration.
 
-`jsipfs daemon`
+For example, your config should include:
 
-Testing the node:
-
-`jsipfs add ./hello-world.txt`
+`{
+    "API": {
+	    "HTTPHeaders": {
+		    "Access-Control-Allow-Methods": [
+			    "POST"
+		    ],
+		    "Access-Control-Allow-Origin": [
+			    "http://127.0.0.1:8080",
+			    "http://127.0.0.1:3000",
+			    "http://localhost:3000",
+			    "http://127.0.0.1:48084",
+			    "https://gateway.ipfs.io",
+		        "https://webui.ipfs.io"
+	        ]
+    }
+}`
 
 ## Learn More
 
