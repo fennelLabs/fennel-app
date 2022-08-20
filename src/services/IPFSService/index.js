@@ -8,11 +8,14 @@ class IPFSClient {
 
   async get(cid) {
     return axios({
-      method: 'get',
+      method: 'post',
       url: `${this._url}/${this._block_api}/get?arg=${cid}`
     })
-      .then((success) => success)
+      .then((success) => {
+        console.log(success);
+      })
       .catch((error) => {
+        console.log('error');
         console.log(error);
         return null;
       });
@@ -27,7 +30,7 @@ class IPFSClient {
       data: data
     })
       .then((success) => {
-        console.debug(success);
+        console.log(success);
         return success['data']['Key'];
       })
       .catch((error) => {
