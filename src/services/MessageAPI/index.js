@@ -53,6 +53,18 @@ class MessageAPIService {
     );
   }
 
+  async signMessage(message) {
+    return new Promise((res, rej) => {
+      try {
+        this._rpc.sign(message, (r) => {
+          res(r);
+        });
+      } catch (e) {
+        rej(e);
+      }
+    });
+  }
+
   async checkMessages(recipientID) {
     let url = `http://localhost:1234/api/messages/?recipient=${recipientID}`;
     let results = await axios
