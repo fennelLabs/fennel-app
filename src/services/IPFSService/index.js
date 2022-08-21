@@ -21,7 +21,6 @@ class IPFSClient {
   }
 
   async put(content) {
-    console.log(this._url);
     const data = new FormData();
     data.append('data', content);
     return axios({
@@ -50,8 +49,6 @@ class IPFSClient {
 export default class IPFSService {
   constructor() {
     this._ipfs = new IPFSClient();
-    this._encoder = new TextEncoder();
-    this._decoder = new TextDecoder();
   }
 
   // Given an IPFS CID, returns the material stored at that CID.
@@ -63,12 +60,8 @@ export default class IPFSService {
   async putFile(content) {
     return await this._ipfs
       .put(content)
-      .then((success) => {
-        return success;
-      })
-      .catch((error) => {
-        return null;
-      });
+      .then((success) => success)
+      .catch(() => null);
   }
 
   // Given a CID, tries to delete the CID and returns whether the operation succeeded or not.
