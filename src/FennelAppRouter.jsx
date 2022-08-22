@@ -20,6 +20,7 @@ import NewMessage from './views/pages/NewMessage';
 import Whiteflag from './views/pages/Whiteflag';
 import Account from './views/pages/Account';
 import ImportKeypair from './views/pages/ImportKeypair';
+import IPFS from './views/pages/IPFS';
 import SendToken from './views/pages/SendToken';
 
 function FennelAppRouter() {
@@ -41,6 +42,7 @@ function FennelAppRouter() {
           <Route path="/identity/backup-key" element={<BackupKey />} />
           <Route path="/identity/revoke-key" element={<RevokeKey />} />
           <Route path="/identity/import-keypair" element={<ImportKeypair />} />
+          <Route path="/identity/ipfs" element={<IPFS />} />
           <Route path="/identity" element={<Identity />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />

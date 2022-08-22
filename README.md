@@ -47,6 +47,35 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
+## IPFS Configuration
+
+This appliction makes use of IPFS. You may run a localhost node to interact with IPFS.
+
+Download/Installation:
+
+https://github.com/ipfs/ipfs-desktop
+
+Be sure to enable POST in the Access-Control-Allow-Methods section in the configuration.
+
+For example, your config should include:
+
+`{
+    "API": {
+	    "HTTPHeaders": {
+		    "Access-Control-Allow-Methods": [
+			    "POST"
+		    ],
+		    "Access-Control-Allow-Origin": [
+			    "http://127.0.0.1:8080",
+			    "http://127.0.0.1:3000",
+			    "http://localhost:3000",
+			    "http://127.0.0.1:48084",
+			    "https://gateway.ipfs.io",
+		        "https://webui.ipfs.io"
+	        ]
+    }
+}`
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
@@ -76,3 +105,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+

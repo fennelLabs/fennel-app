@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "fennel-app",
   "author": {
     "name": "Fennel Labs",
@@ -9,6 +10,9 @@
   "private": true,
   "electron": "build/electron.js",
   "web-app": "build/index.html",
+  "modulePaths": [
+    "./node_modules/"
+  ],
   "targets": {
     "electron": {
       "context": "electron-main",
@@ -22,12 +26,16 @@
     }
   },
   "dependencies": {
+    "@libp2p/logger": "^2.0.0",
     "@polkadot/api": "^8.6.2",
     "@popperjs/core": "2.9.1",
     "@swc/helpers": "^0.3.17",
     "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "daisyui": "^2.15.2",
+    "dotenv": "^16.0.1",
+    "ipfs": "^0.63.5",
+    "libp2p": "^0.37.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -37,9 +45,10 @@
     "text-encoding": "^0.7.0",
     "web-vitals": "^2.1.4"
   },
+  "proxy": "127.0.0.1:5003",
   "scripts": {
     "start": "parcel -p 3000 --target web-app --dist-dir build .",
-    "test": "react-scripts test",
+    "test": "mocha ",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm start\" \"npm:electron:start\"",
     "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
@@ -49,6 +58,22 @@
     "format": "prettier -w src/**/*",
     "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
     "prod:build": "parcel build --public-url ./ ."
+  },
+  "alias": {
+    "@multiformats/multiaddr-to-uri": "/node_modules/@multiformats/multiaddr-to-uri/src/index.ts",
+    "ipfs-core-utils/agent": "/node_modules/ipfs-core-utils/src/agent.js",
+    "ipfs-core-utils/pins/normalise-input": "/node_modules/ipfs-core-utils/src/pins/normalise-input.js",
+    "ipfs-core-utils/to-url-string": "/node_modules/ipfs-core-utils/src/to-url-string.js",
+    "@libp2p/interface-peer-id": "/node_modules/@libp2p/interface-peer-id/dist/src/index.js",
+    "ipfs-http-client": "/node_modules/ipfs-http-client/src/index.js",
+    "@multiformats/multiaddr": "/node_modules/@multiformats/multiaddr/dist/src/index.js",
+    "ipfs-core-utils/multibases": "/node_modules/ipfs-core-utils/src/multibases.js",
+    "@libp2p/logger": "/node_modules/@libp2p/logger/dist/src/index.js",
+    "@libp2p/peer-id": "/node_modules/@libp2p/peer-id/dist/src/index.js",
+    "ipfs-core-utils/multicodecs": "/node_modules/ipfs-core-utils/src/multicodecs.js",
+    "ipfs-core-utils/multihashes": "/node_modules/ipfs-core-utils/src/multihashes.js",
+    "ipfs-core-utils/files/normalise-input-single": "/node_modules/ipfs-core-utils/src/files/normalise-input-single.js",
+    "ipfs-core-utils/multipart-request": "/node_modules/ipfs-core-utils/src/multipart-request.js"
   },
   "build": {
     "extends": null,
@@ -105,13 +130,16 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.18.9",
     "@parcel/css": "^1.10.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.7",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "chai": "^4.3.6",
     "concurrently": "^7.2.1",
+    "constants-browserify": "^1.0.0",
     "electron": "^19.0.1",
     "electron-builder": "^23.0.3",
     "electron-is-dev": "^2.0.0",
@@ -120,12 +148,23 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
+    "https-browserify": "^1.0.0",
+    "mocha": "^9.2.2",
+    "os-browserify": "^0.3.0",
     "parcel": "^2.6.0",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.4.14",
     "prettier": "2.6.2",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",
+    "querystring-es3": "^0.2.1",
+    "react-test-renderer": "^18.2.0",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
     "tailwindcss": "^3.0.24",
+    "timers-browserify": "^2.0.12",
+    "url": "^0.11.0",
+    "util": "^0.12.4",
     "wait-on": "^6.0.1"
   },
   "optionalDependencies": {
