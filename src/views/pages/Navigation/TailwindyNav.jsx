@@ -5,7 +5,7 @@ import {useAccount} from '../../hooks/useAccount';
 
 function TailwindyNav() {
   const connectedToChain = queryChainConnection();
-  const {balance} = useAccount();
+  const {address, balance} = useAccount();
 
   return (
     <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-amber-500 mb-3">
@@ -18,6 +18,7 @@ function TailwindyNav() {
             Our Unnamed App
           </Link>
           <div className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white">
+            Address: {address} <br />
             Balance: {balance}
           </div>
           <button
@@ -36,12 +37,6 @@ function TailwindyNav() {
           <ul className="flex flex-col lg:flex-row list-none ml-auto">
             {React.Children.toArray(
               [
-                <Link key={0} to="/wallet/generate" className="link">
-                  Generate Wallet
-                </Link>,
-                <Link key={1} to="/wallet/restore" className="link">
-                  Restore Wallet
-                </Link>,
                 <Link key={2} to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
@@ -68,7 +63,8 @@ function TailwindyNav() {
                 <Link key={7} to="/whiteflag" className="link">
                   Whiteflag
                 </Link>
-              ].map((e) => <li key={8}>{e}</li>)
+                // eslint-disable-next-line react/jsx-key
+              ].map((e) => <li>{e}</li>)
             )}
           </ul>
         </div>

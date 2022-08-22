@@ -33,10 +33,10 @@ class AccountBalanceService {
   }
 
   listenForBalanceChanges() {
-    return this._keyManager.pair$
+    return this._keyManager.address$
       .pipe(
         filter((a) => !!a),
-        switchMap((a) => this._api.query.system.account(a.address))
+        switchMap((a) => this._api.query.system.account(a))
       )
       .subscribe(({nonce, data: balance}) => {
         this._balance.next(balance.free.toString());
