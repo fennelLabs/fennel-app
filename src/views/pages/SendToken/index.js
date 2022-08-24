@@ -48,9 +48,7 @@ function SendToken() {
 
   return (
     <div className="flex flex-row">
-      <div className="basis-1/4">
-        <FeedSubNav />
-      </div>
+      <div className="basis-1/4"></div>
       <div className="basis-3/4 px-8">
         <PageTitle>Send UNIT</PageTitle>
         {success && <Text>Transaction sent successfully.</Text>}
