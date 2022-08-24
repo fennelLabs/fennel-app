@@ -53,20 +53,31 @@ function PublishKey() {
         }
       }
     } catch (e) {
-      if (!!e.response.data) {
-        let p = e.response.data;
-        if (p['on_chain_identity_number']) {
-          setError(p['on_chain_identity_number']);
-        } else {
-          setError(
-            'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
-          );
-        }
-      } else {
+      // If response exists, it's a message API problem.
+      if (!e.response) {
+        // Otherwise it's an RPC error.
+        setError(
+          'Fennel Protocol has encountered a problem. If the error persists, please contact:'
+        );
+        return;
+      }
+
+      if (!e.response.data) {
         setError(
           'Unable to connect to the message server - this may be a temporary problem. If the problem persists, please contact:'
         );
+        return;
       }
+
+      let p = e.response.data;
+      if (p['on_chain_identity_number']) {
+        setError(p['on_chain_identity_number']);
+        return;
+      }
+
+      setError(
+        'Publishing your key has failed. This may be a temporary problem. If refreshing this page does not result in success, please contact:'
+      );
     }
   }
 
