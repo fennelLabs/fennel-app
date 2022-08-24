@@ -5,32 +5,6 @@ import InboxSubNav from '../../components/InboxSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import {useDefaultSender} from '../../hooks/useDefaultSender';
 
-const test_messages = [
-  {
-    id: 0,
-    message: '000 dolor lorum ipsum dolor lorum ipsum',
-    fingerprint: 'asdfas99234js9siw2923jsakfaskasd92'
-  },
-  {
-    id: 1,
-    message:
-      '111 dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum',
-    fingerprint: 'asdfas99234js9siw2923jsakfaskasd92'
-  },
-  {
-    id: 2,
-    message:
-      '222 dolor lorum ipsum dolor lorum ipsum  dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum dolor lorum ipsum',
-    fingerprint: 'asdfas99234js9siw2923jsakfaskasd92'
-  },
-  {
-    id: 3,
-    message:
-      '333 dolor lorum ipsum dolor lorum ipsum  dolor lorum ipsum dolor lorum ipsum  dolor lorum ipsum dolor lorum ipsum',
-    fingerprint: 'asdfas99234js9siw2923jsakfaskasd92'
-  }
-];
-
 function Inbox() {
   const {messageService} = useServiceContext();
   const [messageList, setMessageList] = useState(null);
@@ -57,11 +31,6 @@ function Inbox() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Inbox</PageTitle>
-        {!messageList && (
-          <button className="btn" onClick={() => setMessageList(test_messages)}>
-            Load Test Messages
-          </button>
-        )}
         <ListView itemList={messageList ?? []} />
       </div>
     </div>
