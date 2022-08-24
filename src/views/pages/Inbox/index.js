@@ -57,11 +57,6 @@ function Inbox() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Inbox</PageTitle>
-        {!messageList && (
-          <button className="btn" onClick={() => setMessageList(test_messages)}>
-            Load Test Messages
-          </button>
-        )}
         <ListView itemList={messageList ?? []} />
       </div>
     </div>
