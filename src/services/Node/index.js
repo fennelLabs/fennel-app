@@ -44,7 +44,7 @@ class Node {
     const api = await this.api();
     const info = await api.tx.identityModule
       .createIdentity()
-      .paymentInfo(keymanager.signer());
+      .paymentInfo(keymanager.address(), keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
@@ -58,7 +58,7 @@ class Node {
     const api = await this.api();
     await api.tx.identityModule
       .createIdentity()
-      .signAndSend(keymanager.signer(), ({events = [], txHash}) => {
+      .signAndSend(keymanager.address(), {signer: keymanager.signer()}, ({events = [], txHash}) => {
         console.log(`Transaction hash ${txHash.toHex()}`);
         events.forEach(({phase, event: {data, method, section}}) => {
           console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
@@ -78,13 +78,34 @@ class Node {
       });
   }
 
+  async getFeeForTransferToken(keymanager, address, amount) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.balances
+      .transfer(address, amount)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async transferToken(keymanager, address, amount) {
+    console.log("TransferToken");
+    console.log(`Address: ${address}`);
+    console.log(`Amount: ${amount}`);
+    const api = await this.api();
+    const txHash = await api.tx.balances
+      .transfer(address, parseInt(amount))
+      .signAndSend(keymanager.address(), {signer: keymanager.signer()});
+    console.log(`Submitted with hash ${txHash}`);
+  }
+
   async getFeeForAnnounceKey(keymanager, fingerprint, location) {
     if (!keymanager.signer()) return;
 
     const api = await this.api();
     const info = await api.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .paymentInfo(keymanager.signer());
+      .paymentInfo(keymanager.address(), keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
@@ -92,7 +113,7 @@ class Node {
     const api = await this.api();
     return await api.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+      .signAndSend(keymanager.address(), {signer: keymanager.signer()}, ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
 
         if (status.isFinalized) {
@@ -118,7 +139,7 @@ class Node {
     const api = await this.api();
     const info = await api.tx.keystoreModule
       .revokeKey(fingerprint)
-      .paymentInfo(keymanager.signer());
+      .paymentInfo(keymanager.address(), keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
@@ -126,7 +147,7 @@ class Node {
     const api = await this.api();
     await api.tx.keystoreModule
       .revokeKey(fingerprint)
-      .signAndSend(keymanager.signer(), ({events = [], status, txHash}) => {
+      .signAndSend(keymanager.address(), {signer: keymanager.signer()}, ({events = [], status, txHash}) => {
         console.log(`Current status is ${status.type}`);
 
         if (status.isFinalized) {
@@ -150,7 +171,7 @@ class Node {
     const api = await this.api();
     const info = await api.tx.signalModule
       .sendSignal(content)
-      .paymentInfo(keymanager.signer());
+      .paymentInfo(keymanager.address(), keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
   }
 
@@ -159,7 +180,7 @@ class Node {
       const api = await this.api();
       await api.tx.signalModule
         .sendSignal(content)
-        .signAndSend(keymanager.signer(), (result) => {
+        .signAndSend(keymanager.address(), {signer: keymanager.signer()}, (result) => {
           console.log(`Current status is ${result.status}`);
 
           if (result.status.isInBlock) {
