@@ -16,6 +16,10 @@ services:
       - "8080:8080"
     volumes:
       - ipfs:/data/ipfs
+      - ./cors.sh:/cors.sh
+      - ./start_ipfs.sh:/start_ipfs.sh
+    entrypoint: /bin/sh /start_ipfs.sh
+    #command: /start-ipfs.sh
 
 volumes:
   fennel-app:
