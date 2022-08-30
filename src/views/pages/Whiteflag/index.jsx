@@ -28,7 +28,7 @@ function Whiteflag() {
           </ul>
         </div>
         <WhiteflagEncode />
-        <WhiteflagDecode />
+        {/* <WhiteflagDecode /> */}
         <div className="grid">
           <div>
             <button

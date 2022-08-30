@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "fennel-app",
   "author": {
     "name": "Fennel Labs",
@@ -50,13 +49,14 @@
   "scripts": {
     "start": "parcel -p 3000 --target web-app --dist-dir build .",
     "test": "mocha ",
+    "test:e2e": "playwright test",
     "eject": "react-scripts eject",
     "dev": "concurrently \"npm start\" \"npm:electron:start\"",
     "electron:start": "wait-on tcp:3000 && npm run electron:build && electron ./build/electron.js",
     "electron:build": "parcel build --target electron .",
     "electron:dist": "electron-builder -mwl",
     "lint": "eslint --ext js,jsx src",
-    "format": "prettier -w src/**/*",
+    "format": "prettier -w src/**/* e2e-tests/*",
     "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
     "prod:build": "parcel build --public-url ./ ."
   },
@@ -133,6 +133,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.18.9",
     "@parcel/css": "^1.10.0",
+    "@playwright/test": "^1.25.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
