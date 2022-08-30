@@ -15,7 +15,7 @@ import config from '../config/ipfs';
 
 const {promise, rxjs} = connect();
 const connected = listenForConnection(rxjs);
-const rpc = new FennelRPC();
+export const rpc = new FennelRPC();
 const messageService = new MessageAPIService(rpc);
 const keymanager = new KeyManager('Main');
 const contactsManager = new ContactsManager();
@@ -26,7 +26,6 @@ const ipfs = new IPFSService();
 const services = {
   polkadotApi: promise,
   connected,
-  rpc,
   messageService,
   keymanager,
   contactsManager,
@@ -41,7 +40,6 @@ const ServiceContext = createContext(services);
  * <description>
  * @typedef {Object} ServiceContext
  * @property {MessageAPIService} messageService <description>
- * @property {FennelRPC} rpc
  * @property {KeyManager} keymanager
  * @property {Node} node
  * @property {ContactsManager} contactsManager
