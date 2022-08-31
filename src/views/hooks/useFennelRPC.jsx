@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useServiceContext} from '../../contexts/ServiceContext';
+import {rpc} from '../../contexts/ServiceContext';
 import {FennelRPC} from '../../services';
 
 /**
@@ -7,8 +7,7 @@ import {FennelRPC} from '../../services';
  * @returns {{open: boolean, rpc: FennelRPC}}
  */
 function useFennelRPC() {
-  const {rpc} = useServiceContext();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(rpc.isOpen());
 
   useEffect(() => {
     const sub = rpc.isWebSocketOpen$.subscribe((isOpen) => setOpen(isOpen));
