@@ -56,8 +56,6 @@ export class WebSocketClient {
 
     this._isWebSocketOpen.subscribe((open) => {
       if (open) {
-        console.log('RPC WebSocket opened.');
-
         // sends all messages captured while the websocket was offline
         this._offlineOutgoingMessageQueue.forEach((m) => ws.send(m));
         // reset for next time
@@ -87,19 +85,19 @@ export class WebSocketClient {
     };
 
     ws.onopen = () => {
-      console.log('opened!');
+      console.info('RPC WebSocket open.');
       this._isWebSocketOpen.next(true);
     };
 
     ws.onerror = (e) => {
-      console.log('RPC WebSocket error.');
+      console.info('RPC WebSocket error.');
       console.error(e);
       this._error.next(e);
       this.check();
     };
 
     ws.onclose = () => {
-      console.log('RPC WebSocket closed.');
+      console.info('RPC WebSocket closed.');
       this._isWebSocketOpen.next(false);
       this.check();
     };

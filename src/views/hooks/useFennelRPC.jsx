@@ -10,10 +10,7 @@ function useFennelRPC() {
   const [open, setOpen] = useState(rpc.isOpen());
 
   useEffect(() => {
-    const sub = rpc.isWebSocketOpen$.subscribe((isOpen) => {
-      console.log('subscription update: ', isOpen);
-      setOpen(isOpen);
-    });
+    const sub = rpc.isWebSocketOpen$.subscribe((isOpen) => setOpen(isOpen));
     return () => {
       sub.unsubscribe();
     };
