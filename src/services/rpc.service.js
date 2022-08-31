@@ -1,4 +1,3 @@
-import {BehaviorSubject, filter, map, ReplaySubject} from 'rxjs';
 import {CLI_URI} from '../config';
 import {WebSocketClient} from '../utils/webSocketClient';
 

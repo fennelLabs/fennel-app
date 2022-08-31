@@ -114,7 +114,7 @@ export class WebSocketClient {
     if (connectionIsClosed && this._isWebSocketOpen.value) {
       this._isWebSocketOpen.next(false);
     } else {
-      //if (!this._isWebSocketOpen.value) this._isWebSocketOpen.next(true);
+      this.connect();
     }
   }
 
