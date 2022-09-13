@@ -7,13 +7,23 @@ RUN DEBIAN_FRONTEND=noninteractive \
     dpkg-reconfigure --frontend noninteractive tzdata && \
     apt-get install unzip curl python3 python3-pip -y && \
     apt-get upgrade -y
+
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install nodejs -y
 
+# add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY . /app
-WORKDIR /app/fennel-app
+# set working directory
+WORKDIR /app
 
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
-RUN npm install react-scripts@3.4.1 -g
+
+# add app
+COPY . ./
+
+# start app
+CMD ["npm", "start"]
