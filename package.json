@@ -33,7 +33,7 @@
     "axios": "^0.27.2",
     "cross-env": "^7.0.3",
     "daisyui": "^2.15.2",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "ipfs": "^0.63.5",
     "libp2p": "^0.37.3",
     "react": "^18.1.0",
@@ -58,7 +58,8 @@
     "lint": "eslint --ext js,jsx src",
     "format": "prettier -w src/**/* e2e-tests/*",
     "clean": "rm -rf ./build/ ./dist/ .parcel-cache/",
-    "prod:build": "parcel build --public-url ./ ."
+    "prod:build": "parcel build --public-url ./ .",
+    "docker:publish": "docker push isaacadams/fennel-app:latest"
   },
   "alias": {
     "@multiformats/multiaddr-to-uri": "/node_modules/@multiformats/multiaddr-to-uri/src/index.ts",
