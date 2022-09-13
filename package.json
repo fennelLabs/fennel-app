@@ -132,7 +132,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.18.9",
-    "@parcel/css": "^1.10.0",
+    "@parcel/css": "^1.14.0",
     "@playwright/test": "^1.25.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
