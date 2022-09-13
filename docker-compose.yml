@@ -1,7 +1,6 @@
 services:
   dev:
     build: .
-    working_dir: /app/fennel-app
     ports:
       - 3000:3000
 
