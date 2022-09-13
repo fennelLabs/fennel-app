@@ -11,7 +11,7 @@ jobs:
 
     services:
       fennel-app:
-        build: ../../.
+        image: isaacadams/fennel-app:latest
         ports:
           - 3000:3000
 
