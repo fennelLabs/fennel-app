@@ -1,17 +1,16 @@
 import {test, expect} from '@playwright/test';
 
 test('navigate to whiteflag', async ({page}) => {
-  // Go to http://localhost:3000/
-  await page.goto('http://localhost:3000');
+  // Go to host
+  await page.goto('/');
 
   // Click text=Whiteflag
   await page.locator('text=Whiteflag').click();
-  await expect(page).toHaveURL('http://localhost:3000/whiteflag');
+  await expect(page).toHaveURL('/whiteflag');
 });
 
 test('encode/decode work', async ({page}) => {
-  // Go to http://localhost:3000/
-  await page.goto('http://localhost:3000/whiteflag');
+  await page.goto('/whiteflag');
   //await page.waitForNavigation();
 
   await widgetTest(

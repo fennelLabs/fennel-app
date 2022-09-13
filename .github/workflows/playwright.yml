@@ -9,12 +9,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
-    services:
-      fennel-app:
-        image: isaacadams/fennel-app:latest
-        ports:
-          - 3000:3000
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
