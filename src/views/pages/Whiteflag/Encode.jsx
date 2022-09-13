@@ -30,27 +30,26 @@ export function WhiteflagEncode() {
   }, [input]);
 
   return (
-    <div className="max-w-[60rem]">
+    <div id="encode" className="widget max-w-[60rem]">
       <div className="grid grid-flow-row">
         <Error>{error}</Error>
-        {open && (
-          <button
-            className="btn"
-            onClick={() => {
-              const {error, message} = validate();
-              if (error) {
-                setError(error);
-                return;
-              }
+        <button
+          className="widget__button btn"
+          disabled={open ? undefined : true}
+          onClick={() => {
+            const {error, message} = validate();
+            if (error) {
+              setError(error);
+              return;
+            }
 
-              rpc.whiteflag_encode(message, (hexadecimal) =>
-                setOutput(hexadecimal)
-              );
-            }}
-          >
-            Encode
-          </button>
-        )}
+            rpc.whiteflag_encode(message, (hexadecimal) =>
+              setOutput(hexadecimal)
+            );
+          }}
+        >
+          Encode
+        </button>
       </div>
       <div className="my-3 grid gap-4 md:grid-flow-col">
         <TextArea
@@ -65,7 +64,7 @@ export function WhiteflagEncode() {
         <div className="flex flex-col">
           <label>Hexadecimal Encoded Message</label>
           <div className="h-full flex self-center items-center py-3 md:py-0">
-            <div className="break-all w-[15rem]">{output}</div>
+            <div className="widget__result break-all w-[15rem]">{output}</div>
           </div>
         </div>
       </div>

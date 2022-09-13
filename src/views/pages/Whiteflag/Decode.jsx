@@ -21,12 +21,12 @@ export function WhiteflagDecode() {
   }, [input]);
 
   return (
-    <div className="max-w-[60rem]">
+    <div id="decode" className="widget max-w-[60rem]">
       <div className="grid grid-flow-row">
         <Error>{error}</Error>
         {open && (
           <button
-            className="btn"
+            className="widget__button btn"
             onClick={() => {
               const {error} = validate();
               if (error) {
@@ -56,7 +56,7 @@ export function WhiteflagDecode() {
         <div className="flex flex-col">
           <label>Decoded Message</label>
           <div className="h-full py-3 md:py-0">
-            <pre>{output}</pre>
+            <pre className="widget__result">{output}</pre>
           </div>
         </div>
       </div>
