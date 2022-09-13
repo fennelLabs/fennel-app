@@ -2,18 +2,16 @@ services:
   dev:
     build: .
     working_dir: /app/fennel-app
-    volumes:
-      - fennel-app:/app
     ports:
       - 3000:3000
-    entrypoint: sh docker-entry.sh
+
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:release
     ports:
-      - "4001:4001"
-      - "5001:5001"
-      - "8080:8080"
+      - '4001:4001'
+      - '5001:5001'
+      - '8080:8080'
     volumes:
       - ipfs:/data/ipfs
       - ./cors.sh:/cors.sh
