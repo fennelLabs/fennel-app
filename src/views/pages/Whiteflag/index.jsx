@@ -29,28 +29,6 @@ function Whiteflag() {
         </div>
         <WhiteflagEncode />
         <WhiteflagDecode />
-        <div className="grid">
-          <div>
-            <button
-              className="btn"
-              onClick={() => {
-                rpc.close();
-              }}
-            >
-              Close RPC
-            </button>
-          </div>
-          <div>
-            <button
-              className="btn"
-              onClick={() => {
-                rpc.open();
-              }}
-            >
-              Open RPC
-            </button>
-          </div>
-        </div>
       </div>
     </PageContainer>
   );
