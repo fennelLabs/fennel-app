@@ -4,6 +4,7 @@ services:
     working_dir: /app/fennel-app
     ports:
       - 3000:3000
+    entrypoint: npm install && npm run start
 
   ipfs:
     container_name: ipfs

@@ -1,1 +1,3 @@
-npm run test
+#!/bin/bash
+npm install
+npm run start
