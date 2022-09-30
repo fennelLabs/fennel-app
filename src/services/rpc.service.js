@@ -6,6 +6,15 @@ export class FennelRPC extends WebSocketClient {
     super(CLI_URI);
   }
 
+  check(callback) {
+    return this.send(
+      {
+        method: 'hello_there'
+      },
+      callback
+    )
+  }
+
   generateKeypair(callback) {
     return this.send(
       {
