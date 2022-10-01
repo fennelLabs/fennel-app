@@ -20,7 +20,7 @@ WORKDIR /app
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN npm install
+RUN npm ci
 
 # add app
 COPY . ./
