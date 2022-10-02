@@ -1,7 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PageTitle from '../../components/PageTitle';
+import useFennelRPC from '../../hooks/useFennelRPC';
 
 function Home() {
+  const {open, rpc} = useFennelRPC();
+
+  useEffect(() => {
+    console.info(`rpc is open: ${open}`);
+    if(open) {
+      rpc.check(console.info);
+    }
+  }, [open]);
+
   return (
     <div className="flex flex-row max-w-[50rem]">
       <div className="basis-4/4 px-8">

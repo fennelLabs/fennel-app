@@ -5,6 +5,7 @@ import AppContext from './contexts/AppContext';
 import RegisterModal from './addons/Modal/RegisterModal';
 import {ServiceContextProvider} from './contexts/ServiceContext';
 import FennelAppRouter from './FennelAppRouter';
+import * as dotenv from 'dotenv';
 
 function App() {
   const modal = RegisterModal();

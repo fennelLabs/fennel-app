@@ -1,5 +1,5 @@
 const rpc_endpoint = {
-  DEV: 'ws://localhost:9030',
+  DEV: `ws://${process.env.RPC_HOST}:9030`,
   PROD: ''
 };
 
