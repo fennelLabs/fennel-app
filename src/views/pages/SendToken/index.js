@@ -6,6 +6,17 @@ import {useServiceContext} from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import Text from '../../components/Text';
 import {useAccount} from '../../hooks/useAccount';
+const {decodeAddress, encodeAddress} = require('@polkadot/keyring');
+
+const isValidAddressPolkadotAddress = () => {
+  try {
+    encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 function SendToken() {
   const {node, keymanager} = useServiceContext();
@@ -24,8 +35,11 @@ function SendToken() {
     });
 
     // The RPC hates it if you send it an empty address.
-    if (address) {
+    if (address && isValidAddressPolkadotAddress(address)) {
       node.getFeeForTransferToken(keymanager, address, amount);
+      setError(undefined);
+    } else if (address && address.length != 48) {
+      setError('Check that the address is correct.');
     }
 
     return () => {
