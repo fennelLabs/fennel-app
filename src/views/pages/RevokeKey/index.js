@@ -8,7 +8,7 @@ import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
 import {useAccount} from '../../hooks/useAccount';
 
 function RevokeKey() {
-  const {node, keymanager} = useServiceContext();
+  const {node, keymanager, contactsManager} = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
   const {balance} = useAccount();
 
@@ -37,9 +37,15 @@ function RevokeKey() {
 
   async function revokeKey() {
     let result = await node.revokeKey(keymanager, fingerprint);
-    if (result && defaultIdentity) {
-      // Need a contactsManager function to delete contacts.
-    }
+    var contact_id = await contactsManager
+      .getIdentityId(fingerprint)
+      .then((response) => response);
+    response = await contactsManager
+      .revokeIdentityKey(contact_id)
+      .then((response) => response);
+    result = !!response;
+    contactsManager.resetContacts();
+    contactsManager.populateContacts();
     setSuccess(result);
   }
 
@@ -64,6 +70,7 @@ function RevokeKey() {
             onCancel={() => setVisible(false)}
           />
         )}
+        {success && <Text>Key revoked successfully.</Text>}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -71,11 +78,18 @@ function RevokeKey() {
           }}
         >
           <div>
-            <textarea
+            <label
+              htmlFor="fingerprint"
+              className="form-label mb-2 text-gray-700"
+            >
+              Name
+            </label>
+            <input
               id="fingerprint"
               value={fingerprint}
               onChange={handleFingerprintChange}
-            ></textarea>
+              type="text"
+            />
           </div>
           <button type="submit" className="btn">
             Revoke Key

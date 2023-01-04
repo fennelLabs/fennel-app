@@ -15,6 +15,9 @@ function IdentitySubNav({children, ...attributes}) {
         <Link to="/identity/publish-key">Publish My Key</Link>
       </li>
       <li>
+        <Link to="/identity/revoke-key">Revoke Key</Link>
+      </li>
+      <li>
         <Link to="/identity/ipfs">IPFS</Link>
       </li>
     </ul>
