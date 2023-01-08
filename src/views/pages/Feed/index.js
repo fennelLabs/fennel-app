@@ -3,7 +3,6 @@ import PageTitle from '../../components/PageTitle';
 import FeedSubNav from '../../components/FeedSubNav';
 import FeedListView from '../../components/FeedListView';
 import {useServiceContext} from '../../../contexts/ServiceContext';
-import Text from '../../components/Text';
 
 function Feed() {
   const {node} = useServiceContext();

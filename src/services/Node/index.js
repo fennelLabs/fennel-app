@@ -25,6 +25,9 @@ class Node {
   _defaultIdentity = new BehaviorSubject(undefined);
   defaultIdentity$ = this._defaultIdentity.asObservable();
 
+  _traits = new BehaviorSubject([]);
+  traits$ = this._traits.asObservable();
+
   /**
    * @type {ApiPromise}
    * @private
@@ -58,24 +61,28 @@ class Node {
     const api = await this.api();
     await api.tx.identityModule
       .createIdentity()
-      .signAndSend(keymanager.address(), {signer: keymanager.signer()}, ({events = [], txHash}) => {
-        console.log(`Transaction hash ${txHash.toHex()}`);
-        events.forEach(({phase, event: {data, method, section}}) => {
-          console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          let id = parseInt(data[0].toString());
-          if (
-            section == 'identityModule' &&
-            method == 'IdentityCreated' &&
-            id
-          ) {
-            identitySubject.next(id);
-
-            if (!this._defaultIdentity.value) {
+      .signAndSend(
+        keymanager.address(),
+        {signer: keymanager.signer()},
+        ({events = [], txHash}) => {
+          console.log(`Transaction hash ${txHash.toHex()}`);
+          events.forEach(({phase, event: {data, method, section}}) => {
+            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+            let id = parseInt(data[0].toString());
+            if (
+              section == 'identityModule' &&
+              method == 'IdentityCreated' &&
+              id
+            ) {
+              identitySubject.next(id);
+              // if (!this._defaultIdentity.value) {
               this._defaultIdentity.next(id);
+              console.log('defaultIdentitySet', this._defaultIdentity.value);
+              // }
             }
-          }
-        });
-      });
+          });
+        }
+      );
   }
 
   async getFeeForTransferToken(keymanager, address, amount) {
@@ -89,7 +96,7 @@ class Node {
   }
 
   async transferToken(keymanager, address, amount) {
-    console.log("TransferToken");
+    console.log('TransferToken');
     console.log(`Address: ${address}`);
     console.log(`Amount: ${amount}`);
     const api = await this.api();
@@ -113,24 +120,28 @@ class Node {
     const api = await this.api();
     return await api.tx.keystoreModule
       .announceKey(fingerprint, location)
-      .signAndSend(keymanager.address(), {signer: keymanager.signer()}, ({events = [], status, txHash}) => {
-        console.log(`Current status is ${status.type}`);
+      .signAndSend(
+        keymanager.address(),
+        {signer: keymanager.signer()},
+        ({events = [], status, txHash}) => {
+          console.log(`Current status is ${status.type}`);
 
-        if (status.isFinalized) {
-          console.log(
-            `Transaction included at blockHash ${status.asFinalized}`
-          );
-          console.log(`Transaction hash ${txHash.toHex()}`);
+          if (status.isFinalized) {
+            console.log(
+              `Transaction included at blockHash ${status.asFinalized}`
+            );
+            console.log(`Transaction hash ${txHash.toHex()}`);
 
-          events.forEach(({phase, event: {data, method, section}}) => {
-            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          });
+            events.forEach(({phase, event: {data, method, section}}) => {
+              console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+            });
 
-          return true;
+            return true;
+          }
+
+          return false;
         }
-
-        return false;
-      });
+      );
   }
 
   async getFeeForRevokeKey(keymanager, fingerprint) {
@@ -147,22 +158,26 @@ class Node {
     const api = await this.api();
     await api.tx.keystoreModule
       .revokeKey(fingerprint)
-      .signAndSend(keymanager.address(), {signer: keymanager.signer()}, ({events = [], status, txHash}) => {
-        console.log(`Current status is ${status.type}`);
+      .signAndSend(
+        keymanager.address(),
+        {signer: keymanager.signer()},
+        ({events = [], status, txHash}) => {
+          console.log(`Current status is ${status.type}`);
 
-        if (status.isFinalized) {
-          console.log(
-            `Transaction included at blockHash ${status.asFinalized}`
-          );
-          console.log(`Transaction hash ${txHash.toHex()}`);
+          if (status.isFinalized) {
+            console.log(
+              `Transaction included at blockHash ${status.asFinalized}`
+            );
+            console.log(`Transaction hash ${txHash.toHex()}`);
 
-          events.forEach(({phase, event: {data, method, section}}) => {
-            console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
-          });
+            events.forEach(({phase, event: {data, method, section}}) => {
+              console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
+            });
 
-          unsub();
+            unsub();
+          }
         }
-      });
+      );
   }
 
   async getFeeForSendNewSignal(keymanager, content) {
@@ -180,19 +195,23 @@ class Node {
       const api = await this.api();
       await api.tx.signalModule
         .sendSignal(content)
-        .signAndSend(keymanager.address(), {signer: keymanager.signer()}, (result) => {
-          console.log(`Current status is ${result.status}`);
+        .signAndSend(
+          keymanager.address(),
+          {signer: keymanager.signer()},
+          (result) => {
+            console.log(`Current status is ${result.status}`);
 
-          if (result.status.isInBlock) {
-            console.log(
-              `Transaction included at blockHash ${result.status.asInBlock}`
-            );
-          } else if (result.status.isFinalized) {
-            console.log(
-              `Transaction finalized at blockHash ${result.status.asFinalized}`
-            );
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
           }
-        });
+        );
     } catch (e) {
       throw 'sendNewSignal() failed.';
     }
@@ -283,6 +302,73 @@ class Node {
       headers: {'Content-Type': 'application/json'}
     });
     return request;
+  }
+
+  hex_to_string(metadata) {
+    return metadata
+      .match(/.{1,2}/g)
+      .map(function (v) {
+        return String.fromCharCode(parseInt(v, 16));
+      })
+      .join('');
+  }
+
+  async getFeeForAddOrUpdateIdentityTrait(keymanager, identity, key2, value) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.identityModule
+      .addOrUpdateIdentityTrait(identity, key2, value)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async addOrUpdateIdentityTrait(keymanager, identity, key2, value) {
+    try {
+      const api = await this.api();
+      await api.tx.identityModule
+        .addOrUpdateIdentityTrait(identity, key2, value)
+        .signAndSend(
+          keymanager.address(),
+          {signer: keymanager.signer()},
+          (result) => {
+            console.log(`Current status is ${result.status}`);
+
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
+          }
+        );
+    } catch (e) {
+      throw 'sendNewSignal() failed.';
+    }
+  }
+
+  async getIdentityTraits(identity) {
+    let api = await this.api();
+    let traitsList = await api.query.identityModule.identityTraitList.entries();
+    let result = [];
+    traitsList.forEach(
+      ([
+        {
+          args: [key1, key2]
+        },
+        value
+      ]) => {
+        if (key1.toNumber() === identity) {
+          result[this.hex_to_string(key2.toHex())] = this.hex_to_string(
+            value.toHex()
+          );
+        }
+      }
+    );
+    this._traits.next(result);
   }
 
   disconnect() {

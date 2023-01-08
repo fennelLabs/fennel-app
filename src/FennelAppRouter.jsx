@@ -22,6 +22,7 @@ import Account from './views/pages/Account';
 import ImportKeypair from './views/pages/ImportKeypair';
 import IPFS from './views/pages/IPFS';
 import SendToken from './views/pages/SendToken';
+import ProfileFormView from './views/pages/ProfileFormView/ProfileFormView';
 
 function FennelAppRouter() {
   return (
@@ -38,6 +39,10 @@ function FennelAppRouter() {
             element={<GenerateKeypair />}
           />
           <Route path="/identity/profile" element={<Profile />} />
+          <Route
+            path="/identity/update-profile"
+            element={<ProfileFormView />}
+          />
           <Route path="/identity/publish-key" element={<PublishKey />} />
           <Route path="/identity/backup-key" element={<BackupKey />} />
           <Route path="/identity/revoke-key" element={<RevokeKey />} />

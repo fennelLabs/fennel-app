@@ -16,7 +16,7 @@ export function useDefaultIdentity() {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  }, [node.defaultIdentity$]);
 
   return identity;
 }
