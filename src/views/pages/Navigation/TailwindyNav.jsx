@@ -40,14 +40,19 @@ function TailwindyNav() {
                 <Link key={2} to="/contacts" className="link">
                   Manage Contacts
                 </Link>,
-                // connectedToChain && (
-                //   <Link key={3} to="/token/send" className="link">
-                //     Send UNIT
-                //   </Link>
-                // ),
+                connectedToChain && (
+                  <Link key={3} to="/token/send" className="link">
+                    Send UNIT
+                  </Link>
+                ),
                 connectedToChain && (
                   <Link key={4} to="/identity" className="link">
                     Manage Identity
+                  </Link>
+                ),
+                connectedToChain && (
+                  <Link key={5} to="/certificate" className="link">
+                    Manage Certificates
                   </Link>
                 ),
                 connectedToChain && (

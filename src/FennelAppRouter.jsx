@@ -23,6 +23,7 @@ import ImportKeypair from './views/pages/ImportKeypair';
 import IPFS from './views/pages/IPFS';
 import SendToken from './views/pages/SendToken';
 import ProfileFormView from './views/pages/ProfileFormView/ProfileFormView';
+import Certificate from './views/pages/Certificate';
 
 function FennelAppRouter() {
   return (
@@ -49,6 +50,7 @@ function FennelAppRouter() {
           <Route path="/identity/import-keypair" element={<ImportKeypair />} />
           <Route path="/identity/ipfs" element={<IPFS />} />
           <Route path="/identity" element={<Identity />} />
+          <Route path="/certificate" element={<Certificate />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
           <Route path="/feed" element={<Feed />} />

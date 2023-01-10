@@ -350,6 +350,43 @@ class Node {
     }
   }
 
+  async getFeeForSendCertificate(keymanager, target) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.certificateModule
+      .sendCertificate(target)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async sendCertificate(keymanager, target) {
+    try {
+      const api = await this.api();
+      await api.tx.certificateModule
+        .sendCertificate(target)
+        .signAndSend(
+          keymanager.address(),
+          {signer: keymanager.signer()},
+          (result) => {
+            console.log(`Current status is ${result.status}`);
+
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
+          }
+        );
+    } catch (e) {
+      throw 'sendNewSignal() failed.';
+    }
+  }
+
   async getIdentityTraits(identity) {
     let api = await this.api();
     let traitsList = await api.query.identityModule.identityTraitList.entries();
