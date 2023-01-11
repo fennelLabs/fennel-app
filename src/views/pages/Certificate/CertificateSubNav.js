@@ -10,6 +10,9 @@ function CertificateSubNav({children, ...attributes}) {
       <li>
         <Link to="/certificate/list">Certificates</Link>
       </li>
+      <li>
+        <Link to="/certificate/revoke">Revoke Certificate</Link>
+      </li>
     </ul>
   );
 }

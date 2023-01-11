@@ -383,7 +383,44 @@ class Node {
           }
         );
     } catch (e) {
-      throw 'sendNewSignal() failed.';
+      throw 'sendCertificate() failed.';
+    }
+  }
+
+  async getFeeForRevokeCertificate(keymanager, target) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.certificateModule
+      .revokeCertificate(target)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async revokeCertificate(keymanager, target) {
+    try {
+      const api = await this.api();
+      await api.tx.certificateModule
+        .revokeCertificate(target)
+        .signAndSend(
+          keymanager.address(),
+          {signer: keymanager.signer()},
+          (result) => {
+            console.log(`Current status is ${result.status}`);
+
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
+          }
+        );
+    } catch (e) {
+      throw 'sendCertificate() failed.';
     }
   }
 
