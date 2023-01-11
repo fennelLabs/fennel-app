@@ -7,11 +7,14 @@ import CertificateListView from './CertificateListView';
 function Certificates() {
   const {node} = useServiceContext();
   const [certificateList, setCertificateList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [searchText, setSearchText] = useState('');
   const [nodeApiReady, setNodeApiReady] = useState(true);
 
   useEffect(() => {
     const sub = node.certificates$.subscribe((d) => {
       setCertificateList(d);
+      setFilteredList(d);
     });
 
     if (node.apiNotReady()) {
@@ -21,10 +24,20 @@ function Certificates() {
       setNodeApiReady(true);
     }
 
+    if (searchText != '') {
+      setFilteredList(
+        certificateList.filter((item) => {
+          return item.origin.toLowerCase().includes(searchText.toLowerCase());
+        })
+      );
+    } else {
+      setFilteredList(certificateList);
+    }
+
     return () => {
       sub.remove();
     };
-  }, [node]);
+  }, [node, searchText, certificateList]);
 
   return (
     <div className="flex flex-row">
@@ -33,13 +46,21 @@ function Certificates() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>Certificates</PageTitle>
+        <div>
+          <input
+            name="search"
+            value={searchText}
+            placeholder="Search"
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
         {!nodeApiReady && (
           <div className="error" role="alert">
             The Fennel Node is currently unavailable. Please try again later.
           </div>
         )}
-        {Object.keys(certificateList).length > 0 && (
-          <CertificateListView itemList={certificateList} />
+        {Object.keys(filteredList).length > 0 && (
+          <CertificateListView itemList={filteredList} />
         )}
       </div>
     </div>

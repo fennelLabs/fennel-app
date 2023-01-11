@@ -390,24 +390,19 @@ class Node {
   async checkCertificateList() {
     let api = await this.api();
     let certList = await api.query.certificateModule.certificateList.entries();
-    console.log('certList', certList);
-    let result = {};
+    let result = [];
     certList.forEach(
-      (
-        [
-          {
-            args: [key1, key2]
-          }
-        ],
-        index
-      ) => {
-        result[index] = {
+      ([
+        {
+          args: [key1, key2]
+        }
+      ]) => {
+        result.push({
           origin: key1.toString(),
           target: key2.toString()
-        };
+        });
       }
     );
-    console.log('result', result);
     this._certificates.next(result);
   }
 

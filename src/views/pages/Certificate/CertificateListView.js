@@ -2,9 +2,6 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 function CertificateListView(props) {
-  Object.entries(props.itemList).map(([key, value]) => {
-    console.log(`${key}, ${value.origin}: ${value.target}`);
-  });
   return (
     <div>
       <div className="overflow-x-auto">
@@ -30,7 +27,7 @@ function CertificateListView(props) {
 }
 
 CertificateListView.propTypes = {
-  itemList: PropTypes.object
+  itemList: PropTypes.array
 };
 
 export default CertificateListView;
