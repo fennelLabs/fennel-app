@@ -85,9 +85,9 @@ export default class ContactsManager {
       })
       .then((response) => {
         const r = response?.data;
-        console.log("START CALL READOUT");
+        console.log('START CALL READOUT');
         console.log(r);
-        return r[0]["id"];
+        return r[0]['id'];
       })
       .catch((error) => {
         console.error(error);
@@ -98,7 +98,7 @@ export default class ContactsManager {
   revokeIdentityKey(contact_id) {
     return axios
       .delete(`${API_IDENTITIES}/${contact_id}/`, {
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json'}
       })
       .then((response) => {
         console.log(response);

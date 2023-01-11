@@ -28,6 +28,9 @@ class Node {
   _traits = new BehaviorSubject([]);
   traits$ = this._traits.asObservable();
 
+  _certificates = new BehaviorSubject([]);
+  certificates$ = this._certificates.asObservable();
+
   /**
    * @type {ApiPromise}
    * @private
@@ -75,10 +78,7 @@ class Node {
               id
             ) {
               identitySubject.next(id);
-              // if (!this._defaultIdentity.value) {
               this._defaultIdentity.next(id);
-              console.log('defaultIdentitySet', this._defaultIdentity.value);
-              // }
             }
           });
         }
@@ -385,6 +385,30 @@ class Node {
     } catch (e) {
       throw 'sendNewSignal() failed.';
     }
+  }
+
+  async checkCertificateList() {
+    let api = await this.api();
+    let certList = await api.query.certificateModule.certificateList.entries();
+    console.log('certList', certList);
+    let result = {};
+    certList.forEach(
+      (
+        [
+          {
+            args: [key1, key2]
+          }
+        ],
+        index
+      ) => {
+        result[index] = {
+          origin: key1.toString(),
+          target: key2.toString()
+        };
+      }
+    );
+    console.log('result', result);
+    this._certificates.next(result);
   }
 
   async getIdentityTraits(identity) {

@@ -7,6 +7,9 @@ function CertificateSubNav({children, ...attributes}) {
       <li>
         <Link to="/certificate">New Certificate</Link>
       </li>
+      <li>
+        <Link to="/certificate/list">Certificates</Link>
+      </li>
     </ul>
   );
 }

@@ -29,7 +29,7 @@ function Certificate() {
   }, [keymanager, node]);
 
   async function handleSubmit() {
-    await node.sendCertificate(keymanager);
+    await node.sendCertificate(keymanager, target);
     setSuccess(true);
   }
 

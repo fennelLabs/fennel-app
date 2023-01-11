@@ -7,7 +7,7 @@ function Home() {
 
   useEffect(() => {
     console.info(`rpc is open: ${open}`);
-    if(open) {
+    if (open) {
       rpc.check(console.info);
     }
   }, [open]);

@@ -12,7 +12,7 @@ export class FennelRPC extends WebSocketClient {
         method: 'hello_there'
       },
       callback
-    )
+    );
   }
 
   generateKeypair(callback) {

@@ -24,6 +24,7 @@ import IPFS from './views/pages/IPFS';
 import SendToken from './views/pages/SendToken';
 import ProfileFormView from './views/pages/ProfileFormView/ProfileFormView';
 import Certificate from './views/pages/Certificate';
+import CertificateList from './views/pages/Certificate/CertificateList';
 
 function FennelAppRouter() {
   return (
@@ -51,6 +52,7 @@ function FennelAppRouter() {
           <Route path="/identity/ipfs" element={<IPFS />} />
           <Route path="/identity" element={<Identity />} />
           <Route path="/certificate" element={<Certificate />} />
+          <Route path="/certificate/list" element={<CertificateList />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
           <Route path="/feed" element={<Feed />} />
