@@ -26,6 +26,7 @@ import ProfileFormView from './views/pages/ProfileFormView/ProfileFormView';
 import Certificate from './views/pages/Certificate';
 import CertificateList from './views/pages/Certificate/CertificateList';
 import CertificateRevokeForm from './views/pages/Certificate/CertificateRevokeForm';
+import CertificateDetailView from './views/pages/Certificate/CertificateDetailView';
 
 function FennelAppRouter() {
   return (
@@ -54,6 +55,10 @@ function FennelAppRouter() {
           <Route path="/identity" element={<Identity />} />
           <Route path="/certificate" element={<Certificate />} />
           <Route path="/certificate/list" element={<CertificateList />} />
+          <Route
+            path="/certificate/detail"
+            element={<CertificateDetailView />}
+          />
           <Route
             path="/certificate/revoke"
             element={<CertificateRevokeForm />}

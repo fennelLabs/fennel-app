@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 
 function CertificateListView(props) {
   return (
@@ -15,8 +16,22 @@ function CertificateListView(props) {
           <tbody>
             {Object.entries(props.itemList).map(([_, value], index) => (
               <tr key={index}>
-                <td>{value.origin}</td>
-                <td>{value.target}</td>
+                <td>
+                  <Link
+                    to="/certificate/detail"
+                    state={{origin: value.origin, target: value.target}}
+                  >
+                    {value.origin}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to="/certificate/detail"
+                    state={{origin: value.origin, target: value.target}}
+                  >
+                    {value.target}
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
