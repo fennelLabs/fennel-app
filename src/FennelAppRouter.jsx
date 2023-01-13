@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Routes, Outlet} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import PageContainer from './views/components/PageContainer';
 import Navigation from './views/pages/Navigation';
 import Home from './views/pages/Home';
@@ -27,6 +27,8 @@ import Certificate from './views/pages/Certificate';
 import CertificateList from './views/pages/Certificate/CertificateList';
 import CertificateRevokeForm from './views/pages/Certificate/CertificateRevokeForm';
 import CertificateDetailView from './views/pages/Certificate/CertificateDetailView';
+import Rating from './views/pages/Rating';
+import NewRatingView from './views/pages/Rating/NewRatingView';
 
 function FennelAppRouter() {
   return (
@@ -63,6 +65,8 @@ function FennelAppRouter() {
             path="/certificate/revoke"
             element={<CertificateRevokeForm />}
           />
+          <Route path="/rating" element={<Rating />} />
+          <Route path="/rating/create" element={<NewRatingView />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
           <Route path="/feed" element={<Feed />} />

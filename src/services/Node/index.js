@@ -387,6 +387,45 @@ class Node {
     }
   }
 
+  async getFeeForSendRatingSignal(keymanager, target, rating) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.signalModule
+      .sendRatingSignal(target, rating)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async sendRatingSignal(keymanager, target, rating) {
+    console.log(target);
+    console.log(rating);
+    try {
+      const api = await this.api();
+      await api.tx.signalModule
+        .sendRatingSignal(target, rating)
+        .signAndSend(
+          keymanager.address(),
+          {signer: keymanager.signer()},
+          (result) => {
+            console.log(`Current status is ${result.status}`);
+
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
+          }
+        );
+    } catch (e) {
+      throw 'sendCertificate() failed.';
+    }
+  }
+
   async getFeeForRevokeCertificate(keymanager, target) {
     if (!keymanager.signer()) return;
 

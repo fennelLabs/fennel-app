@@ -37,17 +37,22 @@ function TailwindyNav() {
           <ul className="flex flex-col lg:flex-row list-none ml-auto">
             {React.Children.toArray(
               [
-                <Link key={2} to="/contacts" className="link">
-                  Manage Contacts
-                </Link>,
                 connectedToChain && (
                   <Link key={3} to="/token/send" className="link">
                     Send UNIT
                   </Link>
                 ),
+                <Link key={2} to="/contacts" className="link">
+                  Manage Contacts
+                </Link>,
                 connectedToChain && (
                   <Link key={4} to="/identity" className="link">
                     Manage Identity
+                  </Link>
+                ),
+                connectedToChain && (
+                  <Link key={5} to="/rating" className="link">
+                    Manage Ratings
                   </Link>
                 ),
                 connectedToChain && (
