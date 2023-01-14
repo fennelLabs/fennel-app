@@ -31,6 +31,9 @@ class Node {
   _certificates = new BehaviorSubject([]);
   certificates$ = this._certificates.asObservable();
 
+  _ratingSignals = new BehaviorSubject([]);
+  ratingSignals$ = this._ratingSignals.asObservable();
+
   /**
    * @type {ApiPromise}
    * @private
@@ -434,6 +437,28 @@ class Node {
       .revokeCertificate(target)
       .paymentInfo(keymanager.address(), keymanager.signer());
     this._fee.next(info.partialFee.toNumber());
+  }
+
+  async checkRatingSignalList() {
+    let api = await this.api();
+    let signalList = await api.query.signalModule.ratingSignalList.entries();
+    console.log('signalList', signalList);
+    let result = [];
+    signalList.forEach(
+      ([
+        {
+          args: [key1, key2]
+        },
+        value
+      ]) => {
+        result.push({
+          origin: key1.toString(),
+          target: key2.toString(),
+          rating: value.toPrimitive()
+        });
+      }
+    );
+    this._ratingSignals.next(result);
   }
 
   async revokeCertificate(keymanager, target) {
