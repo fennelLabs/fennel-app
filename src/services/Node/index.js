@@ -33,6 +33,8 @@ class Node {
 
   _ratingSignals = new BehaviorSubject([]);
   ratingSignals$ = this._ratingSignals.asObservable();
+  _queriedRating = new BehaviorSubject(0);
+  queriedRating$ = this._queriedRating.asObservable();
 
   /**
    * @type {ApiPromise}
@@ -439,10 +441,21 @@ class Node {
     this._fee.next(info.partialFee.toNumber());
   }
 
+  async checkListForRating(origin, target) {
+    await this.checkRatingSignalList();
+    let result = 0;
+    this._ratingSignals.value.forEach((item) => {
+      if (item.origin == origin && item.target == target) {
+        console.log('Rating found. Setting query value to', item.rating);
+        result = item.rating;
+      }
+    });
+    this._queriedRating.next(result);
+  }
+
   async checkRatingSignalList() {
     let api = await this.api();
     let signalList = await api.query.signalModule.ratingSignalList.entries();
-    console.log('signalList', signalList);
     let result = [];
     signalList.forEach(
       ([

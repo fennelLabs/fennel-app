@@ -2,16 +2,18 @@ import React, {useState, useEffect} from 'react';
 import PageTitle from '../../components/PageTitle';
 import RatingSubNav from './RatingSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
+import Button from '../../components/Button';
 
 function Rating() {
   const {node} = useServiceContext();
   const [nodeApiReady, setNodeApiReady] = useState(true);
   const [ratingList, setRatingList] = useState([]);
+  const [origin, setOrigin] = useState('');
+  const [target, setTarget] = useState('');
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
-    const sub = node.ratingSignals$.subscribe((d) => {
-      setRatingList(d);
-    });
+    const sub = node.ratingSignals$.subscribe((d) => setRatingList(d));
 
     if (node.apiNotReady()) {
       setNodeApiReady(false);
@@ -20,9 +22,12 @@ function Rating() {
       setNodeApiReady(true);
     }
 
-    return () => {
-      sub.remove();
-    };
+    return () => sub.remove();
+  }, [node]);
+
+  useEffect(() => {
+    const sub = node.queriedRating$.subscribe((d) => setRating(d));
+    return () => sub.remove();
   }, [node]);
 
   return (
@@ -35,6 +40,31 @@ function Rating() {
         {!nodeApiReady && (
           <div className="error" role="alert">
             The Fennel Node is currently unavailable. Please try again later.
+          </div>
+        )}
+        {nodeApiReady && (
+          <div>
+            <label htmlFor="origin">Origin</label>
+            <input
+              name="origin"
+              value={origin}
+              onChange={(e) => setOrigin(e.target.value)}
+            />
+            <label htmlFor="target">Target</label>
+            <input
+              name="target"
+              value={target}
+              onChange={(e) => setTarget(e.target.value)}
+            />
+            <label htmlFor="rating">Rating</label>
+            <input name="rating" value={rating} readOnly={true} />
+            <Button
+              onClick={() => {
+                node.checkListForRating(origin, target);
+              }}
+            >
+              Query
+            </Button>
           </div>
         )}
         {nodeApiReady && (
