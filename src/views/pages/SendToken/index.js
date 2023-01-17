@@ -1,17 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
-import FeedSubNav from '../../components/FeedSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import Text from '../../components/Text';
 import {useAccount} from '../../hooks/useAccount';
-const {decodeAddress, encodeAddress} = require('@polkadot/keyring');
+import {decodeAddress, encodeAddress} from '@polkadot/keyring';
+import {hexToU8a, isHex} from '@polkadot/util';
 
-const isValidAddressPolkadotAddress = () => {
+const isValidAddressPolkadotAddress = (address) => {
   try {
     encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
-
     return true;
   } catch (error) {
     return false;
