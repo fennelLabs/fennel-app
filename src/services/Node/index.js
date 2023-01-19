@@ -403,8 +403,6 @@ class Node {
   }
 
   async sendRatingSignal(keymanager, target, rating) {
-    console.log(target);
-    console.log(rating);
     try {
       const api = await this.api();
       await api.tx.signalModule
@@ -427,7 +425,44 @@ class Node {
           }
         );
     } catch (e) {
-      throw 'sendCertificate() failed.';
+      throw 'sendRatingSignal() failed.';
+    }
+  }
+
+  async getFeeForUpdateRatingSignal(keymanager, target, rating) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.signalModule
+      .updateRatingSignal(target, rating)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async updateRatingSignal(keymanager, target, rating) {
+    try {
+      const api = await this.api();
+      await api.tx.signalModule
+        .updateRatingSignal(target, rating)
+        .signAndSend(
+          keymanager.address(),
+          {signer: keymanager.signer()},
+          (result) => {
+            console.log(`Current status is ${result.status}`);
+
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
+          }
+        );
+    } catch (e) {
+      throw 'updateRatingSignal() failed.';
     }
   }
 

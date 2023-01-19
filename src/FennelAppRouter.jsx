@@ -29,6 +29,7 @@ import CertificateRevokeForm from './views/pages/Certificate/CertificateRevokeFo
 import CertificateDetailView from './views/pages/Certificate/CertificateDetailView';
 import Rating from './views/pages/Rating';
 import NewRatingView from './views/pages/Rating/NewRatingView';
+import UpdateRatingView from './views/pages/Rating/UpdateRatingView';
 
 function FennelAppRouter() {
   return (
@@ -67,6 +68,7 @@ function FennelAppRouter() {
           />
           <Route path="/rating" element={<Rating />} />
           <Route path="/rating/create" element={<NewRatingView />} />
+          <Route path="/rating/update" element={<UpdateRatingView/>} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
           <Route path="/feed" element={<Feed />} />

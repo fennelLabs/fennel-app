@@ -3,6 +3,7 @@ import PageTitle from '../../components/PageTitle';
 import RatingSubNav from './RatingSubNav';
 import {useServiceContext} from '../../../contexts/ServiceContext';
 import Button from '../../components/Button';
+import {Link} from 'react-router-dom';
 
 function Rating() {
   const {node} = useServiceContext();
@@ -76,6 +77,7 @@ function Rating() {
                     <th>Origin</th>
                     <th>Target</th>
                     <th>Rating</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -84,6 +86,17 @@ function Rating() {
                       <td>{value.origin}</td>
                       <td>{value.target}</td>
                       <td>{value.rating}</td>
+                      <td>
+                        <Link
+                          to="/rating/update"
+                          state={{
+                            startTarget: value.target,
+                            startRating: value.rating
+                          }}
+                        >
+                          Update
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
