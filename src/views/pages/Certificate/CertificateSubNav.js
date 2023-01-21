@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function CertificateSubNav({children, ...attributes}) {
+function CertificateSubNav({ children, ...attributes }) {
   return (
     <ul className="menu bg-base-300 w-56 p-2 rounded-box">
       <li>
@@ -16,5 +17,9 @@ function CertificateSubNav({children, ...attributes}) {
     </ul>
   );
 }
+
+CertificateSubNav.propTypes = {
+  children: PropTypes.array
+};
 
 export default CertificateSubNav;

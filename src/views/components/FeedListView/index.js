@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button';
 
 function FeedListView(props) {
-  const [state, setState] = useState({readingId: null});
+  const [state, setState] = useState({ readingId: null });
 
   const toggleItem = (id) => {
     setState((prevState) => ({
@@ -13,7 +13,7 @@ function FeedListView(props) {
   };
 
   return state.readingId == null ? (
-    <div style={{width: '90%'}}>
+    <div style={{ width: '90%' }}>
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>

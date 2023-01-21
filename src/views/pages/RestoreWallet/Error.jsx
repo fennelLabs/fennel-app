@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export function Error({children}) {
+export function Error({ children }) {
   return (
     children && (
       <div
@@ -12,3 +13,7 @@ export function Error({children}) {
     )
   );
 }
+
+Error.propTypes = {
+  children: PropTypes.array
+};

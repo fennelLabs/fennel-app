@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
-import {usePublishKeyForm} from './usePublishKeyForm';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useDefaultIdentity } from '../../hooks/useDefaultIdentity';
+import { usePublishKeyForm } from './usePublishKeyForm';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
-import {useAccount} from '../../hooks/useAccount';
+import { useAccount } from '../../hooks/useAccount';
 
 function PublishKey() {
-  const {node, keymanager, contactsManager} = useServiceContext();
+  const { node, keymanager, contactsManager } = useServiceContext();
   const defaultIdentity = useDefaultIdentity();
-  const {balance} = useAccount();
+  const { balance } = useAccount();
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(undefined);
@@ -35,7 +35,7 @@ function PublishKey() {
     return () => {
       fee_sub.remove();
     };
-  }, [fingerprint, location]);
+  }, [fingerprint, location, keymanager, node]);
 
   async function publishKey() {
     try {

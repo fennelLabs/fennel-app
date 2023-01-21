@@ -1,11 +1,11 @@
-import React, {useState, useContext} from 'react';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useIpfsFactory} from '../../hooks/useIpfsFactory';
+import React, { useState, useContext } from 'react';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useIpfsFactory } from '../../hooks/useIpfsFactory';
 import Button from '../../components/Button';
 
 function GenerateWallet() {
   const [mnemonic, setMnemonic] = useState('');
-  const {keymanager, ipfs} = useServiceContext();
+  const { keymanager, ipfs } = useServiceContext();
   const [error, setError] = useState(undefined);
 
   async function generateMnemonic() {

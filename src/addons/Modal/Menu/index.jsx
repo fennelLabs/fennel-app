@@ -1,7 +1,7 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import ModalTemplate from '../Template';
-import {Link} from 'react-router-dom';
-import {ModalContext} from '../useModalContext';
+import { Link } from 'react-router-dom';
+import { ModalContext } from '../useModalContext';
 import './MobileMenu.css';
 import routes from '../../../config/routes';
 
@@ -9,7 +9,7 @@ function MenuModal() {
   const modal = useContext(ModalContext);
 
   return (
-    <ModalTemplate options={{title: '', backgroundColor: 'seagreen'}}>
+    <ModalTemplate options={{ title: '', backgroundColor: 'seagreen' }}>
       <div
         style={{
           height: '100vh',
@@ -21,8 +21,13 @@ function MenuModal() {
         }}
       >
         {React.Children.toArray(
-          routes.map((r) => (
-            <Link className="menu-link" to={r.to} onClick={() => onLinkClick()}>
+          routes.map((r, index) => (
+            <Link
+              key={index}
+              className="menu-link"
+              to={r.to}
+              onClick={() => onLinkClick()}
+            >
               {r.text}
             </Link>
           ))

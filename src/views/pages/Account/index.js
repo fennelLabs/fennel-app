@@ -1,17 +1,17 @@
-import React, {useState, useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import Node from '../../../services/Node';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useNavigate} from 'react-router-dom';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useNavigate } from 'react-router-dom';
 
 function Account() {
-  const [createAccount, setCreateAccount] = useState({createAccount: true});
+  const [createAccount, setCreateAccount] = useState({ createAccount: true });
   const [btnEnabled, setBtnEnabled] = useState(false);
   const [mnemonic, setMnemonic] = useState('');
-  const {_, keymanager} = useServiceContext();
+  const { _, keymanager } = useServiceContext();
   const navigate = useNavigate();
 
   function toggleChoice() {

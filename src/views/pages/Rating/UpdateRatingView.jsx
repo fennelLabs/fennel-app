@@ -1,28 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import RatingSubNav from './RatingSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
-import {useAccount} from '../../hooks/useAccount';
+import { useAccount } from '../../hooks/useAccount';
 import { useLocation } from 'react-router-dom';
 
 function UpdateRatingView() {
-  const {account, balance} = useAccount();
+  const { account, balance } = useAccount();
   const [success, setSuccess] = useState(false);
-  const {keymanager, node} = useServiceContext();
+  const { keymanager, node } = useServiceContext();
   const [fee, setFee] = useState(0);
   const [visible, setVisible] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
   let location = useLocation();
-  let {startTarget, startRating} = location.state;
-  const [target, setTarget] = useState(startTarget);
+  let { startTarget, startRating } = location.state;
   const [rating, setRating] = useState(startRating);
-
-  console.log("target", target);
-  console.log("rating", rating);
 
   useEffect(() => {
     const fee_sub = node.fee$.subscribe((d) => {
@@ -34,7 +30,7 @@ function UpdateRatingView() {
     return () => {
       fee_sub.remove();
     };
-  }, [keymanager, node, target, rating]);
+  }, [keymanager, node, rating]);
 
   async function handleSubmit() {
     await node.updateRatingSignal(keymanager, target, rating);
@@ -80,11 +76,7 @@ function UpdateRatingView() {
                 <label className="label cursor-pointer">
                   <div>
                     <label htmlFor="target">Target Hash</label>
-                    <input
-                      value={target}
-                      name="target"
-                      readOnly={true}
-                    />
+                    <input value={startTarget} name="target" readOnly={true} />
                   </div>
                   <div>
                     <label htmlFor="rating">Rating</label>

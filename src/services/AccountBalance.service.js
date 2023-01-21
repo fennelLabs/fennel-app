@@ -1,5 +1,5 @@
-import {ApiRx} from '@polkadot/api';
-import {BehaviorSubject, filter, switchMap} from 'rxjs';
+import { ApiRx } from '@polkadot/api';
+import { BehaviorSubject, filter, switchMap } from 'rxjs';
 import KeyManager from './KeyManager';
 
 class AccountBalanceService {
@@ -38,7 +38,7 @@ class AccountBalanceService {
         filter((a) => !!a),
         switchMap((a) => this._api.query.system.account(a))
       )
-      .subscribe(({nonce, data: balance}) => {
+      .subscribe(({ nonce, data: balance }) => {
         this._balance.next(balance.free.toString());
         console.log(
           `free balance is ${balance.free} with ${balance.reserved} reserved and a nonce of ${nonce}`

@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useAccount} from '../../hooks/useAccount';
+import { useDefaultIdentity } from '../../hooks/useDefaultIdentity';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useAccount } from '../../hooks/useAccount';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
@@ -10,8 +10,8 @@ import PageTitle from '../../components/PageTitle';
 import IdentitySubNav from '../../components/IdentitySubNav';
 
 function ProfileFormView(props) {
-  const {node, keymanager} = useServiceContext();
-  const {balance} = useAccount();
+  const { node, keymanager } = useServiceContext();
+  const { balance } = useAccount();
   const defaultIdentity = useDefaultIdentity();
 
   const [fee, setFee] = useState(0);

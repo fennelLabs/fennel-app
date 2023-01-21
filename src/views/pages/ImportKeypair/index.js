@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
-import {useNavigate} from 'react-router-dom';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useNavigate } from 'react-router-dom';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function ImportKeypair() {
   const navigate = useNavigate();
   const [mnemonic, setMnemonic] = useState('');
   const [isComplete, setIsComplete] = useState(false);
   const [key, setKey] = useState('');
-  const {_, keymanager} = useServiceContext();
+  const { _, keymanager } = useServiceContext();
 
   handleSubmit = (e) => {
     e.preventDefault();

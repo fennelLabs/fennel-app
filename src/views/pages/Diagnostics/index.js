@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import React, { useState, useEffect } from 'react';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function Diagnostics() {
-  const {node} = useServiceContext();
+  const { node } = useServiceContext();
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
-    setData({pending: true, diagnostics: {}});
+    setData({ pending: true, diagnostics: {} });
     const fetchData = async () => {
       const data = await node.getDiagnosticsData();
       return data;
@@ -27,13 +27,9 @@ function Diagnostics() {
     fetchMoreData()
       .then((fetchedMoreData) => {
         console.log(fetchedMoreData);
-        //setData({
-        //  pending: false,
-        //  diagnostics: fetchedData
-        //});
       })
       .catch(console.error);
-  }, []);
+  }, [node]);
 
   return (
     <div>

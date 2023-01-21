@@ -1,4 +1,4 @@
-import React, {useState, createContext} from 'react';
+import React, { useState, createContext } from 'react';
 import ModalDisplay from './ModalDisplay';
 
 export const ModalContext = createContext({});
@@ -14,9 +14,9 @@ function useModalContext() {
       name,
       isShowing: name !== undefined
     },
-    controls: {close},
+    controls: { close },
     getModalHandle: (name) => {
-      return {open: () => open(name), close};
+      return { open: () => open(name), close };
     }
   };
 
@@ -32,7 +32,7 @@ function useModalContext() {
 }
 
 export default function () {
-  const {getModalHandle, ...context} = useModalContext();
+  const { getModalHandle, ...context } = useModalContext();
   return {
     getModalHandle,
     ModalContextProvider: () => (

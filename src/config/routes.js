@@ -7,7 +7,7 @@ const routes = [
 ];
 
 function createRoute(to, text) {
-  return {to, text};
+  return { to, text };
 }
 
 export default routes;

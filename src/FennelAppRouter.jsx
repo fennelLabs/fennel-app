@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import PageContainer from './views/components/PageContainer';
 import Navigation from './views/pages/Navigation';
 import Home from './views/pages/Home';
@@ -68,7 +68,7 @@ function FennelAppRouter() {
           />
           <Route path="/rating" element={<Rating />} />
           <Route path="/rating/create" element={<NewRatingView />} />
-          <Route path="/rating/update" element={<UpdateRatingView/>} />
+          <Route path="/rating/update" element={<UpdateRatingView />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
           <Route path="/feed" element={<Feed />} />

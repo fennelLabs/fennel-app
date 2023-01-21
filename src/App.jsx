@@ -1,9 +1,9 @@
 import React from 'react';
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 import AppContext from './contexts/AppContext';
 import RegisterModal from './addons/Modal/RegisterModal';
-import {ServiceContextProvider} from './contexts/ServiceContext';
+import { ServiceContextProvider } from './contexts/ServiceContext';
 import FennelAppRouter from './FennelAppRouter';
 import * as dotenv from 'dotenv';
 

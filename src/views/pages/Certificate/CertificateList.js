@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 import CertificateSubNav from './CertificateSubNav';
 import CertificateListView from './CertificateListView';
 
 function Certificates() {
-  const {node} = useServiceContext();
+  const { node } = useServiceContext();
   const [certificateList, setCertificateList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [searchText, setSearchText] = useState('');

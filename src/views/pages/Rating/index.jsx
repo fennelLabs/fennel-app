@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import RatingSubNav from './RatingSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 import Button from '../../components/Button';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Rating() {
-  const {node} = useServiceContext();
+  const { node } = useServiceContext();
   const [nodeApiReady, setNodeApiReady] = useState(true);
   const [ratingList, setRatingList] = useState([]);
   const [origin, setOrigin] = useState('');

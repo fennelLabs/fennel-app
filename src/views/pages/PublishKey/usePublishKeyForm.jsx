@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-export function usePublishKeyForm({onSubmit}) {
+export function usePublishKeyForm({ onSubmit }) {
   const [fingerprint, setFingerprint] = useState('');
   const [location, setLocation] = useState('');
 
   function handleFingerprintChange(e) {
-    const {value} = e.target;
+    const { value } = e.target;
     setFingerprint(value);
   }
 
   function handleLocationChange(e) {
-    const {value} = e.target;
+    const { value } = e.target;
     setLocation(value);
   }
 

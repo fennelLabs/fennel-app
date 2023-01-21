@@ -1,6 +1,6 @@
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
-import {API_IDENTITIES} from '../config';
+import { API_IDENTITIES } from '../config';
 
 export default class ContactsManager {
   _identities = new BehaviorSubject([]);
@@ -12,7 +12,7 @@ export default class ContactsManager {
   getContactKey(contact_id) {
     return axios
       .get(`${API_IDENTITIES}/${contact_id}`, {
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
       })
       .then((response) => {
         console.log(response);
@@ -81,7 +81,7 @@ export default class ContactsManager {
   getIdentityId(fingerprint) {
     return axios
       .get(`${API_IDENTITIES}/?fingerprint=${fingerprint}`, {
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
       })
       .then((response) => {
         const r = response?.data;
@@ -98,7 +98,7 @@ export default class ContactsManager {
   revokeIdentityKey(contact_id) {
     return axios
       .delete(`${API_IDENTITIES}/${contact_id}/`, {
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
       })
       .then((response) => {
         console.log(response);

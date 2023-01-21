@@ -1,19 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
-import {useAccount} from '../../hooks/useAccount';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function RevokeKey() {
-  const {node, keymanager, contactsManager} = useServiceContext();
-  const defaultIdentity = useDefaultIdentity();
-  const {balance} = useAccount();
+  const { node, keymanager, contactsManager } = useServiceContext();
 
   const [fee, setFee] = useState(0);
-  const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [fingerprint, setFingerprint] = useState('');
   const [success, setSuccess] = useState(false);
@@ -28,10 +23,10 @@ function RevokeKey() {
     return () => {
       fee_sub.remove();
     };
-  }, [fingerprint]);
+  }, [fingerprint, keymanager, node]);
 
   function handleFingerprintChange(e) {
-    const {value} = e.target;
+    const { value } = e.target;
     setFingerprint(value);
   }
 
@@ -64,7 +59,6 @@ function RevokeKey() {
         {visible && (
           <TransactionConfirm
             onConfirm={() => {
-              setConfirmed(true);
               setVisible(false);
             }}
             onCancel={() => setVisible(false)}

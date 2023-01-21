@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useDefaultIdentity } from '../../hooks/useDefaultIdentity';
 import ProfileListView from './ProfileListView';
 import Text from '../../components/Text';
 
 function Profile() {
-  const {node} = useServiceContext();
+  const { node } = useServiceContext();
   const [nodeApiReady, setNodeApiReady] = useState(true);
   const defaultIdentity = useDefaultIdentity();
   const [traits, setTraits] = useState([]);
@@ -27,7 +27,7 @@ function Profile() {
     return () => {
       sub.remove();
     };
-  }, [node, defaultIdentity]);
+  }, [node, node.traits$, defaultIdentity]);
 
   return (
     <div className="flex flex-row">

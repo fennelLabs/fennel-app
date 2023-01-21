@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {rpc} from '../../contexts/ServiceContext';
-import {FennelRPC} from '../../services';
+import React, { useEffect, useState } from 'react';
+import { rpc } from '../../contexts/ServiceContext';
+import { FennelRPC } from '../../services';
 
 /**
  * returns the rpc instance and a boolean indicating the state of the web socket connection
@@ -16,7 +16,7 @@ function useFennelRPC() {
     };
   }, []);
 
-  return {open, rpc};
+  return { open, rpc };
 }
 
 export default useFennelRPC;

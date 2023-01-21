@@ -1,12 +1,12 @@
-import {Keyring} from '@polkadot/api';
-import {KeyringPair} from '@polkadot/keyring/types';
+import { Keyring } from '@polkadot/api';
+import { KeyringPair } from '@polkadot/keyring/types';
 import {
   mnemonicGenerate,
   decodeAddress,
   blake2AsHex
 } from '@polkadot/util-crypto';
-import {stringToU8a, u8aToHex} from '@polkadot/util';
-import {BehaviorSubject} from 'rxjs';
+import { stringToU8a, u8aToHex } from '@polkadot/util';
+import { BehaviorSubject } from 'rxjs';
 import {
   web3Accounts,
   web3Enable,
@@ -91,7 +91,7 @@ class KeyManager {
    */
   loadAccount(name, mnemonic) {
     this._pair.next(
-      this._keyring.addFromUri(mnemonic, {name: name}, 'sr25519')
+      this._keyring.addFromUri(mnemonic, { name: name }, 'sr25519')
     );
     console.log(`Address: ${this._pair.value.address}`);
     this._address.next(this._pair.value.address);

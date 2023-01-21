@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ListView from '../../components/ListView';
 import PageTitle from '../../components/PageTitle';
 import InboxSubNav from '../../components/InboxSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultSender} from '../../hooks/useDefaultSender';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { useDefaultSender } from '../../hooks/useDefaultSender';
 
 function Inbox() {
-  const {messageService} = useServiceContext();
+  const { messageService } = useServiceContext();
   const [messageList, setMessageList] = useState(null);
   const defaultSender = useDefaultSender();
 
@@ -16,13 +16,14 @@ function Inbox() {
     });
 
     if (!!defaultSender) {
+      console.log('Checking messages for', defaultSender);
       messageService.checkMessages(defaultSender);
     }
 
     return () => {
       sub.unsubscribe();
     };
-  }, [defaultSender]);
+  }, [defaultSender, messageService]);
 
   return (
     <div className="flex flex-row">

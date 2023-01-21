@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function InboxSubNav({children, ...attributes}) {
+function InboxSubNav({ children, ...attributes }) {
   return (
     <ul className="menu bg-base-300 w-56 p-2 rounded-box">
       <li>
@@ -13,5 +14,9 @@ function InboxSubNav({children, ...attributes}) {
     </ul>
   );
 }
+
+InboxSubNav.propTypes = {
+  children: PropTypes.array
+};
 
 export default InboxSubNav;

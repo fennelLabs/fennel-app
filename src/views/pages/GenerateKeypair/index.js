@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import useFennelRPC from '../../hooks/useFennelRPC';
 
 function GenerateKeypair() {
   const [publicKey, setPublicKey] = useState(null);
-  const {rpc} = useFennelRPC();
+  const { rpc } = useFennelRPC();
   const [error, setError] = useState(undefined);
 
   function generateKeypair() {

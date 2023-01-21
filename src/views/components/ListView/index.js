@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../Button';
 
 function ListView(props) {
-  const [state, setState] = useState({readingId: null});
+  const [state, setState] = useState({ readingId: null });
 
   const toggleItem = (id) => {
     setState((prevState) => ({

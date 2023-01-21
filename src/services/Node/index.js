@@ -1,7 +1,7 @@
-import {ApiPromise} from '@polkadot/api';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {TextDecoder} from 'text-encoding';
-import {NODE_URI_WS} from '../../config';
+import { ApiPromise } from '@polkadot/api';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { TextDecoder } from 'text-encoding';
+import { NODE_URI_WS } from '../../config';
 
 class Node {
   /**
@@ -71,10 +71,10 @@ class Node {
       .createIdentity()
       .signAndSend(
         keymanager.address(),
-        {signer: keymanager.signer()},
-        ({events = [], txHash}) => {
+        { signer: keymanager.signer() },
+        ({ events = [], txHash }) => {
           console.log(`Transaction hash ${txHash.toHex()}`);
-          events.forEach(({phase, event: {data, method, section}}) => {
+          events.forEach(({ phase, event: { data, method, section } }) => {
             console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
             let id = parseInt(data[0].toString());
             if (
@@ -107,7 +107,7 @@ class Node {
     const api = await this.api();
     const txHash = await api.tx.balances
       .transfer(address, parseInt(amount))
-      .signAndSend(keymanager.address(), {signer: keymanager.signer()});
+      .signAndSend(keymanager.address(), { signer: keymanager.signer() });
     console.log(`Submitted with hash ${txHash}`);
   }
 
@@ -127,8 +127,8 @@ class Node {
       .announceKey(fingerprint, location)
       .signAndSend(
         keymanager.address(),
-        {signer: keymanager.signer()},
-        ({events = [], status, txHash}) => {
+        { signer: keymanager.signer() },
+        ({ events = [], status, txHash }) => {
           console.log(`Current status is ${status.type}`);
 
           if (status.isFinalized) {
@@ -137,7 +137,7 @@ class Node {
             );
             console.log(`Transaction hash ${txHash.toHex()}`);
 
-            events.forEach(({phase, event: {data, method, section}}) => {
+            events.forEach(({ phase, event: { data, method, section } }) => {
               console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
             });
 
@@ -165,8 +165,8 @@ class Node {
       .revokeKey(fingerprint)
       .signAndSend(
         keymanager.address(),
-        {signer: keymanager.signer()},
-        ({events = [], status, txHash}) => {
+        { signer: keymanager.signer() },
+        ({ events = [], status, txHash }) => {
           console.log(`Current status is ${status.type}`);
 
           if (status.isFinalized) {
@@ -175,7 +175,7 @@ class Node {
             );
             console.log(`Transaction hash ${txHash.toHex()}`);
 
-            events.forEach(({phase, event: {data, method, section}}) => {
+            events.forEach(({ phase, event: { data, method, section } }) => {
               console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
             });
 
@@ -202,7 +202,7 @@ class Node {
         .sendSignal(content)
         .signAndSend(
           keymanager.address(),
-          {signer: keymanager.signer()},
+          { signer: keymanager.signer() },
           (result) => {
             console.log(`Current status is ${result.status}`);
 
@@ -234,14 +234,14 @@ class Node {
     const allRecords = await apiAt.query.system.events();
 
     signedBlock.block.extrinsics.forEach(
-      ({method: {method, section}}, index) => {
+      ({ method: { method, section } }, index) => {
         if (method == 'sendSignal' && section == 'signalModule') {
           const events = allRecords
             .filter(
-              ({phase}) =>
+              ({ phase }) =>
                 phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
             )
-            .map(({event}) => {
+            .map(({ event }) => {
               return {
                 id: event.index,
                 section: event.section,
@@ -304,7 +304,7 @@ class Node {
         jsonrpc: '2.0',
         method: 'state_getMetadata'
       }),
-      headers: {'Content-Type': 'application/json'}
+      headers: { 'Content-Type': 'application/json' }
     });
     return request;
   }
@@ -335,7 +335,7 @@ class Node {
         .addOrUpdateIdentityTrait(identity, key2, value)
         .signAndSend(
           keymanager.address(),
-          {signer: keymanager.signer()},
+          { signer: keymanager.signer() },
           (result) => {
             console.log(`Current status is ${result.status}`);
 
@@ -372,7 +372,7 @@ class Node {
         .sendCertificate(target)
         .signAndSend(
           keymanager.address(),
-          {signer: keymanager.signer()},
+          { signer: keymanager.signer() },
           (result) => {
             console.log(`Current status is ${result.status}`);
 
@@ -409,7 +409,7 @@ class Node {
         .sendRatingSignal(target, rating)
         .signAndSend(
           keymanager.address(),
-          {signer: keymanager.signer()},
+          { signer: keymanager.signer() },
           (result) => {
             console.log(`Current status is ${result.status}`);
 
@@ -446,7 +446,7 @@ class Node {
         .updateRatingSignal(target, rating)
         .signAndSend(
           keymanager.address(),
-          {signer: keymanager.signer()},
+          { signer: keymanager.signer() },
           (result) => {
             console.log(`Current status is ${result.status}`);
 
@@ -516,7 +516,7 @@ class Node {
         .revokeCertificate(target)
         .signAndSend(
           keymanager.address(),
-          {signer: keymanager.signer()},
+          { signer: keymanager.signer() },
           (result) => {
             console.log(`Current status is ${result.status}`);
 

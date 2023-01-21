@@ -2,7 +2,7 @@ import React from 'react';
 import PageTitle from '../../components/PageTitle';
 import CertificateSubNav from './CertificateSubNav';
 import Button from '../../components/Button';
-import {useLocation, useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 function CertificateDetailView() {
@@ -10,7 +10,7 @@ function CertificateDetailView() {
   let location = useLocation();
   console.log('location', location);
   console.log('location.state', location.state);
-  let {origin, target} = location.state;
+  let { origin, target } = location.state;
   console.log(`${origin}, ${target}`);
   return (
     <div className="flex flex-row">

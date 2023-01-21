@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import FeedSubNav from '../../components/FeedSubNav';
 import FeedListView from '../../components/FeedListView';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function Feed() {
-  const {node} = useServiceContext();
+  const { node } = useServiceContext();
   const [signalList, setSignalList] = useState([]);
   const [nodeApiReady, setNodeApiReady] = useState(true);
 

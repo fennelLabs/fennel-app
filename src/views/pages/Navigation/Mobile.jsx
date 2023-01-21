@@ -2,7 +2,7 @@ import React from 'react';
 import useModal from '../../../utils/useModal';
 
 export function Mobile() {
-  const {open} = useModal('Menu');
+  const { open } = useModal('Menu');
 
   return (
     <>

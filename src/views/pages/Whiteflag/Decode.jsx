@@ -1,24 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {isHexadecimalString} from '../../../utils/isHexadecimalString';
+import React, { useEffect, useState } from 'react';
+import { useCallback } from 'react';
+import { isHexadecimalString } from '../../../utils/isHexadecimalString';
 import useFennelRPC from '../../hooks/useFennelRPC';
-import {Error} from './Error';
-import {TextArea} from './TextArea';
+import { Error } from './Error';
+import { TextArea } from './TextArea';
 
 const example_wf_auth_message =
   '5746313020800000000000000000000000000000000000000000000000000000000000000000b43a3a38399d1797b7b933b0b734b9b0ba34b7b71734b73a17bbb434ba32b33630b380';
 
 export function WhiteflagDecode() {
-  const {open, rpc} = useFennelRPC();
+  const { open, rpc } = useFennelRPC();
   const [output, setOutput] = useState(undefined);
   const [input, setInput] = useState(example_wf_auth_message);
   const [error, setError] = useState(undefined);
+
+  const validate = useCallback(() => {
+    return {
+      error: !isHexadecimalString(input) && 'invalid hexadecimal',
+      message: undefined
+    };
+  }, [input]);
 
   useEffect(() => {
     if (error) {
       const validation = validate();
       setError(validation.error);
     }
-  }, [input]);
+  }, [input, error, validate]);
 
   return (
     <div className="max-w-[60rem]">
@@ -28,7 +36,7 @@ export function WhiteflagDecode() {
           <button
             className="btn"
             onClick={() => {
-              const {error} = validate();
+              const { error } = validate();
               if (error) {
                 setError(error);
                 return;
@@ -62,11 +70,4 @@ export function WhiteflagDecode() {
       </div>
     </div>
   );
-
-  function validate() {
-    return {
-      error: !isHexadecimalString(input) && 'invalid hexadecimal',
-      message: undefined
-    };
-  }
 }

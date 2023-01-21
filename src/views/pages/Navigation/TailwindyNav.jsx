@@ -1,11 +1,11 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import queryChainConnection from '../../hooks/queryChainConnection';
-import {useAccount} from '../../hooks/useAccount';
+import { Link } from 'react-router-dom';
+import QueryChainConnection from '../../hooks/queryChainConnection';
+import { useAccount } from '../../hooks/useAccount';
 
 function TailwindyNav() {
-  const connectedToChain = queryChainConnection();
-  const {address, balance} = useAccount();
+  const connectedToChain = QueryChainConnection();
+  const { address, balance } = useAccount();
 
   return (
     <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-amber-500 mb-3">
@@ -17,7 +17,7 @@ function TailwindyNav() {
           >
             Our Unnamed App
           </Link>
-          <div className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white">
+          <div className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap text-white">
             Address: {address} <br />
             Balance: {balance}
           </div>

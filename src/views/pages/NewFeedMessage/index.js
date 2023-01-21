@@ -1,15 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
 import FeedSubNav from '../../components/FeedSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import Text from '../../components/Text';
-import {useAccount} from '../../hooks/useAccount';
+import { useAccount } from '../../hooks/useAccount';
 
 function NewFeedMessage() {
-  const {node, keymanager} = useServiceContext();
-  const {balance} = useAccount();
+  const { node, keymanager } = useServiceContext();
+  const { balance } = useAccount();
 
   const [value, setValue] = useState('');
   const [fee, setFee] = useState(0);
@@ -27,7 +27,7 @@ function NewFeedMessage() {
     return () => {
       fee_sub.remove();
     };
-  }, [value]);
+  }, [value, keymanager, node]);
 
   function sendNewSignal(keymanager, value) {
     if (node.apiNotReady()) {

@@ -1,4 +1,4 @@
-import {BehaviorSubject, filter, map, ReplaySubject} from 'rxjs';
+import { BehaviorSubject, filter, map, ReplaySubject } from 'rxjs';
 
 export class WebSocketClient {
   /**
@@ -116,7 +116,7 @@ export class WebSocketClient {
     }
   }
 
-  send({method, params, id}, callback) {
+  send({ method, params, id }, callback) {
     if (!/\w+/g.test(method)) {
       console.error('method name cannot be empty');
       return;

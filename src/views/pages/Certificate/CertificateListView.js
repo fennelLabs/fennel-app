@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function CertificateListView(props) {
   return (
@@ -19,7 +19,7 @@ function CertificateListView(props) {
                 <td>
                   <Link
                     to="/certificate/detail"
-                    state={{origin: value.origin, target: value.target}}
+                    state={{ origin: value.origin, target: value.target }}
                   >
                     {value.origin}
                   </Link>
@@ -27,7 +27,7 @@ function CertificateListView(props) {
                 <td>
                   <Link
                     to="/certificate/detail"
-                    state={{origin: value.origin, target: value.target}}
+                    state={{ origin: value.origin, target: value.target }}
                   >
                     {value.target}
                   </Link>
