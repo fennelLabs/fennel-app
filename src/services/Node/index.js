@@ -489,6 +489,7 @@ class Node {
   }
 
   async checkRatingSignalList() {
+    console.log('Checking rating signals.');
     let api = await this.api();
     let signalList = await api.query.signalModule.ratingSignalList.entries();
     let result = [];
@@ -514,6 +515,43 @@ class Node {
       const api = await this.api();
       await api.tx.certificateModule
         .revokeCertificate(target)
+        .signAndSend(
+          keymanager.address(),
+          { signer: keymanager.signer() },
+          (result) => {
+            console.log(`Current status is ${result.status}`);
+
+            if (result.status.isInBlock) {
+              console.log(
+                `Transaction included at blockHash ${result.status.asInBlock}`
+              );
+            } else if (result.status.isFinalized) {
+              console.log(
+                `Transaction finalized at blockHash ${result.status.asFinalized}`
+              );
+            }
+          }
+        );
+    } catch (e) {
+      throw 'sendCertificate() failed.';
+    }
+  }
+
+  async getFeeForRevokeRating(keymanager, target) {
+    if (!keymanager.signer()) return;
+
+    const api = await this.api();
+    const info = await api.tx.signalModule
+      .revokeRatingSignal(target)
+      .paymentInfo(keymanager.address(), keymanager.signer());
+    this._fee.next(info.partialFee.toNumber());
+  }
+
+  async revokeRating(keymanager, target) {
+    try {
+      const api = await this.api();
+      await api.tx.signalModule
+        .revokeRatingSignal(target)
         .signAndSend(
           keymanager.address(),
           { signer: keymanager.signer() },

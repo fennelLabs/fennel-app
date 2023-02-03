@@ -10,6 +10,9 @@ function RatingSubNav() {
       <li>
         <Link to="/rating/create">New Rating Signal</Link>
       </li>
+      <li>
+        <Link to="/rating/revoke">Revoke Rating Signal</Link>
+      </li>
     </ul>
   );
 }
