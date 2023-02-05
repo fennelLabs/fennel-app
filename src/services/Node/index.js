@@ -14,6 +14,9 @@ class Node {
   _trust_signals = new BehaviorSubject([]);
   trust_signals$ = this._trust_signals.asObservable();
 
+  _trust_connections = new BehaviorSubject([]);
+  trust_connections$ = this._trust_connections.asObservable();
+
   /**
    * @type {BehaviorSubject}
    * @private
@@ -575,6 +578,27 @@ class Node {
     } catch (e) {
       throw 'sendCertificate() failed.';
     }
+  }
+
+  async getTrustIssuanceList() {
+    let api = await this.api();
+    let storageList = await api.query.trustModule.trustIssuance.entries();
+    let result = [];
+    storageList.forEach(
+      ([
+        {
+          args: [key1, key2]
+        },
+        value
+      ]) => {
+        result.push({
+          origin: key1.toString(),
+          target: key2.toString(),
+          trust_number: value.toPrimitive()
+        });
+      }
+    );
+    this._trust_connections.next(result);
   }
 
   async listenForTrustActions() {
