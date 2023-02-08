@@ -8,6 +8,9 @@ class Node {
    * @type {BehaviorSubject}
    * @private
    */
+  _events = new BehaviorSubject([]);
+  events$ = this._events.asObservable();
+
   _signals = new BehaviorSubject([]);
   signals$ = this._signals.asObservable();
 
@@ -53,6 +56,42 @@ class Node {
    */
   constructor(api) {
     this._api = api;
+  }
+
+  async listenForChainEvents() {
+    var events_list = [];
+
+    const decoder = new TextDecoder('utf-8');
+
+    const api = await this.api();
+
+    const signedBlock = await api.rpc.chain.getBlock();
+    const apiAt = await api.at(signedBlock.block.header.hash);
+    const allRecords = await apiAt.query.system.events();
+
+    signedBlock.block.extrinsics.forEach(({}, index) => {
+      const events = allRecords
+        .filter(
+          ({ phase }) =>
+            phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
+        )
+        .map(({ event }) => {
+          return {
+            id: event.index,
+            section: event.section,
+            method: event.method,
+            message: decoder.decode(event.data[0])
+          };
+        });
+
+      events_list.push(...events);
+    });
+
+    let final_events = Array.from(
+      new Set([...this._events.value, ...events_list].map(JSON.stringify))
+    ).map(JSON.parse);
+
+    this._events.next(final_events);
   }
 
   async getFeeForCreateIdentity(keymanager) {
