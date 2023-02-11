@@ -14,6 +14,9 @@ class Node {
   _signals = new BehaviorSubject([]);
   signals$ = this._signals.asObservable();
 
+  _signal_module = new BehaviorSubject([]);
+  signal_module$ = this._signal_module.asObservable();
+
   _trust_signals = new BehaviorSubject([]);
   trust_signals$ = this._trust_signals.asObservable();
 
@@ -703,6 +706,52 @@ class Node {
       }
     );
     this._certificates.next(result);
+  }
+
+  async listenForSignalModule() {
+    var events_list = [];
+
+    const decoder = new TextDecoder('utf-8');
+
+    const api = await this.api();
+
+    const signedBlock = await api.rpc.chain.getBlock();
+    const apiAt = await api.at(signedBlock.block.header.hash);
+    const allRecords = await apiAt.query.system.events();
+
+    signedBlock.block.extrinsics.forEach(
+      ({ method: { method, section } }, index) => {
+        if (section == 'signalModule') {
+          const events = allRecords
+            .filter(
+              ({ phase }) =>
+                phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
+            )
+            .map(({ event }) => {
+              return {
+                id: event.index,
+                section: event.section,
+                method: event.method,
+                message: decoder.decode(event.data[0])
+              };
+            });
+
+          events_list.push(...events);
+        }
+      }
+    );
+
+    let new_events_list = events_list.filter((element) => {
+      return element.section == 'signalModule';
+    });
+
+    let final_events = Array.from(
+      new Set(
+        [...this._signal_module.value, ...new_events_list].map(JSON.stringify)
+      )
+    ).map(JSON.parse);
+
+    this._signal_module.next(final_events);
   }
 
   async getIdentityTraits(identity) {
