@@ -52,6 +52,9 @@ class Node {
   _trustParameters = new BehaviorSubject([]);
   trustParameters$ = this._trustParameters.asObservable();
 
+  _signalParameters = new BehaviorSubject([]);
+  signalParameters$ = this._signalParameters.asObservable();
+
   /**
    * @type {ApiPromise}
    * @private
@@ -565,7 +568,7 @@ class Node {
   async checkTrustParameterList() {
     let api = await this.api();
     let trustParameterList =
-      await api.query.signalModule.trustParameterList.entries();
+      await api.query.trustModule.trustParameterList.entries();
     let result = [];
     trustParameterList.forEach(
       ([
@@ -582,6 +585,28 @@ class Node {
       }
     );
     this._trustParameters.next(result);
+  }
+
+  async checkSignalParameterList() {
+    let api = await this.api();
+    let signalParameterList =
+      await api.query.signalModule.signalParameterList.entries();
+    let result = [];
+    signalParameterList.forEach(
+      ([
+        {
+          args: [key1, key2]
+        },
+        value
+      ]) => {
+        result.push({
+          origin: key1.toString(),
+          key: key2.toString(),
+          value: value.toPrimitive()
+        });
+      }
+    );
+    this._signalParameters.next(result);
   }
 
   async revokeCertificate(keymanager, target) {
