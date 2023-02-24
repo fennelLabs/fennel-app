@@ -45,8 +45,12 @@ class Node {
 
   _ratingSignals = new BehaviorSubject([]);
   ratingSignals$ = this._ratingSignals.asObservable();
+
   _queriedRating = new BehaviorSubject(0);
   queriedRating$ = this._queriedRating.asObservable();
+
+  _trustParameters = new BehaviorSubject([]);
+  trustParameters$ = this._trustParameters.asObservable();
 
   /**
    * @type {ApiPromise}
@@ -556,6 +560,28 @@ class Node {
       }
     );
     this._ratingSignals.next(result);
+  }
+
+  async checkTrustParameterList() {
+    let api = await this.api();
+    let trustParameterList =
+      await api.query.signalModule.trustParameterList.entries();
+    let result = [];
+    trustParameterList.forEach(
+      ([
+        {
+          args: [key1, key2]
+        },
+        value
+      ]) => {
+        result.push({
+          origin: key1.toString(),
+          key: key2.toString(),
+          value: value.toPrimitive()
+        });
+      }
+    );
+    this._trustParameters.next(result);
   }
 
   async revokeCertificate(keymanager, target) {
