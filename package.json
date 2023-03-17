@@ -142,7 +142,7 @@
     "chai": "^4.3.6",
     "concurrently": "^7.2.1",
     "constants-browserify": "^1.0.0",
-    "electron": "^19.0.1",
+    "electron": "^20.0.1",
     "electron-builder": "^23.0.3",
     "electron-is-dev": "^2.0.0",
     "eslint": "^8.16.0",
