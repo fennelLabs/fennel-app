@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import useFennelRPC from '../../hooks/useFennelRPC';
-import {Error} from './Error';
-import {TextArea} from './TextArea';
+import { Error } from './Error';
+import { TextArea } from './TextArea';
 
 const example_wf_auth_message = formatJSON({
   prefix: 'WF',
@@ -17,17 +17,26 @@ const example_wf_auth_message = formatJSON({
 });
 
 export function WhiteflagEncode() {
-  const {open, rpc} = useFennelRPC();
+  const { open, rpc } = useFennelRPC();
   const [output, setOutput] = useState(undefined);
   const [input, setInput] = useState(example_wf_auth_message);
   const [error, setError] = useState(undefined);
+
+  const validate = useCallback(() => {
+    try {
+      const message = JSON.parse(input);
+      return { error: undefined, message };
+    } catch (e) {
+      return { error: 'invalid json', message: undefined };
+    }
+  }, [input]);
 
   useEffect(() => {
     if (error) {
       const validation = validate();
       setError(validation.error);
     }
-  }, [input]);
+  }, [input, error, validate]);
 
   return (
     <div className="max-w-[60rem]">
@@ -37,7 +46,7 @@ export function WhiteflagEncode() {
           <button
             className="btn"
             onClick={() => {
-              const {error, message} = validate();
+              const { error, message } = validate();
               if (error) {
                 setError(error);
                 return;
@@ -71,15 +80,6 @@ export function WhiteflagEncode() {
       </div>
     </div>
   );
-
-  function validate() {
-    try {
-      const message = JSON.parse(input);
-      return {error: undefined, message};
-    } catch (e) {
-      return {error: 'invalid json', message: undefined};
-    }
-  }
 
   function ensureInputIsString() {
     if (typeof input === typeof 'string') {

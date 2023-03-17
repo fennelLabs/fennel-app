@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-function IdentitySubNav({children, ...attributes}) {
+function IdentitySubNav({ children, ...attributes }) {
   return (
     <ul className="menu bg-base-300 w-56 p-2 rounded-box">
       <li>
@@ -13,6 +13,15 @@ function IdentitySubNav({children, ...attributes}) {
       </li>
       <li>
         <Link to="/identity/publish-key">Publish My Key</Link>
+      </li>
+      <li>
+        <Link to="/identity/profile">Profile</Link>
+      </li>
+      <li>
+        <Link to="/identity/update-profile">Update Profile</Link>
+      </li>
+      <li>
+        <Link to="/identity/revoke-key">Revoke Key</Link>
       </li>
       <li>
         <Link to="/identity/ipfs">IPFS</Link>

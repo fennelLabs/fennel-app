@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function PageTitle(props) {
   return (
@@ -7,5 +8,9 @@ function PageTitle(props) {
     </h1>
   );
 }
+
+PageTitle.propTypes = {
+  children: PropTypes.array
+};
 
 export default PageTitle;

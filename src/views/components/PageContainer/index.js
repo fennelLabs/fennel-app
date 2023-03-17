@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function PageContainer(props) {
   return (
@@ -11,5 +12,9 @@ function PageContainer(props) {
     </main>
   );
 }
+
+PageContainer.propTypes = {
+  children: PropTypes.array
+};
 
 export default PageContainer;

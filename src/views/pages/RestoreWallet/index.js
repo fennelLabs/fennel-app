@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {Error} from './Error';
+import React, { useState } from 'react';
+import { useServiceContext } from '../../../contexts/ServiceContext';
+import { Error } from './Error';
 
 function RestoreWallet(props) {
   const [seedPhrase, setSeedPhrase] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-  const {keymanager} = useServiceContext();
+  const { keymanager } = useServiceContext();
 
   return (
     <form

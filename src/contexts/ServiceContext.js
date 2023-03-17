@@ -1,19 +1,17 @@
-import React, {useEffect, createContext, useContext} from 'react';
+import React, { useEffect, createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {FennelRPC} from '../services';
-import useIpfsFactory from '../views/hooks/useIpfsFactory';
+import { FennelRPC } from '../services';
 import MessageAPIService from '../services/MessageAPI';
 import KeyManager from '../services/KeyManager';
 import Node from '../services/Node';
 import ContactsManager from '../services/ContactsManager.service';
-import {ApiPromise} from '@polkadot/api';
-import connect, {listenForConnection} from '../utils/loadPolkadotApi';
+import { ApiPromise } from '@polkadot/api';
+import connect, { listenForConnection } from '../utils/loadPolkadotApi';
 import AccountBalanceService from '../services/AccountBalance.service';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import IPFSService from '../services/IPFSService';
-import config from '../config/ipfs';
 
-const {promise, rxjs} = connect();
+const { promise, rxjs } = connect();
 const connected = listenForConnection(rxjs);
 export const rpc = new FennelRPC();
 const messageService = new MessageAPIService(rpc);
@@ -53,7 +51,7 @@ const ServiceContext = createContext(services);
  */
 export const useServiceContext = () => useContext(ServiceContext);
 
-export const ServiceContextProvider = ({children}) => {
+export const ServiceContextProvider = ({ children }) => {
   useEffect(() => {
     promise.isReady;
     rxjs.isReady;

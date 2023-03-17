@@ -1,4 +1,4 @@
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 
 export default class MessageEncryptionIndicatorsManager {

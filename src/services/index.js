@@ -1,1 +1,1 @@
-export {FennelRPC} from './rpc.service';
+export { FennelRPC } from './rpc.service';

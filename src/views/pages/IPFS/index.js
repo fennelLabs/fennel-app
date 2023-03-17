@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import Button from '../../components/Button';
 import IdentitySubNav from '../../components/IdentitySubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function IPFS() {
   //Insert values from the data store
@@ -11,15 +11,15 @@ function IPFS() {
   const [cid, setCID] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const {ipfs} = useServiceContext();
+  const { ipfs } = useServiceContext();
 
   const handleTextChange = (e) => {
-    const {value} = e.target;
+    const { value } = e.target;
     setText(value);
   };
 
   const handleCIDChange = (e) => {
-    const {value} = e.target;
+    const { value } = e.target;
     setCID(value);
   };
 

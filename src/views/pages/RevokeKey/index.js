@@ -1,19 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import IdentitySubNav from '../../components/IdentitySubNav';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
-import {useServiceContext} from '../../../contexts/ServiceContext';
-import {useDefaultIdentity} from '../../hooks/useDefaultIdentity';
-import {useAccount} from '../../hooks/useAccount';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function RevokeKey() {
-  const {node, keymanager} = useServiceContext();
-  const defaultIdentity = useDefaultIdentity();
-  const {balance} = useAccount();
+  const { node, keymanager, contactsManager } = useServiceContext();
 
   const [fee, setFee] = useState(0);
-  const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
   const [fingerprint, setFingerprint] = useState('');
   const [success, setSuccess] = useState(false);
@@ -28,18 +23,24 @@ function RevokeKey() {
     return () => {
       fee_sub.remove();
     };
-  }, [fingerprint]);
+  }, [fingerprint, keymanager, node]);
 
   function handleFingerprintChange(e) {
-    const {value} = e.target;
+    const { value } = e.target;
     setFingerprint(value);
   }
 
   async function revokeKey() {
     let result = await node.revokeKey(keymanager, fingerprint);
-    if (result && defaultIdentity) {
-      // Need a contactsManager function to delete contacts.
-    }
+    var contact_id = await contactsManager
+      .getIdentityId(fingerprint)
+      .then((response) => response);
+    response = await contactsManager
+      .revokeIdentityKey(contact_id)
+      .then((response) => response);
+    result = !!response;
+    contactsManager.resetContacts();
+    contactsManager.populateContacts();
     setSuccess(result);
   }
 
@@ -58,12 +59,12 @@ function RevokeKey() {
         {visible && (
           <TransactionConfirm
             onConfirm={() => {
-              setConfirmed(true);
               setVisible(false);
             }}
             onCancel={() => setVisible(false)}
           />
         )}
+        {success && <Text>Key revoked successfully.</Text>}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -71,11 +72,18 @@ function RevokeKey() {
           }}
         >
           <div>
-            <textarea
+            <label
+              htmlFor="fingerprint"
+              className="form-label mb-2 text-gray-700"
+            >
+              Name
+            </label>
+            <input
               id="fingerprint"
               value={fingerprint}
               onChange={handleFingerprintChange}
-            ></textarea>
+              type="text"
+            />
           </div>
           <button type="submit" className="btn">
             Revoke Key

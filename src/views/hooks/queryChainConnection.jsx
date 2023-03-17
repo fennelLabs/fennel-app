@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {useServiceContext} from '../../contexts/ServiceContext';
+import React, { useState, useEffect } from 'react';
+import { useServiceContext } from '../../contexts/ServiceContext';
 
-function queryChainConnection() {
-  const {connected} = useServiceContext();
+function QueryChainConnection() {
+  const { connected } = useServiceContext();
   const [isConnected, setIsConnected] = useState(connected.value());
 
   useEffect(() => {
@@ -11,9 +11,9 @@ function queryChainConnection() {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  }, [connected.$]);
 
   return isConnected;
 }
 
-export default queryChainConnection;
+export default QueryChainConnection;

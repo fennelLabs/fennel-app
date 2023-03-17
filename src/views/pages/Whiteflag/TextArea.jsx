@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 export function TextArea({
   id,
   title,
@@ -25,3 +28,11 @@ export function TextArea({
     </div>
   );
 }
+
+TextArea.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func
+};

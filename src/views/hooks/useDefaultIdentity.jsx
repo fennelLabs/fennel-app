@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {filter} from 'rxjs';
-import {useServiceContext} from '../../contexts/ServiceContext';
+import React, { useState, useEffect } from 'react';
+import { filter } from 'rxjs';
+import { useServiceContext } from '../../contexts/ServiceContext';
 
 export function useDefaultIdentity() {
-  const {node} = useServiceContext();
+  const { node } = useServiceContext();
   const [identity, setDefaultIdentity] = useState(undefined);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function useDefaultIdentity() {
     return () => {
       sub.unsubscribe();
     };
-  }, []);
+  }, [node.defaultIdentity$]);
 
   return identity;
 }

@@ -1,5 +1,5 @@
-import {CLI_URI} from '../config';
-import {WebSocketClient} from '../utils/webSocketClient';
+import { CLI_URI } from '../config';
+import { WebSocketClient } from '../utils/webSocketClient';
 
 export class FennelRPC extends WebSocketClient {
   constructor() {
@@ -12,7 +12,7 @@ export class FennelRPC extends WebSocketClient {
         method: 'hello_there'
       },
       callback
-    )
+    );
   }
 
   generateKeypair(callback) {

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query) {
   const mql = window.matchMedia(query);

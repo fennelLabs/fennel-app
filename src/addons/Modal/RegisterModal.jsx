@@ -5,7 +5,7 @@ import useModalContext from './useModalContext';
 const root = document.getElementById('modal-root');
 
 function RegisterModal() {
-  const {getModalHandle, ModalContextProvider} = useModalContext();
+  const { getModalHandle, ModalContextProvider } = useModalContext();
 
   return {
     value: {

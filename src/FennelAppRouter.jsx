@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Routes, Outlet} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import PageContainer from './views/components/PageContainer';
 import Navigation from './views/pages/Navigation';
 import Home from './views/pages/Home';
@@ -22,6 +22,15 @@ import Account from './views/pages/Account';
 import ImportKeypair from './views/pages/ImportKeypair';
 import IPFS from './views/pages/IPFS';
 import SendToken from './views/pages/SendToken';
+import ProfileFormView from './views/pages/ProfileFormView/ProfileFormView';
+import Certificate from './views/pages/Certificate';
+import CertificateList from './views/pages/Certificate/CertificateList';
+import CertificateRevokeForm from './views/pages/Certificate/CertificateRevokeForm';
+import CertificateDetailView from './views/pages/Certificate/CertificateDetailView';
+import Rating from './views/pages/Rating';
+import NewRatingView from './views/pages/Rating/NewRatingView';
+import UpdateRatingView from './views/pages/Rating/UpdateRatingView';
+import RevokeRatingView from './views/pages/Rating/RevokeRatingView';
 
 function FennelAppRouter() {
   return (
@@ -38,12 +47,30 @@ function FennelAppRouter() {
             element={<GenerateKeypair />}
           />
           <Route path="/identity/profile" element={<Profile />} />
+          <Route
+            path="/identity/update-profile"
+            element={<ProfileFormView />}
+          />
           <Route path="/identity/publish-key" element={<PublishKey />} />
           <Route path="/identity/backup-key" element={<BackupKey />} />
           <Route path="/identity/revoke-key" element={<RevokeKey />} />
           <Route path="/identity/import-keypair" element={<ImportKeypair />} />
           <Route path="/identity/ipfs" element={<IPFS />} />
           <Route path="/identity" element={<Identity />} />
+          <Route path="/certificate" element={<Certificate />} />
+          <Route path="/certificate/list" element={<CertificateList />} />
+          <Route
+            path="/certificate/detail"
+            element={<CertificateDetailView />}
+          />
+          <Route
+            path="/certificate/revoke"
+            element={<CertificateRevokeForm />}
+          />
+          <Route path="/rating" element={<Rating />} />
+          <Route path="/rating/create" element={<NewRatingView />} />
+          <Route path="/rating/update" element={<UpdateRatingView />} />
+          <Route path="/rating/revoke" element={<RevokeRatingView />} />
           <Route path="/contacts/*" element={<Contacts />} />
           <Route path="/whiteflag/*" element={<Whiteflag />} />
           <Route path="/feed" element={<Feed />} />

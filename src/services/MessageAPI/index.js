@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BehaviorSubject} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {
   API_MESSAGES,
   API_IDENTITIES,
@@ -152,7 +152,7 @@ function decodeHex(hex) {
 
 function sendMessage(
   message,
-  {publicKey, signature, fingerprint, sender, recipient},
+  { publicKey, signature, fingerprint, sender, recipient },
   indicator
 ) {
   return axios({

@@ -2,11 +2,11 @@ import React from 'react';
 import PageContainer from '../../components/PageContainer';
 import PageTitle from '../../components/PageTitle';
 import useFennelRPC from '../../hooks/useFennelRPC';
-import {WhiteflagDecode} from './Decode';
-import {WhiteflagEncode} from './Encode';
+import { WhiteflagDecode } from './Decode';
+import { WhiteflagEncode } from './Encode';
 
 function Whiteflag() {
-  const {rpc} = useFennelRPC();
+  const { rpc } = useFennelRPC();
   return (
     <PageContainer>
       <div className="grid w-full h-full">

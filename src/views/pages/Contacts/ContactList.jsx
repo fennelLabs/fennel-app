@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import React, { useEffect, useState } from 'react';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 function ContactsList() {
-  const {contactsManager} = useServiceContext();
+  const { contactsManager } = useServiceContext();
   const [contactList, setContactList] = useState([]);
 
   useEffect(() => {
@@ -20,12 +20,12 @@ function ContactsList() {
       sub.remove();
       clearInterval(id);
     };
-  }, []);
+  }, [contactsManager]);
 
   return (
-    <div style={{width: '90%'}}>
+    <div style={{ width: '90%' }}>
       {contactList.length > 0 ? (
-        contactList.map(({id, fingerprint}) => (
+        contactList.map(({ id, fingerprint }) => (
           <div key={id}>{fingerprint}</div>
         ))
       ) : (

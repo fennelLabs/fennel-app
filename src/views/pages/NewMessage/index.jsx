@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import InboxSubNav from '../../components/InboxSubNav';
 import Button from '../../components/Button';
 import MessageEncryptionIndicatorsManager from '../../../services/MessageEncryptionIndicatorsManager.service';
-import {useDefaultSender} from '../../hooks/useDefaultSender';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useDefaultSender } from '../../hooks/useDefaultSender';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 
 const indicatorsManager = new MessageEncryptionIndicatorsManager();
 
@@ -22,7 +22,7 @@ function NewMessage() {
 
   const [recipient, setRecipient] = useState(null);
 
-  const {contactsManager, messageService} = useServiceContext();
+  const { contactsManager, messageService } = useServiceContext();
   const defaultSender = useDefaultSender();
   const [recipientsList, setRecipientsList] = useState([]);
   const [encryptionIndicatorsList, setEncryptionsIndicatorsList] = useState([]);
@@ -44,7 +44,7 @@ function NewMessage() {
       sub.remove();
       indicatorsSub.remove();
     };
-  }, []);
+  }, [contactsManager]);
 
   useEffect(() => {
     if (recipient && recipient > 0) {
@@ -60,10 +60,10 @@ function NewMessage() {
         })
         .catch(console.error);
     }
-  }, [recipient]);
+  }, [recipient, contactsManager]);
 
   const handleTextChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setState((prevState) => ({
       ...prevState,
       [name]: value
@@ -71,12 +71,12 @@ function NewMessage() {
   };
 
   const handleRecipientChange = (e) => {
-    const {value} = e.target;
+    const { value } = e.target;
     setRecipient(value);
   };
 
   const handleIndicatorChange = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setState((prevState) => ({
       ...prevState,
       [name]: value
@@ -117,13 +117,7 @@ function NewMessage() {
       </div>
       <div className="basis-3/4 px-8">
         <PageTitle>New Message</PageTitle>
-        {!success ? (
-          <Text>
-            Some text explaining what this is all about and what to expect.
-          </Text>
-        ) : (
-          <Text>Message sent successfully.</Text>
-        )}
+        {success && <Text>Message sent successfully.</Text>}
         {defaultSender ? (
           <form onSubmit={submitMessage}>
             <div className="form-control">

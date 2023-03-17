@@ -1,17 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTitle from '../../components/PageTitle';
 import Button from '../../components/Button';
-import FeedSubNav from '../../components/FeedSubNav';
-import {useServiceContext} from '../../../contexts/ServiceContext';
+import { useServiceContext } from '../../../contexts/ServiceContext';
 import TransactionConfirm from '../../../addons/Modal/TransactionConfirm';
 import Text from '../../components/Text';
-import {useAccount} from '../../hooks/useAccount';
-const {decodeAddress, encodeAddress} = require('@polkadot/keyring');
+import { useAccount } from '../../hooks/useAccount';
+import { decodeAddress, encodeAddress } from '@polkadot/keyring';
+import { hexToU8a, isHex } from '@polkadot/util';
 
-const isValidAddressPolkadotAddress = () => {
+const isValidAddressPolkadotAddress = (address) => {
   try {
     encodeAddress(isHex(address) ? hexToU8a(address) : decodeAddress(address));
-
     return true;
   } catch (error) {
     return false;
@@ -19,8 +18,8 @@ const isValidAddressPolkadotAddress = () => {
 };
 
 function SendToken() {
-  const {node, keymanager} = useServiceContext();
-  const {balance} = useAccount();
+  const { node, keymanager } = useServiceContext();
+  const { balance } = useAccount();
 
   const [amount, setAmount] = useState(0);
   const [address, setAddress] = useState('');
@@ -40,12 +39,14 @@ function SendToken() {
       setError(undefined);
     } else if (address && address.length != 48) {
       setError('Check that the address is correct.');
+    } else {
+      console.log('invalid address');
     }
 
     return () => {
       fee_sub.remove();
     };
-  }, [address, amount]);
+  }, [address, amount, keymanager, node, node.fee$]);
 
   function transferToken(keymanager, address, amount) {
     if (node.apiNotReady()) {

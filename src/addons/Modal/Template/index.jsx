@@ -1,6 +1,7 @@
-import React, {useContext} from 'react';
-import {ModalContext} from '../useModalContext';
+import React, { useContext } from 'react';
+import { ModalContext } from '../useModalContext';
 import './Template.style.css';
+import PropTypes from 'prop-types';
 
 const sizeVariants = {
   full: 'modal-full',
@@ -8,9 +9,9 @@ const sizeVariants = {
   small: 'modal-small'
 };
 
-function ModalTemplate({options, ...props}) {
-  const {controls} = useContext(ModalContext);
-  const {size, title, backgroundColor} = options;
+function ModalTemplate({ options, ...props }) {
+  const { controls } = useContext(ModalContext);
+  const { size, title, backgroundColor } = options;
 
   return (
     <div
@@ -40,7 +41,7 @@ function ModalTemplate({options, ...props}) {
           }}
           onClick={() => controls.close()}
         >
-          <span style={{fontSize: '2rem', paddingRight: '1rem'}}>x</span>
+          <span style={{ fontSize: '2rem', paddingRight: '1rem' }}>x</span>
         </div>
         {title && (
           <div
@@ -58,5 +59,10 @@ function ModalTemplate({options, ...props}) {
     </div>
   );
 }
+
+ModalTemplate.propTypes = {
+  options: PropTypes.object,
+  children: PropTypes.array
+};
 
 export default ModalTemplate;

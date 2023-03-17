@@ -1,5 +1,5 @@
 import React from 'react';
-import {Routes, Route, Link} from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import PageTitle from '../../components/PageTitle';
 import Text from '../../components/Text';
 import ContactsList from './ContactList';

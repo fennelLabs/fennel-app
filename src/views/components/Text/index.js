@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function Text(props) {
   return (
@@ -7,5 +8,9 @@ function Text(props) {
     </p>
   );
 }
+
+Text.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.array])
+};
 
 export default Text;

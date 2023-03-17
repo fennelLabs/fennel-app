@@ -1,11 +1,11 @@
-import {ApiPromise, ApiRx, WsProvider} from '@polkadot/api';
-import {ApiBase} from '@polkadot/api/base';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {NODE_URI_WS} from '../config';
+import { ApiPromise, ApiRx, WsProvider } from '@polkadot/api';
+import { ApiBase } from '@polkadot/api/base';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { NODE_URI_WS } from '../config';
 
 function connect() {
-  const options = {provider: new WsProvider(`${NODE_URI_WS}`)};
-  return {rxjs: new ApiRx(options), promise: new ApiPromise(options)};
+  const options = { provider: new WsProvider(`${NODE_URI_WS}`) };
+  return { rxjs: new ApiRx(options), promise: new ApiPromise(options) };
 }
 
 /**

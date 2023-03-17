@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {filter} from 'rxjs';
-import {useServiceContext} from '../../contexts/ServiceContext';
+import React, { useState, useEffect } from 'react';
+import { filter } from 'rxjs';
+import { useServiceContext } from '../../contexts/ServiceContext';
 
 export function useAccount() {
-  const {keymanager, accountBalanceService} = useServiceContext();
+  const { keymanager, accountBalanceService } = useServiceContext();
 
   const [address, setAddress] = useState(undefined);
   const [account, setAccount] = useState(undefined);
@@ -35,7 +35,7 @@ export function useAccount() {
         s.unsubscribe();
       });
     };
-  }, []);
+  }, [accountBalanceService.balance$, keymanager.address$, keymanager.pair$]);
 
-  return {address, account, balance};
+  return { address, account, balance };
 }
