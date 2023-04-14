@@ -33,6 +33,8 @@ class Node {
 
   _ratingSignals = new BehaviorSubject([]);
   ratingSignals$ = this._ratingSignals.asObservable();
+  _whiteflagRatingSignals = new BehaviorSubject([]);
+  whiteflagRatingSignals$ = this._whiteflagRatingSignals.asObservable();
   _queriedRating = new BehaviorSubject(0);
   queriedRating$ = this._queriedRating.asObservable();
 
@@ -492,6 +494,29 @@ class Node {
     console.log('Checking rating signals.');
     let api = await this.api();
     let signalList = await api.query.signalModule.ratingSignalList.entries();
+    let result = [];
+    signalList.forEach(
+      ([
+        {
+          args: [key1, key2]
+        },
+        value
+      ]) => {
+        result.push({
+          origin: key1.toString(),
+          target: key2.toString(),
+          rating: value.toPrimitive()
+        });
+      }
+    );
+    this._ratingSignals.next(result);
+  }
+
+  async checkWhiteflagRatingSignalList() {
+    console.log('Checking whiteflag rating signals.');
+    let api = await this.api();
+    let signalList =
+      await api.query.signalModule.whiteflagRatingSignalList.entries();
     let result = [];
     signalList.forEach(
       ([
