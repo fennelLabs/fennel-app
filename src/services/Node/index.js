@@ -532,7 +532,7 @@ class Node {
         });
       }
     );
-    this._ratingSignals.next(result);
+    this._whiteflagRatingSignals.next(result);
   }
 
   async revokeCertificate(keymanager, target) {
